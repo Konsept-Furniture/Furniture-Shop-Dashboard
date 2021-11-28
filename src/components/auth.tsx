@@ -8,12 +8,13 @@ export interface AuthProps {
 
 export function Auth({ children }: AuthProps) {
    const router = useRouter()
-   const { data: { data: profile } = {}, firstLoading } = useAuth()
+   const { profile, firstLoading } = useAuth()
 
    useEffect(() => {
       if (!firstLoading && !profile?.username) {
          router.push('/login')
       }
+      console.log('profile', profile)
    }, [router, profile, firstLoading])
 
    if (!profile?.username) return <p>Loading...</p>
