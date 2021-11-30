@@ -2,7 +2,7 @@ export interface Product {
    _id: string
    title?: string
    desc?: string
-   img?: string
+   img: string
    categories?: string[]
    size?: any
    color?: any
@@ -14,7 +14,7 @@ export interface Product {
    inStock?: boolean
    deleted?: boolean
    createdAt: string
-   updatedAt?: string
+   updatedAt: string
 }
 export interface ProductPayload {
    _id: string

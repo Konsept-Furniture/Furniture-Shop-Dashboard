@@ -73,9 +73,6 @@ const Products = () => {
       getProductList(pagination)
    }
 
-   const handleEditProduct = async (product: ProductPayload) => {}
-   const handleAddProduct = async (product: ProductPayload) => {}
-
    const handleDeleteProduct = async (product: Product) => {
       console.log('delete product', product)
       getProductList(pagination)
