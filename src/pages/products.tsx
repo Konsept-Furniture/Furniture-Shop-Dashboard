@@ -57,6 +57,8 @@ const Products = () => {
          try {
             const res = await productApi.update(editProduct._id, product)
             console.log(res)
+            await handleCloseAddEditModal()
+            getProductList(pagination)
          } catch (error) {
             console.log('error to edit product', error)
          }
@@ -64,13 +66,12 @@ const Products = () => {
          try {
             const res = await productApi.add(product)
             console.log(res)
+            await handleCloseAddEditModal()
+            getProductList(pagination)
          } catch (error) {
             console.log('error to add product', error)
          }
       }
-
-      await handleCloseAddEditModal()
-      getProductList(pagination)
    }
 
    const handleDeleteProduct = async (product: Product) => {
