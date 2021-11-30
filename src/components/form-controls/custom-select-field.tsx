@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Control, useController } from 'react-hook-form'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Theme, useTheme } from '@mui/material/styles'
+import useSWR from 'swr'
+import { Category } from 'models'
 
 export interface SelectOption {
    label?: string
@@ -15,7 +17,6 @@ export interface CustomSelectFieldProps {
    label?: string
    disabled?: boolean
    multiple?: boolean
-   options: SelectOption[]
 }
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -27,7 +28,7 @@ const MenuProps = {
       },
    },
 }
-function getStyles(option: SelectOption, options: readonly SelectOption[], theme: Theme) {
+function getStyles(option: Category, options: readonly Category[], theme: Theme) {
    return {
       fontWeight:
          options.indexOf(option) === -1
@@ -42,8 +43,12 @@ export function CustomSelectField({
    label,
    disabled,
    multiple = false,
-   options,
 }: CustomSelectFieldProps) {
+   const { data: { data: options } = {} } = useSWR('categories', {
+      dedupingInterval: 60 * 60 * 1000, // 1hr
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+   })
    const theme = useTheme()
 
    const handleChange = (event: SelectChangeEvent<string>) => {
@@ -75,15 +80,17 @@ export function CustomSelectField({
             label={label}
             multiple={multiple}
          >
-            {options.map(item => (
-               <MenuItem
-                  key={item.value}
-                  value={item.value}
-                  style={getStyles(item, options, theme)}
-               >
-                  {item.label}
-               </MenuItem>
-            ))}
+            {options
+               ? options.map((item: Category) => (
+                    <MenuItem
+                       key={item._id}
+                       value={item.name}
+                       style={getStyles(item, options, theme)}
+                    >
+                       {item.name}
+                    </MenuItem>
+                 ))
+               : null}
          </Select>
 
          <FormHelperText>{error?.message}</FormHelperText>

@@ -112,16 +112,16 @@ export function ProductAddEditModal({
                   control={control}
                   name="categories"
                   label="Categories"
-                  options={[
-                     {
-                        label: 'art',
-                        value: 'art',
-                     },
-                     {
-                        label: 'bedroom',
-                        value: 'bedroom',
-                     },
-                  ]}
+                  // options={[
+                  //    {
+                  //       label: 'art',
+                  //       value: 'art',
+                  //    },
+                  //    {
+                  //       label: 'bedroom',
+                  //       value: 'bedroom',
+                  //    },
+                  // ]}
                   multiple={true}
                   disabled={isSubmitting}
                />
