@@ -18,7 +18,7 @@ import NextLink from 'next/link'
 import useSWR from 'swr'
 import { Product } from 'models'
 
-const NUMBER_PRODUCTS: number = 5
+const NUMBER_PRODUCTS: number = 6
 
 const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
    <List>
