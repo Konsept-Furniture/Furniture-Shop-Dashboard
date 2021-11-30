@@ -1,6 +1,4 @@
-import { format } from 'date-fns'
-import { v4 as uuid } from 'uuid'
-import PerfectScrollbar from 'react-perfect-scrollbar'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import {
    Box,
    Button,
@@ -15,10 +13,12 @@ import {
    TableSortLabel,
    Tooltip,
 } from '@mui/material'
-import ArrowRightIcon from '@mui/icons-material/ArrowRight'
-import { SeverityPill } from '../severity-pill'
+import { format } from 'date-fns'
 import NextLink from 'next/link'
 import { ChangeEvent, useState } from 'react'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { v4 as uuid } from 'uuid'
+import { SeverityPill } from '../severity-pill'
 
 const orders = [
    {
@@ -98,7 +98,7 @@ export const LatestOrders = (props: any) => {
       setSelectedOrderIds(newSelectedOrderIds)
    }
 
-   const handleSelectOne = (event: ChangeEvent<HTMLInputElement>, id: string) => {
+   const handleSelectOne = (id: string) => {
       const selectedIndex = selectedOrderIds.indexOf(id)
       let newSelectedOrderIds: string[] = []
 
@@ -150,11 +150,11 @@ export const LatestOrders = (props: any) => {
                   </TableHead>
                   <TableBody>
                      {orders.map(order => (
-                        <TableRow hover key={order.id}>
+                        <TableRow hover key={order.id} onClick={event => handleSelectOne(order.id)}>
                            <TableCell padding="checkbox">
                               <Checkbox
                                  checked={selectedOrderIds.indexOf(order.id) !== -1}
-                                 onChange={event => handleSelectOne(event, order.id)}
+                                 onChange={event => handleSelectOne(order.id)}
                                  value="true"
                               />
                            </TableCell>
