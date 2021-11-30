@@ -16,8 +16,9 @@ import { LoadingButton } from '@mui/lab'
 
 export interface ProductAddEditModalProps {
    isOpen: boolean
+   isEdit: boolean
    children?: ReactNode
-   data: Partial<Product>
+   data?: Product
    onClose: () => void
    onSubmit: (product: ProductPayload) => Promise<void>
 }
@@ -26,13 +27,14 @@ const schema = yup.object({
    title: yup.string().max(255).required(),
    desc: yup.string().max(255).required(),
    img: yup.string().max(255).required(),
-   // categories: yup.array(yup.string().max(255)),
+   categories: yup.array(yup.string().max(255)),
    // price: yup.number().integer().min(0),
    // quantity: yup.number().integer().min(0),
 })
 
 export function ProductAddEditModal({
    isOpen,
+   isEdit,
    data,
    children,
    onClose,
@@ -43,7 +45,7 @@ export function ProductAddEditModal({
          title: '',
          desc: '',
          img: '',
-         // categories: [],
+         categories: [],
          // price: undefined,
          // quantity: undefined,
       },
@@ -60,15 +62,26 @@ export function ProductAddEditModal({
    }
 
    useEffect(() => {
-      reset({
-         title: data?.title || '',
-         desc: data?.desc || '',
-         img: data?.img || '',
-         categories: data?.categories || [],
-         // price: data?.price || undefined,
-         // quantity: data?.countInStock || undefined,
-      })
-   }, [data, reset])
+      if (isEdit) {
+         reset({
+            title: data?.title || '',
+            desc: data?.desc || '',
+            img: data?.img || '',
+            categories: data?.categories || [],
+            // price: data?.price || undefined,
+            // quantity: data?.countInStock || undefined,
+         })
+      } else {
+         reset({
+            title: '',
+            desc: '',
+            img: '',
+            categories: [],
+            // price: data?.price || undefined,
+            // quantity: data?.countInStock || undefined,
+         })
+      }
+   }, [data, reset, isEdit])
 
    return (
       <Dialog open={isOpen} onClose={onClose} scroll="body">

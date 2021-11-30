@@ -8,9 +8,9 @@ import Head from 'next/head'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 const Products = () => {
-   const [mode, setMode] = useState('')
+   const [isEdit, setIsEdit] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-   const [editProduct, setEditProduct] = useState<Partial<Product>>({})
+   const [editProduct, setEditProduct] = useState<Product>()
    const [loading, setLoading] = useState(false)
    const [products, setProducts] = useState<Product[]>([])
    const [pagination, SetPagination] = useState<PaginationParams>({
@@ -48,7 +48,17 @@ const Products = () => {
       console.log('edit product', editProduct?._id, product)
 
       if (editProduct?._id) {
-         await handleEditProduct(product)
+         try {
+            const res = await productApi.update(editProduct._id, product)
+            console.log(res)
+         } catch (error) {
+            try {
+               const res = await productApi.add(product)
+               console.log(res)
+            } catch (error) {
+               console.log('error to add product', error)
+            }
+         }
       } else {
          await handleAddProduct(product)
       }
@@ -57,22 +67,8 @@ const Products = () => {
       getProductList(pagination)
    }
 
-   const handleEditProduct = async (product: ProductPayload) => {
-      try {
-         const res = await productApi.edit(editProduct._id, product)
-         console.log(res)
-      } catch (error) {
-         console.log('error to edit product', error)
-      }
-   }
-   const handleAddProduct = async (product: ProductPayload) => {
-      try {
-         const res = await productApi.add(product)
-         console.log(res)
-      } catch (error) {
-         console.log('error to add product', error)
-      }
-   }
+   const handleEditProduct = async (product: ProductPayload) => {}
+   const handleAddProduct = async (product: ProductPayload) => {}
 
    const handleDeleteProduct = async (product: Product) => {
       console.log('delete product', product)
@@ -81,7 +77,6 @@ const Products = () => {
 
    const handleCloseAddEditModal = () => {
       setIsEditModalOpen(false)
-      setEditProduct({})
    }
 
    useEffect(() => {
@@ -103,9 +98,8 @@ const Products = () => {
             <Container maxWidth={false}>
                <ProductListToolbar
                   onAddProductClick={() => {
+                     setIsEdit(false)
                      setIsEditModalOpen(true)
-                     setEditProduct({})
-                     setMode('add')
                   }}
                />
                <ProductList
@@ -114,7 +108,7 @@ const Products = () => {
                      console.log(product)
                      setIsEditModalOpen(true)
                      setEditProduct(product)
-                     setMode('edit')
+                     setIsEdit(true)
                   }}
                   onDeleteClick={handleDeleteProduct}
                />
@@ -134,6 +128,7 @@ const Products = () => {
                </Box>
 
                <ProductAddEditModal
+                  isEdit={isEdit}
                   data={editProduct}
                   isOpen={isEditModalOpen}
                   onClose={handleCloseAddEditModal}

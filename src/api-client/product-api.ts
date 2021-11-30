@@ -5,7 +5,10 @@ export const productApi = {
    getList(payload: ListParams): Promise<ListResponse<Product>> {
       return axiosClient.get('products', { params: payload })
    },
-   edit(productId: string, payload: ProductPayload): Promise<ResponseData<string>> {
+   getById(id: string): Promise<ResponseData<Product>> {
+      return axiosClient.get(`products/${id}`)
+   },
+   update(productId: string, payload: Partial<ProductPayload>): Promise<ResponseData<string>> {
       return axiosClient.put(`products/${productId}`, payload)
    },
    add(payload: ProductPayload): Promise<ResponseData<Product>> {
