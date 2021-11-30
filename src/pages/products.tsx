@@ -6,8 +6,14 @@ import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
 import { PaginationParams, Product, ProductPayload } from 'models'
 import Head from 'next/head'
 import { ChangeEvent, useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 const Products = () => {
+   useSWR('categories', {
+      dedupingInterval: 60 * 60 * 1000, // 1hr
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+   })
    const [isEdit, setIsEdit] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
    const [editProduct, setEditProduct] = useState<Product>()
@@ -52,15 +58,15 @@ const Products = () => {
             const res = await productApi.update(editProduct._id, product)
             console.log(res)
          } catch (error) {
-            try {
-               const res = await productApi.add(product)
-               console.log(res)
-            } catch (error) {
-               console.log('error to add product', error)
-            }
+            console.log('error to edit product', error)
          }
       } else {
-         await handleAddProduct(product)
+         try {
+            const res = await productApi.add(product)
+            console.log(res)
+         } catch (error) {
+            console.log('error to add product', error)
+         }
       }
 
       await handleCloseAddEditModal()
