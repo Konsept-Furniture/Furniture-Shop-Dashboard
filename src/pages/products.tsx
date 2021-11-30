@@ -1,46 +1,149 @@
-import Head from 'next/head'
-import { Box, Container, Grid, Pagination } from '@mui/material'
-import { products } from '../__mocks__/products'
-import { ProductListToolbar } from '../components/product/product-list-toolbar'
-import { ProductCard } from '../components/product/product-card'
+import { Box, Container, Pagination } from '@mui/material'
+import { productApi } from 'api-client'
 import { DashboardLayout } from 'components/layouts/dashboard-layout'
+import { ProductList, ProductListToolbar } from 'components/product'
+import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
+import { PaginationParams, Product, ProductPayload } from 'models'
+import Head from 'next/head'
+import { ChangeEvent, useEffect, useState } from 'react'
 
-const Products = () => (
-   <>
-      <Head>
-         <title>Products | Material Kit</title>
-      </Head>
-      <Box
-         component="main"
-         sx={{
-            flexGrow: 1,
-            py: 8,
-         }}
-      >
-         <Container maxWidth={false}>
-            <ProductListToolbar />
-            <Box sx={{ pt: 3 }}>
-               <Grid container spacing={3}>
-                  {products.map(product => (
-                     <Grid item key={product.id} lg={4} md={6} xs={12}>
-                        <ProductCard product={product} />
-                     </Grid>
-                  ))}
-               </Grid>
-            </Box>
-            <Box
-               sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  pt: 3,
-               }}
-            >
-               <Pagination color="primary" count={3} size="small" />
-            </Box>
-         </Container>
-      </Box>
-   </>
-)
+const Products = () => {
+   const [mode, setMode] = useState('')
+   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+   const [editProduct, setEditProduct] = useState<Partial<Product>>({})
+   const [loading, setLoading] = useState(false)
+   const [products, setProducts] = useState<Product[]>([])
+   const [pagination, SetPagination] = useState<PaginationParams>({
+      currentPage: 1,
+      pageSize: 12,
+      totalItems: 0,
+      totalPages: 1,
+   })
+
+   //TODO: apply debounce on searching products by title
+   const getProductList = async (_pagination: Partial<PaginationParams>) => {
+      setLoading(true)
+      try {
+         const payload = {
+            page: _pagination.currentPage,
+            pageSize: _pagination.pageSize,
+         }
+         const res = await productApi.getList(payload)
+         setProducts(res.data)
+         SetPagination(res.pagination)
+      } catch (error) {
+         console.log('error to get product list', error)
+      }
+      setLoading(false)
+   }
+
+   const handleChangePagination = async (event: ChangeEvent<unknown>, value: number) => {
+      await getProductList({
+         ...pagination,
+         currentPage: value,
+      })
+   }
+
+   const handleAddEditProduct = async (product: ProductPayload) => {
+      console.log('edit product', editProduct?._id, product)
+
+      if (editProduct?._id) {
+         await handleEditProduct(product)
+      } else {
+         await handleAddProduct(product)
+      }
+
+      await handleCloseAddEditModal()
+      getProductList(pagination)
+   }
+
+   const handleEditProduct = async (product: ProductPayload) => {
+      try {
+         const res = await productApi.edit(editProduct._id, product)
+         console.log(res)
+      } catch (error) {
+         console.log('error to edit product', error)
+      }
+   }
+   const handleAddProduct = async (product: ProductPayload) => {
+      try {
+         const res = await productApi.add(product)
+         console.log(res)
+      } catch (error) {
+         console.log('error to add product', error)
+      }
+   }
+
+   const handleDeleteProduct = async (product: Product) => {
+      console.log('delete product', product)
+      getProductList(pagination)
+   }
+
+   const handleCloseAddEditModal = () => {
+      setIsEditModalOpen(false)
+      setEditProduct({})
+   }
+
+   useEffect(() => {
+      getProductList(pagination)
+   }, [])
+
+   return (
+      <>
+         <Head>
+            <title>Products | FlowerShop</title>
+         </Head>
+         <Box
+            component="main"
+            sx={{
+               flexGrow: 1,
+               py: 8,
+            }}
+         >
+            <Container maxWidth={false}>
+               <ProductListToolbar
+                  onAddProductClick={() => {
+                     setIsEditModalOpen(true)
+                     setEditProduct({})
+                     setMode('add')
+                  }}
+               />
+               <ProductList
+                  products={products}
+                  onEditClick={(product: Product) => {
+                     console.log(product)
+                     setIsEditModalOpen(true)
+                     setEditProduct(product)
+                     setMode('edit')
+                  }}
+                  onDeleteClick={handleDeleteProduct}
+               />
+               <Box
+                  sx={{
+                     display: 'flex',
+                     justifyContent: 'center',
+                     pt: 3,
+                  }}
+               >
+                  <Pagination
+                     color="primary"
+                     count={pagination.totalPages}
+                     page={pagination.currentPage}
+                     onChange={handleChangePagination}
+                  />
+               </Box>
+
+               <ProductAddEditModal
+                  data={editProduct}
+                  isOpen={isEditModalOpen}
+                  onClose={handleCloseAddEditModal}
+                  onSubmit={handleAddEditProduct}
+               />
+            </Container>
+         </Box>
+      </>
+   )
+}
 
 Products.Layout = DashboardLayout
 
