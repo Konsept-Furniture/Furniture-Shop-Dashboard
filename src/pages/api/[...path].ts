@@ -15,6 +15,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       // convert cookies to header Authorization
       const cookies = new Cookies(req, res)
       const accessToken = cookies.get('access_token')
+      console.log(accessToken)
       if (accessToken) {
          req.headers.Authorization = `Bearer ${accessToken}`
       }
