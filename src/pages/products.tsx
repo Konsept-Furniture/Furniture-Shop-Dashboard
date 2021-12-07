@@ -79,17 +79,17 @@ const Products = () => {
 
    const handleDeleteProduct = async (product: Product) => {
       console.log('delete product', product)
-      try {
-         const res = await productApi.delete(product)
-         enqueueSnackbar(res.message, {
-            variant: 'success'
-         })
-         getProductList(pagination)
-      } catch (error: any) {
-         enqueueSnackbar(error.message, {
-            variant: 'error'
-         })
-      }
+      // try {
+      //    const res = await productApi.delete(product)
+      //    enqueueSnackbar(res.message, {
+      //       variant: 'success'
+      //    })
+      //    getProductList(pagination)
+      // } catch (error: any) {
+      //    enqueueSnackbar(error.message, {
+      //       variant: 'error'
+      //    })
+      // }
    }
 
    const handleCloseAddEditModal = () => {
