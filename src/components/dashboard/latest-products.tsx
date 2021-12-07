@@ -1,4 +1,4 @@
-import { formatDistanceToNow, parseISO, subHours } from 'date-fns'
+import { formatDistance, parseISO, subHours } from 'date-fns'
 import {
    Box,
    Button,
@@ -10,7 +10,7 @@ import {
    ListItem,
    ListItemAvatar,
    ListItemText,
-   Skeleton,
+   Skeleton
 } from '@mui/material'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -41,7 +41,7 @@ const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
 
 export const LatestProducts = (props: any) => {
    const { data: { data: products } = {} } = useSWR(`products?page=1&pageSize=${NUMBER_PRODUCTS}`, {
-      revalidateOnFocus: true,
+      revalidateOnFocus: true
    })
 
    return (
@@ -61,13 +61,17 @@ export const LatestProducts = (props: any) => {
                            src={product.img}
                            style={{
                               height: 48,
-                              width: 48,
+                              width: 48
                            }}
                         />
                      </ListItemAvatar>
                      <ListItemText
                         primary={product.title}
-                        secondary={`Updated ${formatDistanceToNow(parseISO(product.updatedAt))}`}
+                        secondary={`Updated ${formatDistance(
+                           parseISO(product.updatedAt),
+                           new Date(),
+                           { addSuffix: true }
+                        )}`}
                      />
                      <IconButton edge="end" size="small">
                         <MoreVertIcon />
@@ -83,7 +87,7 @@ export const LatestProducts = (props: any) => {
             sx={{
                display: 'flex',
                justifyContent: 'flex-end',
-               p: 2,
+               p: 2
             }}
          >
             <NextLink href={'/products'} passHref>

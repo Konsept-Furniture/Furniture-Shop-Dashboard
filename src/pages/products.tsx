@@ -5,6 +5,7 @@ import { ProductList, ProductListToolbar } from 'components/product'
 import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
 import { PaginationParams, Product, ProductPayload } from 'models'
 import Head from 'next/head'
+import { useSnackbar } from 'notistack'
 import { ChangeEvent, useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -12,8 +13,10 @@ const Products = () => {
    useSWR('categories', {
       dedupingInterval: 60 * 60 * 1000, // 1hr
       revalidateOnFocus: false,
-      revalidateOnMount: true,
+      revalidateOnMount: true
    })
+
+   const { enqueueSnackbar } = useSnackbar()
    const [isEdit, setIsEdit] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
    const [editProduct, setEditProduct] = useState<Product>()
@@ -23,7 +26,7 @@ const Products = () => {
       currentPage: 1,
       pageSize: 12,
       totalItems: 0,
-      totalPages: 1,
+      totalPages: 1
    })
 
    //TODO: apply debounce on searching products by title
@@ -32,7 +35,7 @@ const Products = () => {
       try {
          const payload = {
             page: _pagination.currentPage,
-            pageSize: _pagination.pageSize,
+            pageSize: _pagination.pageSize
          }
          const res = await productApi.getList(payload)
          setProducts(res.data)
@@ -46,7 +49,7 @@ const Products = () => {
    const handleChangePagination = async (event: ChangeEvent<unknown>, value: number) => {
       await getProductList({
          ...pagination,
-         currentPage: value,
+         currentPage: value
       })
    }
 
@@ -76,11 +79,22 @@ const Products = () => {
 
    const handleDeleteProduct = async (product: Product) => {
       console.log('delete product', product)
-      getProductList(pagination)
+      try {
+         const res = await productApi.delete(product)
+         enqueueSnackbar(res.message, {
+            variant: 'success'
+         })
+         getProductList(pagination)
+      } catch (error: any) {
+         enqueueSnackbar(error.message, {
+            variant: 'error'
+         })
+      }
    }
 
    const handleCloseAddEditModal = () => {
       setIsEditModalOpen(false)
+      setEditProduct(undefined)
    }
 
    useEffect(() => {
@@ -96,7 +110,7 @@ const Products = () => {
             component="main"
             sx={{
                flexGrow: 1,
-               py: 8,
+               py: 8
             }}
          >
             <Container maxWidth={false}>
@@ -109,7 +123,6 @@ const Products = () => {
                <ProductList
                   products={products}
                   onEditClick={(product: Product) => {
-                     console.log(product)
                      setIsEditModalOpen(true)
                      setEditProduct(product)
                      setIsEdit(true)
@@ -120,7 +133,7 @@ const Products = () => {
                   sx={{
                      display: 'flex',
                      justifyContent: 'center',
-                     pt: 3,
+                     pt: 3
                   }}
                >
                   <Pagination

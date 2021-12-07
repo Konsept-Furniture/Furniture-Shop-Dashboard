@@ -1,11 +1,4 @@
-import {
-   Button,
-   Dialog,
-   DialogActions,
-   DialogContent,
-   DialogContentText,
-   DialogTitle,
-} from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import React, { ReactNode, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
@@ -17,7 +10,6 @@ import { LoadingButton } from '@mui/lab'
 export interface ProductAddEditModalProps {
    isOpen: boolean
    isEdit: boolean
-   children?: ReactNode
    data?: Product
    onClose: () => void
    onSubmit: (product: ProductPayload) => Promise<void>
@@ -28,17 +20,16 @@ const schema = yup.object({
    desc: yup.string().max(255).required(),
    img: yup.string().max(255).required(),
    categories: yup.array(yup.string().max(255)),
-   // price: yup.number().integer().min(0),
-   // quantity: yup.number().integer().min(0),
+   price: yup.number().integer().min(0),
+   quantity: yup.number().integer().min(0)
 })
 
 export function ProductAddEditModal({
    isOpen,
    isEdit,
    data,
-   children,
    onClose,
-   onSubmit,
+   onSubmit
 }: ProductAddEditModalProps) {
    const form = useForm<ProductPayload>({
       defaultValues: {
@@ -46,15 +37,15 @@ export function ProductAddEditModal({
          desc: '',
          img: '',
          categories: [],
-         // price: undefined,
-         // quantity: undefined,
+         price: undefined,
+         quantity: undefined
       },
-      resolver: yupResolver(schema),
+      resolver: yupResolver(schema)
    })
    const {
       reset,
       control,
-      formState: { errors, isSubmitting },
+      formState: { isSubmitting }
    } = form
 
    const handleSaveProduct = async (values: ProductPayload) => {
@@ -62,14 +53,15 @@ export function ProductAddEditModal({
    }
 
    useEffect(() => {
+      console.log(data)
       if (isEdit) {
          reset({
             title: data?.title || '',
             desc: data?.desc || '',
             img: data?.img || '',
             categories: data?.categories || [],
-            // price: data?.price || undefined,
-            // quantity: data?.countInStock || undefined,
+            price: data?.price,
+            quantity: data?.quantity
          })
       } else {
          reset({
@@ -77,14 +69,19 @@ export function ProductAddEditModal({
             desc: '',
             img: '',
             categories: [],
-            // price: data?.price || undefined,
-            // quantity: data?.countInStock || undefined,
+            price: undefined,
+            quantity: undefined
          })
       }
    }, [data, reset, isEdit])
 
+   const handleClose = () => {
+      onClose()
+      reset()
+   }
+
    return (
-      <Dialog open={isOpen} onClose={onClose} scroll="body">
+      <Dialog open={isOpen} onClose={handleClose} scroll="body">
          <DialogTitle>Product</DialogTitle>
          <DialogContent>
             <form>
@@ -112,22 +109,11 @@ export function ProductAddEditModal({
                   control={control}
                   name="categories"
                   label="Categories"
-                  // options={[
-                  //    {
-                  //       label: 'art',
-                  //       value: 'art',
-                  //    },
-                  //    {
-                  //       label: 'bedroom',
-                  //       value: 'bedroom',
-                  //    },
-                  // ]}
                   multiple={true}
                   disabled={isSubmitting}
                />
-               {/* <CustomTextField form={form} name="price" label="Product Title" />
-               <CustomTextField form={form} name="quantity" label="Product Title" /> */}
-               {JSON.stringify(errors)}
+               <CustomTextField control={control} name="price" label="Price" />
+               <CustomTextField control={control} name="quantity" label="Quantity" />
             </form>
          </DialogContent>
          <DialogActions>

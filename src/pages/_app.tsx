@@ -10,6 +10,7 @@ import { SWRConfig } from 'swr'
 import axiosClient from '../api-client/axios-client'
 import { AppPropsWithLayout } from 'models'
 import { EmptyLayout } from 'components/layouts'
+import { SnackbarProvider } from 'notistack'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -27,17 +28,19 @@ const App = (props: AppPropsWithLayout) => {
 
          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ThemeProvider theme={theme}>
-               <SWRConfig
-                  value={{
-                     fetcher: (url: string) => axiosClient.get(url),
-                     shouldRetryOnError: false,
-                  }}
-               >
-                  <CssBaseline />
-                  <Layout>
-                     <Component {...pageProps} />
-                  </Layout>
-               </SWRConfig>
+               <SnackbarProvider maxSnack={1} preventDuplicate>
+                  <SWRConfig
+                     value={{
+                        fetcher: (url: string) => axiosClient.get(url),
+                        shouldRetryOnError: false
+                     }}
+                  >
+                     <CssBaseline />
+                     <Layout>
+                        <Component {...pageProps} />
+                     </Layout>
+                  </SWRConfig>
+               </SnackbarProvider>
             </ThemeProvider>
          </LocalizationProvider>
       </CacheProvider>
