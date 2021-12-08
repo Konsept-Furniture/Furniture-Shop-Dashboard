@@ -40,9 +40,12 @@ const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
 )
 
 export const LatestProducts = (props: any) => {
-   const { data: { data: products } = {} } = useSWR(`products?page=1&pageSize=${NUMBER_PRODUCTS}`, {
-      revalidateOnFocus: true
-   })
+   const { data: { data: products } = {} } = useSWR(
+      `products?page=1&pageSize=${NUMBER_PRODUCTS}&orderBy=updatedAt-desc`,
+      {
+         revalidateOnFocus: true
+      }
+   )
 
    return (
       <Card {...props}>

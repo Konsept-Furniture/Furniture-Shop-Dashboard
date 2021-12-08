@@ -13,51 +13,56 @@ import { ShoppingBag as ShoppingBagIcon } from '../../icons/shopping-bag'
 import { User as UserIcon } from '../../icons/user'
 import { UserAdd as UserAddIcon } from '../../icons/user-add'
 import { Users as UsersIcon } from '../../icons/users'
+import { Order as OrderIcon } from '../../icons/order'
 import { XCircle as XCircleIcon } from '../../icons/x-circle'
 import { Logo } from '../logo'
 import { NavItem } from '../nav-item'
-
 const items = [
    {
       href: '/',
       icon: <ChartBarIcon fontSize="small" />,
-      title: 'Dashboard',
+      title: 'Dashboard'
    },
    {
       href: '/customers',
       icon: <UsersIcon fontSize="small" />,
-      title: 'Customers',
+      title: 'Customers'
+   },
+   {
+      href: '/orders',
+      icon: <OrderIcon fontSize="small" />,
+      title: 'Orders'
    },
    {
       href: '/products',
       icon: <ShoppingBagIcon fontSize="small" />,
-      title: 'Products',
+      title: 'Products'
    },
    {
       href: '/account',
       icon: <UserIcon fontSize="small" />,
-      title: 'Account',
+      title: 'Account'
    },
    {
       href: '/settings',
       icon: <CogIcon fontSize="small" />,
-      title: 'Settings',
+      title: 'Settings'
    },
    {
       href: '/login',
       icon: <LockIcon fontSize="small" />,
-      title: 'Login',
+      title: 'Login'
    },
    {
       href: '/register',
       icon: <UserAddIcon fontSize="small" />,
-      title: 'Register',
+      title: 'Register'
    },
    {
       href: '/404',
       icon: <XCircleIcon fontSize="small" />,
-      title: 'Error',
-   },
+      title: 'Error'
+   }
 ]
 
 export const DashboardSidebar = props => {
@@ -65,7 +70,7 @@ export const DashboardSidebar = props => {
    const router = useRouter()
    const lgUp = useMediaQuery(theme => theme.breakpoints.up('lg'), {
       defaultMatches: true,
-      noSsr: false,
+      noSsr: false
    })
 
    useEffect(
@@ -79,7 +84,7 @@ export const DashboardSidebar = props => {
          }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [router.asPath],
+      [router.asPath]
    )
 
    const content = (
@@ -88,23 +93,29 @@ export const DashboardSidebar = props => {
             sx={{
                display: 'flex',
                flexDirection: 'column',
-               height: '100%',
+               height: '100%'
             }}
          >
             <div>
-               <Box sx={{ p: 3 }}>
+               <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
                   <NextLink href="/" passHref>
                      <a>
-                        <Logo
+                        {/* <Logo
                            sx={{
                               height: 42,
-                              width: 42,
+                              width: 42
                            }}
-                        />
+                        /> */}
+                        {/* <img
+                           width="100"
+                           // height=""
+                           src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
+                        /> */}
+                        <Typography variant="h3">Konsept</Typography>
                      </a>
                   </NextLink>
                </Box>
-               <Box sx={{ px: 2 }}>
+               {/* <Box sx={{ px: 2 }}>
                   <Box
                      sx={{
                         alignItems: 'center',
@@ -114,7 +125,7 @@ export const DashboardSidebar = props => {
                         justifyContent: 'space-between',
                         px: 3,
                         py: '11px',
-                        borderRadius: 1,
+                        borderRadius: 1
                      }}
                   >
                      <div>
@@ -129,16 +140,16 @@ export const DashboardSidebar = props => {
                         sx={{
                            color: 'neutral.500',
                            width: 14,
-                           height: 14,
+                           height: 14
                         }}
                      />
                   </Box>
-               </Box>
+               </Box> */}
             </div>
             <Divider
                sx={{
                   borderColor: '#2D3748',
-                  my: 3,
+                  my: 3
                }}
             />
             <Box sx={{ flexGrow: 1 }}>
@@ -146,7 +157,7 @@ export const DashboardSidebar = props => {
                   <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
                ))}
             </Box>
-            <Divider sx={{ borderColor: '#2D3748' }} />
+            {/* <Divider sx={{ borderColor: '#2D3748' }} />
             <Box
                sx={{
                   px: 2,
@@ -184,7 +195,7 @@ export const DashboardSidebar = props => {
                      Pro Live Preview
                   </Button>
                </NextLink>
-            </Box>
+            </Box> */}
          </Box>
       </>
    )
@@ -198,8 +209,8 @@ export const DashboardSidebar = props => {
                sx: {
                   backgroundColor: 'neutral.900',
                   color: '#FFFFFF',
-                  width: 280,
-               },
+                  width: 280
+               }
             }}
             variant="permanent"
          >
@@ -217,8 +228,8 @@ export const DashboardSidebar = props => {
             sx: {
                backgroundColor: 'neutral.900',
                color: '#FFFFFF',
-               width: 280,
-            },
+               width: 280
+            }
          }}
          sx={{ zIndex: theme => theme.zIndex.appBar + 100 }}
          variant="temporary"
@@ -230,5 +241,5 @@ export const DashboardSidebar = props => {
 
 DashboardSidebar.propTypes = {
    onClose: PropTypes.func,
-   open: PropTypes.bool,
+   open: PropTypes.bool
 }
