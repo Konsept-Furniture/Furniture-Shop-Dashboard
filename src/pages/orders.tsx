@@ -27,7 +27,7 @@ const Orders = () => {
    return (
       <>
          <Head>
-            <title>Orders | Material Kit</title>
+            <title>Orders | FlowerShop</title>
          </Head>
          <Box
             component="main"

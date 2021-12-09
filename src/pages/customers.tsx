@@ -8,13 +8,13 @@ import { DashboardLayout } from 'components/layouts/dashboard-layout'
 const Customers = () => (
    <>
       <Head>
-         <title>Customers | Material Kit</title>
+         <title>Customers | FlowerShop</title>
       </Head>
       <Box
          component="main"
          sx={{
             flexGrow: 1,
-            py: 8,
+            py: 8
          }}
       >
          <Container maxWidth={false}>
