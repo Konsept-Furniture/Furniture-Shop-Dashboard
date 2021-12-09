@@ -23,11 +23,11 @@ const items = [
       icon: <ChartBarIcon fontSize="small" />,
       title: 'Dashboard'
    },
-   {
-      href: '/customers',
-      icon: <UsersIcon fontSize="small" />,
-      title: 'Customers'
-   },
+   // {
+   //    href: '/customers',
+   //    icon: <UsersIcon fontSize="small" />,
+   //    title: 'Customers'
+   // },
    {
       href: '/orders',
       icon: <OrderIcon fontSize="small" />,
@@ -42,27 +42,27 @@ const items = [
       href: '/account',
       icon: <UserIcon fontSize="small" />,
       title: 'Account'
-   },
-   {
-      href: '/settings',
-      icon: <CogIcon fontSize="small" />,
-      title: 'Settings'
-   },
-   {
-      href: '/login',
-      icon: <LockIcon fontSize="small" />,
-      title: 'Login'
-   },
-   {
-      href: '/register',
-      icon: <UserAddIcon fontSize="small" />,
-      title: 'Register'
-   },
-   {
-      href: '/404',
-      icon: <XCircleIcon fontSize="small" />,
-      title: 'Error'
    }
+   // {
+   //    href: '/settings',
+   //    icon: <CogIcon fontSize="small" />,
+   //    title: 'Settings'
+   // },
+   // {
+   //    href: '/login',
+   //    icon: <LockIcon fontSize="small" />,
+   //    title: 'Login'
+   // },
+   // {
+   //    href: '/register',
+   //    icon: <UserAddIcon fontSize="small" />,
+   //    title: 'Register'
+   // },
+   // {
+   //    href: '/404',
+   //    icon: <XCircleIcon fontSize="small" />,
+   //    title: 'Error'
+   // }
 ]
 
 export const DashboardSidebar = props => {
@@ -99,7 +99,7 @@ export const DashboardSidebar = props => {
             <div>
                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
                   <NextLink href="/" passHref>
-                     <a>
+                     <a style={{ mt: 2, textDecoration: 'none' }}>
                         {/* <Logo
                            sx={{
                               height: 42,
@@ -111,7 +111,9 @@ export const DashboardSidebar = props => {
                            // height=""
                            src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
                         /> */}
-                        <Typography variant="h3">Konsept</Typography>
+                        <Typography variant="h3" sx={{ color: 'secondary.main' }}>
+                           Konsept
+                        </Typography>
                      </a>
                   </NextLink>
                </Box>
