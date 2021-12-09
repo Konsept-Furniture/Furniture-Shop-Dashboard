@@ -93,7 +93,7 @@ export const OrderListResults = ({ pagination, ...rest }: { pagination: Paginati
                      onChange={handleSelectAll}
                   />
                </TableCell>
-               {/* <TableCell>Order ID</TableCell> */}
+               <TableCell>Order ID</TableCell>
                {/* <TableCell align="center">Name</TableCell> */}
                {/* <TableCell align="center">Email</TableCell> */}
                <TableCell align="center">Ordered date</TableCell>
@@ -118,7 +118,7 @@ export const OrderListResults = ({ pagination, ...rest }: { pagination: Paginati
                         value="true"
                      />
                   </TableCell>
-                  {/* <TableCell>{order._id}</TableCell> */}
+                  <TableCell>{order._id}</TableCell>
                   {/* FIXME: name */}
                   {/* <TableCell align="left">
                               <Box
