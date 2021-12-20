@@ -111,7 +111,7 @@ export const DashboardSidebar = props => {
                            // height=""
                            src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
                         /> */}
-                        <Typography variant="h3" sx={{ color: 'secondary.main' }}>
+                        <Typography variant="h3" sx={{ color: '#ffffff' }}>
                            Konsept
                         </Typography>
                      </a>

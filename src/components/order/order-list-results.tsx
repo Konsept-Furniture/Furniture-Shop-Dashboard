@@ -1,4 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from 'react'
+import IconCOD from '../../assets/IconCOD'
+import IconPaypal from '../../assets/IconPaypal'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
@@ -79,6 +81,7 @@ export const OrderListResults = ({ pagination, ...rest }: { pagination: Paginati
       setPage(newPage)
    }
 
+
    return (
       <Table>
          <TableHead>
@@ -147,7 +150,9 @@ export const OrderListResults = ({ pagination, ...rest }: { pagination: Paginati
                   </TableCell> */}
 
                   <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
-                  <TableCell align="center">{order.payment}</TableCell>
+                  <TableCell align="center">
+                     {order.payment === 'COD' ? ( <IconCOD width="48" height="48"/>) : (<IconPaypal width="48" height="48"/>)}
+                     </TableCell>
                   <TableCell align="center">
                      <SeverityPill
                         color={
