@@ -33,3 +33,15 @@ export interface Address {
    district: string
    province: string
 }
+export type EditOrderFormValues = {
+   customerName: string
+   street: string
+   ward: string
+   district: string
+   province: string
+   phone: string
+   email: string
+   notes: string
+   status: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED'
+   amount: number
+}

@@ -13,13 +13,13 @@ const fetcher = (url: string) => {
 
 export function useAuth(options?: Partial<PublicConfiguration>) {
    const {
-      data: { data: profile } = {},
+      data: profile = {},
       error,
-      mutate,
+      mutate
    } = useSWR('users/read/infor', {
       dedupingInterval: 60 * 60 * 1000, // 1hr
       revalidateOnFocus: false,
-      ...options,
+      ...options
    })
 
    const firstLoading = profile === undefined && error === undefined
@@ -40,6 +40,6 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
       error,
       login,
       logout,
-      firstLoading,
+      firstLoading
    }
 }

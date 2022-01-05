@@ -3,9 +3,10 @@ import React, { ReactNode, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import * as yup from 'yup'
-import { Product, ProductPayload } from 'models'
+import { Category, Product, ProductPayload } from 'models'
 import { CustomSelectField, CustomTextField } from 'components/form-controls'
 import { LoadingButton } from '@mui/lab'
+import useSWR from 'swr'
 
 export interface ProductAddEditModalProps {
    isOpen: boolean
@@ -31,6 +32,12 @@ export function ProductAddEditModal({
    onClose,
    onSubmit
 }: ProductAddEditModalProps) {
+   const { data: options = {} } = useSWR('categories', {
+      dedupingInterval: 60 * 60 * 1000, // 1hr
+      revalidateOnFocus: false,
+      revalidateOnMount: true
+   })
+
    const form = useForm<ProductPayload>({
       defaultValues: {
          title: '',
@@ -111,6 +118,14 @@ export function ProductAddEditModal({
                   label="Categories"
                   multiple={true}
                   disabled={isSubmitting}
+                  options={
+                     options
+                        ? options.map((item: Category) => ({
+                             value: item.name,
+                             label: item.name
+                          }))
+                        : []
+                  }
                />
                <CustomTextField control={control} name="price" label="Price" />
                <CustomTextField control={control} name="quantity" label="Quantity" />
