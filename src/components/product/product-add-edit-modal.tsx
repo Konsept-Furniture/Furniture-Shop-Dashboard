@@ -32,7 +32,7 @@ export function ProductAddEditModal({
    onClose,
    onSubmit
 }: ProductAddEditModalProps) {
-   const { data: options = {} } = useSWR('categories', {
+   const { data: options = [] } = useSWR('categories', {
       dedupingInterval: 60 * 60 * 1000, // 1hr
       revalidateOnFocus: false,
       revalidateOnMount: true
