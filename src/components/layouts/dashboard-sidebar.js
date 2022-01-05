@@ -17,17 +17,19 @@ import { Order as OrderIcon } from '../../icons/order'
 import { XCircle as XCircleIcon } from '../../icons/x-circle'
 import { Logo } from '../logo'
 import { NavItem } from '../nav-item'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+
 const items = [
    {
       href: '/',
       icon: <ChartBarIcon fontSize="small" />,
       title: 'Dashboard'
    },
-   // {
-   //    href: '/customers',
-   //    icon: <UsersIcon fontSize="small" />,
-   //    title: 'Customers'
-   // },
+   {
+      href: '/customers',
+      icon: <UsersIcon fontSize="small" />,
+      title: 'Customers'
+   },
    {
       href: '/orders',
       icon: <OrderIcon fontSize="small" />,
@@ -42,27 +44,27 @@ const items = [
       href: '/account',
       icon: <UserIcon fontSize="small" />,
       title: 'Account'
+   },
+   {
+      href: '/settings',
+      icon: <CogIcon fontSize="small" />,
+      title: 'Settings'
+   },
+   {
+      href: '/login',
+      icon: <LockIcon fontSize="small" />,
+      title: 'Login'
+   },
+   {
+      href: '/register',
+      icon: <UserAddIcon fontSize="small" />,
+      title: 'Register'
+   },
+   {
+      href: '/404',
+      icon: <XCircleIcon fontSize="small" />,
+      title: 'Error'
    }
-   // {
-   //    href: '/settings',
-   //    icon: <CogIcon fontSize="small" />,
-   //    title: 'Settings'
-   // },
-   // {
-   //    href: '/login',
-   //    icon: <LockIcon fontSize="small" />,
-   //    title: 'Login'
-   // },
-   // {
-   //    href: '/register',
-   //    icon: <UserAddIcon fontSize="small" />,
-   //    title: 'Register'
-   // },
-   // {
-   //    href: '/404',
-   //    icon: <XCircleIcon fontSize="small" />,
-   //    title: 'Error'
-   // }
 ]
 
 export const DashboardSidebar = props => {
@@ -88,7 +90,7 @@ export const DashboardSidebar = props => {
    )
 
    const content = (
-      <>
+      <PerfectScrollbar>
          <Box
             sx={{
                display: 'flex',
@@ -117,7 +119,7 @@ export const DashboardSidebar = props => {
                      </a>
                   </NextLink>
                </Box>
-               {/* <Box sx={{ px: 2 }}>
+               <Box sx={{ px: 2 }}>
                   <Box
                      sx={{
                         alignItems: 'center',
@@ -146,7 +148,7 @@ export const DashboardSidebar = props => {
                         }}
                      />
                   </Box>
-               </Box> */}
+               </Box>
             </div>
             <Divider
                sx={{
@@ -159,11 +161,11 @@ export const DashboardSidebar = props => {
                   <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
                ))}
             </Box>
-            {/* <Divider sx={{ borderColor: '#2D3748' }} />
-            <Box
+            <Divider sx={{ borderColor: '#2D3748' }} />
+            {/* <Box
                sx={{
                   px: 2,
-                  py: 3,
+                  py: 3
                }}
             >
                <Typography color="neutral.100" variant="subtitle2">
@@ -179,8 +181,8 @@ export const DashboardSidebar = props => {
                      mx: 'auto',
                      width: '160px',
                      '& img': {
-                        width: '100%',
-                     },
+                        width: '100%'
+                     }
                   }}
                >
                   <img alt="Go to pro" src="/static/images/sidebar_pro.png" />
@@ -199,7 +201,7 @@ export const DashboardSidebar = props => {
                </NextLink>
             </Box> */}
          </Box>
-      </>
+      </PerfectScrollbar>
    )
 
    if (lgUp) {
