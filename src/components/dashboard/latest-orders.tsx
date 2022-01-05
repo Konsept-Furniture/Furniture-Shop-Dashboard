@@ -25,7 +25,7 @@ import { SeverityPill } from '../severity-pill'
 const NUMBER_ORDERS: number = 6
 
 export const LatestOrders = (props: any) => {
-   const { data: { data: orders } = { data: [] } } = useSWR(
+   const { data: orders = [] } = useSWR(
       `orders?page=1&pageSize=${NUMBER_ORDERS}&orderBy=updatedAt-desc`,
       {
          revalidateOnFocus: true
@@ -99,35 +99,38 @@ export const LatestOrders = (props: any) => {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {orders.map((order: Order) => (
-                        <TableRow
-                           hover
-                           key={order._id}
-                           onClick={event => handleSelectOne(order._id)}
-                        >
-                           <TableCell padding="checkbox">
-                              <Checkbox
-                                 checked={selectedOrderIds.indexOf(order._id) !== -1}
-                                 onChange={event => handleSelectOne(order._id)}
-                                 value="true"
-                              />
-                           </TableCell>
-                           <TableCell>{order._id}</TableCell>
-                           <TableCell>{order.deliveryInfo.name}</TableCell>
-                           <TableCell>{format(parseISO(order.createdAt), 'dd/MM/yyyy')}</TableCell>
-                           <TableCell>
-                              <SeverityPill
-                                 color={
-                                    (order.status === 'DELIVERIED' && 'success') ||
-                                    (order.status === 'REFUNDED' && 'error') ||
-                                    'warning'
-                                 }
-                              >
-                                 {order.status}
-                              </SeverityPill>
-                           </TableCell>
-                        </TableRow>
-                     ))}
+                     {orders &&
+                        orders.map((order: Order) => (
+                           <TableRow
+                              hover
+                              key={order._id}
+                              onClick={event => handleSelectOne(order._id)}
+                           >
+                              <TableCell padding="checkbox">
+                                 <Checkbox
+                                    checked={selectedOrderIds.indexOf(order._id) !== -1}
+                                    onChange={event => handleSelectOne(order._id)}
+                                    value="true"
+                                 />
+                              </TableCell>
+                              <TableCell>{order._id}</TableCell>
+                              <TableCell>{order.deliveryInfo.name}</TableCell>
+                              <TableCell>
+                                 {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
+                              </TableCell>
+                              <TableCell>
+                                 <SeverityPill
+                                    color={
+                                       (order.status === 'DELIVERIED' && 'success') ||
+                                       (order.status === 'REFUNDED' && 'error') ||
+                                       'warning'
+                                    }
+                                 >
+                                    {order.status}
+                                 </SeverityPill>
+                              </TableCell>
+                           </TableRow>
+                        ))}
                   </TableBody>
                </Table>
             </Box>

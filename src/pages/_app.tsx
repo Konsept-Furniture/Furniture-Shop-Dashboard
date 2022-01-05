@@ -11,6 +11,7 @@ import axiosClient from '../api-client/axios-client'
 import { AppPropsWithLayout } from 'models'
 import { EmptyLayout } from 'components/layouts'
 import { SnackbarProvider } from 'notistack'
+import 'react-perfect-scrollbar/dist/css/styles.css'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -31,7 +32,7 @@ const App = (props: AppPropsWithLayout) => {
                <SnackbarProvider maxSnack={1} preventDuplicate>
                   <SWRConfig
                      value={{
-                        fetcher: (url: string) => axiosClient.get(url),
+                        fetcher: (url: string) => axiosClient.get(url).then(res => res.data),
                         shouldRetryOnError: false
                      }}
                   >
