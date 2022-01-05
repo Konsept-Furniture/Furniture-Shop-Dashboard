@@ -163,36 +163,43 @@ export const theme = createTheme({
          paper: '#FFFFFF'
       },
       divider: '#E6E8F0',
+      //xanh dương
       primary: {
          main: '#3f51b5',
          light: '#757de8',
          dark: '#002984',
-         contrastText: '#FFFFFF'
+         contrastText: '#FFFFFF',
+         sideBar: '#3949ab'
       },
+      //xanh lá sẫm
       secondary: {
          main: '#009688',
          light: '#52c7b8',
          dark: '#00675b',
          contrastText: '#FFFFFF'
       },
+      //xanh lá tươi
       success: {
          main: '#4caf50',
          light: '#43C6B7',
          dark: '#0E8074',
          contrastText: '#FFFFFF'
       },
+      //tím
       info: {
          main: '#9c27b0',
          light: '#d05ce3',
          dark: '#6a0080',
          contrastText: '#FFFFFF'
       },
+      //vàng
       warning: {
          main: '#fdd835',
          light: '#ffff72',
          dark: '#c8b900',
          contrastText: '#FFFFFF'
       },
+      //đỏ
       error: {
          main: '#f44336',
          light: '#ff7961',

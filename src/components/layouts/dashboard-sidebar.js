@@ -99,7 +99,7 @@ export const DashboardSidebar = props => {
             }}
          >
             <div>
-               <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+               <Box sx={{ p: 3, display: 'flex', justifyContent: 'center',}}>
                   <NextLink href="/" passHref>
                      <a style={{ mt: 2, textDecoration: 'none' }}>
                         {/* <Logo
@@ -113,7 +113,7 @@ export const DashboardSidebar = props => {
                            // height=""
                            src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
                         /> */}
-                        <Typography variant="h3" sx={{ color: 'secondary.main' }}>
+                        <Typography variant="h3" sx={{ color: '#ffffff' }}>
                            Konsept
                         </Typography>
                      </a>
@@ -152,7 +152,7 @@ export const DashboardSidebar = props => {
             </div>
             <Divider
                sx={{
-                  borderColor: '#2D3748',
+                  borderColor: 'primary.sideBar',
                   my: 3
                }}
             />
@@ -211,7 +211,7 @@ export const DashboardSidebar = props => {
             open
             PaperProps={{
                sx: {
-                  backgroundColor: 'neutral.900',
+                  backgroundColor: 'primary.sideBar',
                   color: '#FFFFFF',
                   width: 280
                }
@@ -230,7 +230,7 @@ export const DashboardSidebar = props => {
          open={open}
          PaperProps={{
             sx: {
-               backgroundColor: 'neutral.900',
+               backgroundColor: 'primary.sideBar',
                color: '#FFFFFF',
                width: 280
             }
