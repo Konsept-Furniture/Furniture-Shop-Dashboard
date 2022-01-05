@@ -1,8 +1,6 @@
-import { TextField } from '@mui/material'
-import { Product, ProductPayload } from 'models'
-import React from 'react'
-import { Control, Controller, useController, UseFormReturn } from 'react-hook-form'
-import { InputHTMLAttributes } from 'react'
+import { InputProps, TextField } from '@mui/material'
+import React, { InputHTMLAttributes } from 'react'
+import { Control, useController } from 'react-hook-form'
 
 export interface CustomTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
    name: string
@@ -11,6 +9,7 @@ export interface CustomTextFieldProps extends InputHTMLAttributes<HTMLInputEleme
    disabled?: boolean
    multiline?: boolean
    rows?: number | string | undefined
+   InputProps?: Partial<InputProps>
 }
 
 export function CustomTextField({
@@ -20,14 +19,15 @@ export function CustomTextField({
    disabled = false,
    multiline = false,
    rows,
+   InputProps,
    ...restProps
 }: CustomTextFieldProps) {
    const {
       field: { value, onChange, onBlur, ref },
-      fieldState: { invalid, error },
+      fieldState: { invalid, error }
    } = useController({
       name,
-      control,
+      control
    })
 
    return (
@@ -45,6 +45,7 @@ export function CustomTextField({
          disabled={disabled}
          multiline={multiline}
          rows={rows}
+         InputProps={InputProps}
          inputProps={restProps}
       />
    )

@@ -1,10 +1,8 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem } from '@mui/material'
-import React, { useState } from 'react'
-import { Control, useController } from 'react-hook-form'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Theme, useTheme } from '@mui/material/styles'
-import useSWR from 'swr'
-import { Category } from 'models'
+import React from 'react'
+import { Control, useController } from 'react-hook-form'
 
 export interface SelectOption {
    label?: string
@@ -17,6 +15,7 @@ export interface CustomSelectFieldProps {
    label?: string
    disabled?: boolean
    multiple?: boolean
+   options: SelectOption[]
 }
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -24,16 +23,16 @@ const MenuProps = {
    PaperProps: {
       style: {
          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-         width: 250,
-      },
-   },
+         width: 250
+      }
+   }
 }
-function getStyles(option: Category, options: readonly Category[], theme: Theme) {
+function getStyles(option: SelectOption, options: readonly SelectOption[], theme: Theme) {
    return {
       fontWeight:
          options.indexOf(option) === -1
             ? theme.typography.fontWeightRegular
-            : theme.typography.fontWeightMedium,
+            : theme.typography.fontWeightMedium
    }
 }
 
@@ -42,31 +41,28 @@ export function CustomSelectField({
    control,
    label,
    disabled,
-   multiple = false,
+   options,
+   multiple
 }: CustomSelectFieldProps) {
-   const { data: { data: options } = {} } = useSWR('categories', {
-      dedupingInterval: 60 * 60 * 1000, // 1hr
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-   })
    const theme = useTheme()
 
    const handleChange = (event: SelectChangeEvent<string>) => {
       const {
-         target: { value },
+         target: { value }
       } = event
+
       onChange(
          // On autofill we get a the stringified value.
-         typeof value === 'string' ? value.split(',') : value,
+         typeof value === 'string' && value.includes(',') ? value.split(',') : value
       )
    }
 
    const {
       field: { value, onChange, onBlur },
-      fieldState: { invalid, error },
+      fieldState: { invalid, error }
    } = useController({
       name,
-      control,
+      control
    })
 
    return (
@@ -78,16 +74,16 @@ export function CustomSelectField({
             onChange={handleChange}
             onBlur={onBlur}
             label={label}
-            multiple={multiple}
+            multiple={!!multiple}
          >
             {options
-               ? options.map((item: Category) => (
+               ? options.map((item: SelectOption) => (
                     <MenuItem
-                       key={item._id}
-                       value={item.name}
+                       key={item.value}
+                       value={item.value}
                        style={getStyles(item, options, theme)}
                     >
-                       {item.name}
+                       {item.label}
                     </MenuItem>
                  ))
                : null}
