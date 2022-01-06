@@ -3,10 +3,11 @@ import { Box, Button, InputAdornment, Typography } from '@mui/material'
 import { CustomSelectField, CustomTextField } from 'components/form-controls'
 import { OrderStatus } from 'constants/enum/order-status'
 import { EditOrderFormValues, Order } from 'models'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { ConfirmDialog } from 'components/product/confirm-dialog'
 
 export interface EditOrderFormProps {
    order?: Order
@@ -30,6 +31,8 @@ const schema = yup.object().shape({
 })
 
 export function EditOrderForm({ order, onSave, onCancel, onDelete }: EditOrderFormProps) {
+   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+
    const defaultValues = {
       customerName: order?.deliveryInfo.name,
       street: order?.deliveryInfo.address.street,
@@ -154,9 +157,22 @@ export function EditOrderForm({ order, onSave, onCancel, onDelete }: EditOrderFo
             />
          </form>
 
-         <Button variant="text" startIcon={<DeleteIcon />} color="error" onClick={onDelete}>
+         <Button
+            variant="text"
+            startIcon={<DeleteIcon />}
+            color="error"
+            onClick={() => setOpenConfirmDialog(!openConfirmDialog)}
+         >
             Delete Order
          </Button>
+
+         <ConfirmDialog
+            isOpen={openConfirmDialog}
+            title="Are you sure?"
+            body="Are you sure to delete this order?"
+            onSubmit={onDelete}
+            onClose={() => setOpenConfirmDialog(!openConfirmDialog)}
+         />
       </Box>
    )
 }

@@ -12,7 +12,9 @@ import {
    Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
+import IconReport from 'assets/IconReport'
 import CustomizedModal from 'components/customized-modal/customized-modal'
+import { OrderStatus } from 'constants/enum/order-status'
 import { format, parseISO } from 'date-fns'
 import { Order, ProductOrder } from 'models'
 import React, { useState } from 'react'
@@ -29,8 +31,16 @@ export interface OrderDetailProps {
 export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderDetailProps) {
    const [mode, setMode] = useState<'edit' | 'view'>('view')
 
-   const handleApprove = async () => {}
-   const handleReject = async () => {}
+   const handleApprove = async () => {
+      if (order?._id) {
+         await onUpdate(order._id)({ status: 'DELIVERIED' })
+      }
+   }
+   const handleReject = async () => {
+      if (order?._id) {
+         await onUpdate(order._id)({ status: 'CANCELED' })
+      }
+   }
 
    return (
       <CustomizedModal
@@ -74,12 +84,25 @@ export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderD
                      ACTIONS
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 2 }}>
-                     <Button variant="contained" onClick={handleApprove}>
-                        Approve
-                     </Button>
-                     <Button variant="outlined" onClick={handleReject}>
-                        Reject
-                     </Button>
+                     {order?.status === 'PROCESSING' && (
+                        <>
+                           <Button variant="contained" onClick={handleApprove}>
+                              Approve
+                           </Button>
+                           <Button variant="outlined" onClick={handleReject}>
+                              Reject
+                           </Button>
+                        </>
+                     )}
+                     {order?.status === 'DELIVERIED' && (
+                        <Button
+                           startIcon={<IconReport width={20} />}
+                           variant="outlined"
+                           onClick={handleReject}
+                        >
+                           Download bill
+                        </Button>
+                     )}
                      <Button
                         variant="text"
                         startIcon={<EditIcon />}
@@ -90,7 +113,7 @@ export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderD
                   </Box>
                </Box>
                <Typography variant="h6" gutterBottom>
-                  Detail
+                  Details
                </Typography>
 
                <List>
@@ -223,9 +246,7 @@ export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderD
                         <TableRow key={product?._id}>
                            <TableCell>{product?.productId}</TableCell>
                            <TableCell align="center">{product?.quantity}</TableCell>
-                           <TableCell align="right">
-                              ${parseInt(product?.amount).toFixed(2)}
-                           </TableCell>
+                           <TableCell align="right">${product?.amount.toFixed(2)}</TableCell>
                         </TableRow>
                      ))}
                   </TableBody>

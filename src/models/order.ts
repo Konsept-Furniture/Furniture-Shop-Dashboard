@@ -9,7 +9,7 @@ export interface Order {
    isPaid: boolean
    payment: 'COD' | 'PayPal'
    notes?: string
-   status?: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED'
+   status?: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED' | 'CANCELED'
    deleted?: boolean
    createdAt: string
    updatedAt: string
@@ -42,6 +42,6 @@ export type EditOrderFormValues = {
    phone: string
    email: string
    notes: string
-   status: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED'
+   status: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED' | 'CANCELED'
    amount: number
 }
