@@ -1,14 +1,17 @@
 import {
+   Avatar,
+   Box,
    Button,
    Dialog,
    DialogActions,
    DialogContent,
    DialogContentText,
-   DialogTitle,
+   DialogTitle
 } from '@mui/material'
 import React, { ReactNode } from 'react'
 
 export interface ConfirmDialogProps {
+   icon?: ReactNode
    isOpen: boolean
    title: string
    body?: ReactNode | string
@@ -17,7 +20,7 @@ export interface ConfirmDialogProps {
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-   const { isOpen, title, body, onSubmit, onClose } = props
+   const { icon, isOpen, title, body, onSubmit, onClose } = props
 
    const handleClose = () => {
       if (onClose) onClose()
@@ -26,16 +29,16 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
       if (onSubmit) onSubmit()
    }
    return (
-      <Dialog
-         open={isOpen}
-         onClose={handleClose}
-         aria-labelledby="alert-dialog-title"
-         aria-describedby="alert-dialog-description"
-      >
-         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-         <DialogContent>
-            <DialogContentText id="alert-dialog-description">{body}</DialogContentText>
-         </DialogContent>
+      <Dialog open={isOpen} onClose={handleClose}>
+         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {icon && <Box sx={{ ml: 2 }}>{icon}</Box>}
+            <Box sx={{ flex: 1 }}>
+               <DialogTitle>{title}</DialogTitle>
+               <DialogContent>
+                  <DialogContentText>{body}</DialogContentText>
+               </DialogContent>
+            </Box>
+         </Box>
          <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit} autoFocus>

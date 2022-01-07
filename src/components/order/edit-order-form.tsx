@@ -1,14 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { Box, Button, InputAdornment, Typography } from '@mui/material'
+import { Avatar, Box, Button, InputAdornment, Typography } from '@mui/material'
 import { CustomSelectField, CustomTextField } from 'components/form-controls'
-import { OrderStatus } from 'constants/enum/order-status'
+import { OrderStatus } from 'constants/enums/order-status'
 import { EditOrderFormValues, Order } from 'models'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { ConfirmDialog } from 'components/product/confirm-dialog'
-
+import { regexVietnamesePhoneNumber } from 'constants/regexes'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 export interface EditOrderFormProps {
    order?: Order
    onSave: (payload: Partial<Order>) => void
@@ -24,7 +25,15 @@ const schema = yup.object().shape({
    province: yup.string().max(255).required(),
    notes: yup.string().max(255),
    // TODO: validate phone
-   phone: yup.string().max(255).required(),
+   phone: yup
+      .string()
+      .max(255)
+      .required()
+      .test('is-vietnamese-phonenumber', 'Incorrect phone number format.', number => {
+         if (!number) return true
+
+         return regexVietnamesePhoneNumber.test(number)
+      }),
    email: yup.string().email().max(255).nullable().required(),
    amount: yup.number().integer().required().nullable().typeError('you must specify a number'),
    status: yup.string().max(255).required()
@@ -75,6 +84,10 @@ export function EditOrderForm({ order, onSave, onCancel, onDelete }: EditOrderFo
          }
          await onSave(payload)
       }
+   }
+
+   const toggleConfirmDialog = () => {
+      setOpenConfirmDialog(!openConfirmDialog)
    }
 
    return (
@@ -161,17 +174,22 @@ export function EditOrderForm({ order, onSave, onCancel, onDelete }: EditOrderFo
             variant="text"
             startIcon={<DeleteIcon />}
             color="error"
-            onClick={() => setOpenConfirmDialog(!openConfirmDialog)}
+            onClick={toggleConfirmDialog}
          >
             Delete Order
          </Button>
 
          <ConfirmDialog
+            icon={
+               <Avatar sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}>
+                  <ReportProblemIcon />
+               </Avatar>
+            }
             isOpen={openConfirmDialog}
             title="Are you sure?"
             body="Are you sure to delete this order?"
             onSubmit={onDelete}
-            onClose={() => setOpenConfirmDialog(!openConfirmDialog)}
+            onClose={toggleConfirmDialog}
          />
       </Box>
    )

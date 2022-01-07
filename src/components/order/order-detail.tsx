@@ -14,7 +14,7 @@ import {
 import { Box } from '@mui/system'
 import IconReport from 'assets/IconReport'
 import CustomizedModal from 'components/customized-modal/customized-modal'
-import { OrderStatus } from 'constants/enum/order-status'
+import { OrderStatus } from 'constants/enums/order-status'
 import { format, parseISO } from 'date-fns'
 import { Order, ProductOrder } from 'models'
 import React, { useState } from 'react'

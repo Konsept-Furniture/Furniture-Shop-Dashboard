@@ -11,23 +11,29 @@ export const Sales = (props: any) => {
       datasets: [
          {
             backgroundColor: '#3F51B5',
+            borderColor: '#3F51B5',
             barPercentage: 0.5,
             barThickness: 12,
             borderRadius: 4,
             categoryPercentage: 0.5,
             data: [18, 5, 19, 27, 29, 19, 20],
             label: 'This year',
-            maxBarThickness: 10
+            maxBarThickness: 10,
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4
          },
          {
-            backgroundColor: '#EEEEEE',
+            backgroundColor: '#e9e9e9',
+            // borderColor: '#EEEEEE',
             barPercentage: 0.5,
             barThickness: 12,
             borderRadius: 4,
             categoryPercentage: 0.5,
             data: [11, 20, 12, 29, 30, 25, 13],
             label: 'Last year',
-            maxBarThickness: 10
+            maxBarThickness: 10,
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4
          }
       ],
       labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 aug']

@@ -1,113 +1,169 @@
-import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import {
+   Skeleton,
+   Table,
+   TableBody,
+   TableCell,
+   TableHead,
+   TableRow,
+   TableSortLabel
+} from '@mui/material'
 import { SeverityPill } from 'components/severity-pill'
 import { format, parseISO } from 'date-fns'
-import { Order, PaginationParams } from 'models'
-import { ChangeEvent, useState } from 'react'
+import { Order, PaginationParams, ProductOrder } from 'models'
+import { useState } from 'react'
+
+type HeadCell = {
+   id: string
+   align: 'left' | 'center' | 'right' | 'justify' | 'inherit'
+   label: string
+   sortable: boolean
+}
+const headCells: HeadCell[] = [
+   {
+      id: 'name',
+      align: 'left',
+      label: 'Customer',
+      sortable: true
+   },
+   {
+      id: 'products',
+      align: 'left',
+      label: 'Products',
+      sortable: false
+   },
+   {
+      id: 'createdAt',
+      align: 'center',
+      label: 'Ordered date',
+      sortable: true
+   },
+   {
+      id: 'price',
+      align: 'center',
+      label: 'Price',
+      sortable: true
+   },
+   {
+      id: 'payment',
+      align: 'center',
+      label: 'Payment Method',
+      sortable: false
+   },
+   {
+      id: 'status',
+      align: 'center',
+      label: 'Status',
+      sortable: false
+   }
+]
 
 export const OrderListResults = ({
-   orders,
+   orderList,
    pagination,
    onRowClick,
+   onSortByColumn,
    ...rest
 }: {
-   orders: Order[]
+   orderList?: Order[]
    pagination: PaginationParams
    onRowClick: (order: Order) => void
+   onSortByColumn: Function
 }) => {
-   const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([])
+   const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+   const [orderBy, setOrderBy] = useState('')
 
-   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-      let newSelectedOrderIds: string[]
-
-      if (event.target.checked) {
-         newSelectedOrderIds = orders.map((order: Order) => order._id)
-      } else {
-         newSelectedOrderIds = []
-      }
-
-      setSelectedOrderIds(newSelectedOrderIds)
+   const handleSort = (property: string) => async (event: React.MouseEvent) => {
+      const isAsc = orderBy === property && order === 'asc'
+      setOrder(isAsc ? 'desc' : 'asc')
+      setOrderBy(property)
+      onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
    }
-
-   const handleSelectOne = (id: string) => {
-      const selectedIndex = selectedOrderIds.indexOf(id)
-      let newSelectedOrderIds: string[] = []
-
-      if (selectedIndex === -1) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds, id)
-      } else if (selectedIndex === 0) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds.slice(1))
-      } else if (selectedIndex === selectedOrderIds.length - 1) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds.slice(0, -1))
-      } else if (selectedIndex > 0) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(
-            selectedOrderIds.slice(0, selectedIndex),
-            selectedOrderIds.slice(selectedIndex + 1)
-         )
-      }
-
-      setSelectedOrderIds(newSelectedOrderIds)
-   }
-
    return (
-      <Table>
+      <Table {...rest}>
          <TableHead>
             <TableRow>
-               <TableCell padding="checkbox">
-                  <Checkbox
-                     checked={selectedOrderIds.length === orders.length}
-                     color="primary"
-                     indeterminate={
-                        selectedOrderIds.length > 0 && selectedOrderIds.length < orders.length
-                     }
-                     onChange={handleSelectAll}
-                  />
-               </TableCell>
-               {/* <TableCell>Order ID</TableCell> */}
-               {/* <TableCell align="center">Name</TableCell> */}
-               {/* <TableCell align="center">Email</TableCell> */}
-               <TableCell align="center">Ordered date</TableCell>
-               {/* <TableCell align="center">Location</TableCell> */}
-               <TableCell align="center">Price</TableCell>
-               <TableCell align="center">Payment Method</TableCell>
-               <TableCell align="center">Status</TableCell>
-               {/* <TableCell align="center">Action</TableCell> */}
+               {headCells.map(cell => (
+                  <TableCell
+                     key={cell.id}
+                     align={cell.align}
+                     sortDirection={orderBy === cell.id ? order : false}
+                  >
+                     {cell.sortable ? (
+                        <TableSortLabel
+                           active={orderBy === cell.id}
+                           direction={orderBy === cell.id ? order : 'asc'}
+                           onClick={handleSort(cell.id)}
+                        >
+                           {cell.label}
+                        </TableSortLabel>
+                     ) : (
+                        cell.label
+                     )}
+                  </TableCell>
+               ))}
             </TableRow>
          </TableHead>
          <TableBody>
-            {orders &&
-               orders.map((order: Order) => (
-                  <TableRow
-                     hover
-                     key={order._id}
-                     selected={selectedOrderIds.indexOf(order._id) !== -1}
-                     onClick={async () => await onRowClick(order)}
-                  >
-                     <TableCell padding="checkbox">
-                        <Checkbox
-                           checked={selectedOrderIds.indexOf(order._id) !== -1}
-                           onChange={event => handleSelectOne(order._id)}
-                           value="true"
-                        />
-                     </TableCell>
-                     <TableCell align="center">
-                        {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
-                     </TableCell>
-                     <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
-                     <TableCell align="center">{order.payment}</TableCell>
-                     <TableCell align="center">
-                        <SeverityPill
-                           color={
-                              (order.status === 'DELIVERIED' && 'success') ||
-                              (order.status === 'REFUNDED' && 'error') ||
-                              (order.status === 'PROCESSING' && 'primary') ||
-                              'warning'
-                           }
-                        >
-                           {order.status}
-                        </SeverityPill>
-                     </TableCell>
-                  </TableRow>
-               ))}
+            {orderList
+               ? orderList.map((order: Order) => (
+                    <TableRow
+                       hover
+                       key={order._id}
+                       // selected={selectedOrderIds.indexOf(order._id) !== -1}
+                       onClick={async () => await onRowClick(order)}
+                    >
+                       <TableCell align="left" sx={{ minWidth: 200 }}>
+                          {order.deliveryInfo.name}
+                       </TableCell>
+                       <TableCell align="left">
+                          {order.products
+                             .map((product: ProductOrder) => product.productId)
+                             .join('\n')}
+                       </TableCell>
+                       <TableCell align="center">
+                          {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
+                       </TableCell>
+                       <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
+                       <TableCell align="center">{order.payment}</TableCell>
+                       <TableCell align="center" sx={{ minWidth: 200 }}>
+                          <SeverityPill
+                             color={
+                                {
+                                   PENDING: 'info',
+                                   DELIVERIED: 'secondary',
+                                   REFUNDED: 'error',
+                                   PROCESSING: 'primary',
+                                   CANCELED: 'warning'
+                                }[order.status || 'PENDING']
+                             }
+                          >
+                             {order.status}
+                          </SeverityPill>
+                       </TableCell>
+                    </TableRow>
+                 ))
+               : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
+                    <TableRow hover key={idx}>
+                       <TableCell align="left">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="left">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="center">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="center">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="center">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="center">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                    </TableRow>
+                 ))}
          </TableBody>
       </Table>
    )

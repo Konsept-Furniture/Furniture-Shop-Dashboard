@@ -8,9 +8,9 @@ const SeverityPillRoot = styled('span')(({ theme, ownerState }) => {
 
    return {
       alignItems: 'center',
-      backgroundColor: alpha(backgroundColor, 0.1),
+      backgroundColor: alpha(backgroundColor, 0.08),
       borderRadius: 4,
-      border: `1px solid ${alpha(color, 0.5)}`,
+      // border: `1px solid ${alpha(color, 0.3)}`,
       color,
       cursor: 'default',
       display: 'inline-flex',
@@ -28,7 +28,7 @@ const SeverityPillRoot = styled('span')(({ theme, ownerState }) => {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       textTransform: 'uppercase',
-      whiteSpace: 'nowrap',
+      whiteSpace: 'nowrap'
    }
 })
 
@@ -46,5 +46,5 @@ export const SeverityPill = props => {
 
 SeverityPill.propTypes = {
    children: PropTypes.node,
-   color: PropTypes.oneOf(['primary', 'secondary', 'error', 'info', 'warning', 'success']),
+   color: PropTypes.oneOf(['primary', 'secondary', 'error', 'info', 'warning', 'success'])
 }

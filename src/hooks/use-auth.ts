@@ -1,4 +1,4 @@
-import { LoginPayload } from './../models'
+import { LoginPayload, User } from './../models'
 import { authApi } from './../api-client'
 import useSWR from 'swr'
 import { PublicConfiguration } from 'swr/dist/types'
@@ -13,7 +13,7 @@ const fetcher = (url: string) => {
 
 export function useAuth(options?: Partial<PublicConfiguration>) {
    const {
-      data: profile = {},
+      data: profile,
       error,
       mutate
    } = useSWR('users/read/infor', {
@@ -35,11 +35,18 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
       mutate({}, false)
    }
 
+   async function updateProfile(payload: Partial<User>) {
+      await authApi.updateProfile(payload).then(res => {
+         mutate({ ...res.data }, true)
+      })
+   }
+
    return {
       profile,
       error,
       login,
       logout,
+      updateProfile,
       firstLoading
    }
 }

@@ -1,16 +1,28 @@
-import { Box, Card, Container, TablePagination, Typography } from '@mui/material'
+import {
+   Box,
+   Card,
+   Container,
+   Divider,
+   Tab,
+   TablePagination,
+   Tabs,
+   Typography
+} from '@mui/material'
 import { orderApi } from 'api-client'
-import CustomizedModal from 'components/customized-modal/customized-modal'
 import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { OrderDetail } from 'components/order/order-detail'
 import { OrderListResults } from 'components/order/order-list-results'
-import { Order, PaginationParams } from 'models'
+import { ResponseListData, Order, PaginationParams } from 'models'
 import Head from 'next/head'
 import { ChangeEvent, MouseEvent, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
+import queryString from 'query-string'
+import axiosClient from 'api-client/axios-client'
+import { OrderListToolbar } from 'components/order/order-list-toolbar'
 
 const Orders = () => {
+   const [filters, setFilters] = useState({ status: '', orderBy: 'updatedAt-desc' })
    const [pagination, setPagination] = useState<PaginationParams>({
       totalItems: 10,
       totalPages: 1,
@@ -18,17 +30,30 @@ const Orders = () => {
       pageSize: 10
    })
 
-   const { mutate } = useSWRConfig()
-   const { data: orders = [] } = useSWR(
-      `orders?page=${pagination.currentPage}&pageSize=${pagination.pageSize}&orderBy=updatedAt-desc`,
+   const fetcher = (url: string) => {
+      return axiosClient
+         .get<any, ResponseListData<Order>>(url)
+         .then((res: ResponseListData<Order>) => {
+            setPagination(res.pagination)
+            return res.data
+         })
+   }
+
+   const { data: orderList, mutate } = useSWR(
+      `orders?page=${pagination.currentPage}&pageSize=${
+         pagination.pageSize
+      }&${queryString.stringify(filters)}`,
+      fetcher,
       {
          revalidateOnFocus: true
-         // refreshInterval: 1000
       }
    )
 
    const [open, setOpen] = useState(false)
    const [selectedOrder, setSelectedOrder] = useState<Order>()
+
+   const [order, setOrder] = useState('asc')
+   const [orderBy, setOrderBy] = useState('')
 
    const handleModalClose = () => {
       setOpen(false)
@@ -39,14 +64,10 @@ const Orders = () => {
    }
 
    const handlePageChange = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-      console.log(newPage)
       setPagination({ ...pagination, currentPage: newPage + 1 })
-
-      // setPage(newPage)
    }
 
    const handleOrderRowClick = async (order: Order) => {
-      console.log('order', order)
       setOpen(true)
       setSelectedOrder(order)
    }
@@ -54,16 +75,14 @@ const Orders = () => {
    const handleUpdateOrder = (id: string) => async (payload: Partial<Order>) => {
       try {
          await orderApi.update(id, payload).then(res => {
+            if (!orderList) return
+
             const updatedOrder = res.data
-            const idx = orders.findIndex((order: Order) => order._id === updatedOrder?._id)
+            const idx = orderList.findIndex((order: Order) => order._id === updatedOrder?._id)
+            const newOrderList = [...orderList]
 
-            const newOrderList = [...orders]
-            newOrderList[idx] = updatedOrder
-
-            mutate(
-               `orders?page=${pagination.currentPage}&pageSize=${pagination.pageSize}&orderBy=updatedAt-desc`,
-               newOrderList
-            )
+            if (updatedOrder && idx >= 0) newOrderList[idx] = updatedOrder
+            mutate(newOrderList, true)
 
             setOpen(false)
          })
@@ -81,6 +100,20 @@ const Orders = () => {
       }
    }
 
+   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+      setFilters({
+         ...filters,
+         status: newValue
+      })
+   }
+
+   const handleSortOrder = (orderBy: string) => {
+      setFilters({
+         ...filters,
+         orderBy
+      })
+   }
+
    return (
       <>
          <Head>
@@ -90,24 +123,48 @@ const Orders = () => {
             component="main"
             sx={{
                flexGrow: 1,
-               py: 8
+               pt: 4,
+               pb: 8
             }}
          >
             <Container maxWidth={false}>
-               <Box sx={{ mt: 3 }}>
+               <Box
+                  sx={{
+                     alignItems: 'center',
+                     display: 'flex',
+                     justifyContent: 'space-between',
+                     flexWrap: 'wrap',
+                     m: -1
+                  }}
+               >
+                  <Typography sx={{ m: 1 }} variant="h4">
+                     Orders
+                  </Typography>
+               </Box>
+               <Box>
                   <Card>
+                     <Tabs value={filters.status} onChange={handleChangeTab}>
+                        <Tab label="All" value="" />
+                        <Tab label="Pending" value="PENDING" />
+                        <Tab label="Processing" value="PROCESSING" />
+                        <Tab label="Deliveried" value="DELIVERIED" />
+                        <Tab label="Canceled" value="CANCELED" />
+                     </Tabs>
+                     <Divider />
+
                      <PerfectScrollbar>
                         <Box sx={{ width: '100%' }}>
                            <OrderListResults
-                              orders={orders}
+                              orderList={orderList}
                               pagination={pagination}
                               onRowClick={handleOrderRowClick}
+                              onSortByColumn={handleSortOrder}
                            />
                         </Box>
                      </PerfectScrollbar>
                      <TablePagination
                         component="div"
-                        count={-1}
+                        count={pagination.totalItems}
                         onPageChange={handlePageChange}
                         onRowsPerPageChange={handleLimitChange}
                         page={pagination.currentPage - 1}

@@ -107,6 +107,15 @@ export const theme = createTheme({
             }
          }
       },
+      MuiTab: {
+         styleOverrides: {
+            root: {
+               textTransform: 'capitalize',
+               color: '#65748b',
+               fontWeight: 500
+            }
+         }
+      },
       MuiTableHead: {
          styleOverrides: {
             root: {

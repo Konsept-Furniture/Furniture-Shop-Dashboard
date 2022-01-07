@@ -1,8 +1,8 @@
-import { Product } from 'models'
+import { User } from 'models'
 
 export interface Order {
    _id: string
-   userId: string
+   user: User
    products: ProductOrder[]
    amount: number
    deliveryInfo: DeliveryInfo

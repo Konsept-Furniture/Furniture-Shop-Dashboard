@@ -13,6 +13,27 @@ import { EmptyLayout } from 'components/layouts'
 import { SnackbarProvider } from 'notistack'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import 'assets/styles/nprogress.css'
+
+if (typeof window !== 'undefined') {
+   NProgress.configure({ showSpinner: false })
+   NProgress.start()
+   Router.events.on('routeChangeStart', () => {
+      console.log('routeChangeStart')
+      NProgress.start()
+   })
+   Router.events.on('routeChangeError', () => {
+      console.log('routeChangeError')
+      NProgress.done()
+   })
+   Router.events.on('routeChangeComplete', () => {
+      console.log('routeChangeComplete')
+      NProgress.done()
+   })
+}
+
 const clientSideEmotionCache = createEmotionCache()
 
 const App = (props: AppPropsWithLayout) => {

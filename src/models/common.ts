@@ -37,7 +37,7 @@ export interface ListParams {
    [key: string]: any
 }
 
-export interface ListResponse<T> {
+export interface ResponseListData<T> {
    data: T[]
    pagination: PaginationParams
    errorCode: Number

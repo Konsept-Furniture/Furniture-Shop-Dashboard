@@ -10,3 +10,10 @@ export interface User {
    createdAt: string
    updatedAt: string
 }
+
+export type EditProfileFormValues = {
+   name: string
+   username: string
+   phone: string
+   email: string
+}
