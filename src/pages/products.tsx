@@ -99,7 +99,7 @@ const Products = () => {
 
    useEffect(() => {
       getProductList(pagination)
-   }, [])
+   }, [pagination])
 
    return (
       <>

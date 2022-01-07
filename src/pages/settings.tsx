@@ -13,7 +13,7 @@ const Settings = () => (
          component="main"
          sx={{
             flexGrow: 1,
-            py: 8,
+            py: 8
          }}
       >
          <Container maxWidth="lg">
@@ -21,9 +21,7 @@ const Settings = () => (
                Settings
             </Typography>
             <SettingsNotifications />
-            <Box sx={{ pt: 3 }}>
-               <SettingsPassword />
-            </Box>
+            <Box sx={{ pt: 3 }}>{/* <SettingsPassword /> */}</Box>
          </Container>
       </Box>
    </>
