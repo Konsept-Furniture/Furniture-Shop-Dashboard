@@ -1,4 +1,4 @@
-import { ResponseData, User, LoginPayload } from './../models'
+import { ResponseData, User, LoginPayload, ChangePasswordFormValues } from './../models'
 import axiosClient from './axios-client'
 
 export const authApi = {
@@ -13,6 +13,10 @@ export const authApi = {
    },
    updateProfile(payload: Partial<User>): Promise<ResponseData<User>> {
       const url = 'users/update/infor'
+      return axiosClient.put(url, JSON.stringify(payload))
+   },
+   changePassword: (payload: ChangePasswordFormValues): Promise<ResponseData<User>> => {
+      const url = 'auth/change-password'
       return axiosClient.put(url, JSON.stringify(payload))
    }
 }

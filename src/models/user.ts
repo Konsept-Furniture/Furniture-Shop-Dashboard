@@ -17,3 +17,9 @@ export type EditProfileFormValues = {
    phone: string
    email: string
 }
+
+export type ChangePasswordFormValues = {
+   oldPassword?: string
+   newPassword?: string
+   confirmPassword?: string
+}

@@ -44,11 +44,6 @@ const items = [
       href: '/account',
       icon: <UserIcon fontSize="small" />,
       title: 'Account'
-   },
-   {
-      href: '/settings',
-      icon: <CogIcon fontSize="small" />,
-      title: 'Settings'
    }
 ]
 

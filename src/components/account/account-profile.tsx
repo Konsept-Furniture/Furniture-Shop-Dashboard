@@ -12,7 +12,7 @@ import { format, parseISO } from 'date-fns'
 import { useAuth } from 'hooks'
 
 export const AccountProfile = (props: any) => {
-   const { profile, firstLoading } = useAuth()
+   const { profile } = useAuth()
 
    return (
       <Card {...props}>
@@ -25,7 +25,7 @@ export const AccountProfile = (props: any) => {
                }}
             >
                <Avatar
-                  src="https://ie-104-flower-shop-fe-konsept-store.vercel.app/dist/src/assets/images/sang.jpg"
+                  src="https://konsept-client.vercel.app/dist/src/assets/images/sang.jpg"
                   sx={{
                      height: 64,
                      mb: 2,
