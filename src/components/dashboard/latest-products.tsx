@@ -22,7 +22,7 @@ const NUMBER_PRODUCTS: number = 6
 
 const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
    <List>
-      {new Array(numberProducts).map((product, index) => (
+      {Array.from(new Array(numberProducts)).map((product, index) => (
          <ListItem divider={index < NUMBER_PRODUCTS - 1} key={index}>
             <ListItemAvatar>
                <Skeleton variant="rectangular" width={48} height={48} />
@@ -40,7 +40,7 @@ const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
 )
 
 export const LatestProducts = (props: any) => {
-   const { data: products = [] } = useSWR(
+   const { data: products } = useSWR(
       `products?page=1&pageSize=${NUMBER_PRODUCTS}&orderBy=updatedAt-desc`,
       {
          revalidateOnFocus: true

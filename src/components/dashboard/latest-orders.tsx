@@ -4,133 +4,93 @@ import {
    Button,
    Card,
    CardHeader,
-   Checkbox,
+   Skeleton,
    Table,
    TableBody,
    TableCell,
    TableHead,
-   TableRow,
-   TableSortLabel,
-   Tooltip
+   TableRow
 } from '@mui/material'
-import { format, parseISO } from 'date-fns'
+import { formatDistanceToNow, parseISO } from 'date-fns'
 import { Order } from 'models/order'
 import NextLink from 'next/link'
-import { ChangeEvent, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import useSWR from 'swr'
-import { v4 as uuid } from 'uuid'
 import { SeverityPill } from '../severity-pill'
 
 const NUMBER_ORDERS: number = 6
 
 export const LatestOrders = (props: any) => {
-   const { data: orders = [] } = useSWR(
-      `orders?page=1&pageSize=${NUMBER_ORDERS}&orderBy=updatedAt-desc`,
+   const { data: orders } = useSWR(
+      `orders?page=1&pageSize=${NUMBER_ORDERS}&orderBy=createdAt-desc`,
       {
          revalidateOnFocus: true
       }
    )
-   console.log('🚀 ~ file: latest-orders.tsx ~ line 94 ~ LatestOrders ~ orders', orders)
 
-   const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([])
-
-   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-      let newSelectedOrderIds: string[]
-
-      if (event.target.checked) {
-         newSelectedOrderIds = orders.map((order: Order) => order._id)
-      } else {
-         newSelectedOrderIds = []
-      }
-
-      setSelectedOrderIds(newSelectedOrderIds)
-   }
-
-   const handleSelectOne = (id: string) => {
-      const selectedIndex = selectedOrderIds.indexOf(id)
-      let newSelectedOrderIds: string[] = []
-
-      if (selectedIndex === -1) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds, id)
-      } else if (selectedIndex === 0) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds.slice(1))
-      } else if (selectedIndex === selectedOrderIds.length - 1) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(selectedOrderIds.slice(0, -1))
-      } else if (selectedIndex > 0) {
-         newSelectedOrderIds = newSelectedOrderIds.concat(
-            selectedOrderIds.slice(0, selectedIndex),
-            selectedOrderIds.slice(selectedIndex + 1)
-         )
-      }
-
-      setSelectedOrderIds(newSelectedOrderIds)
-   }
    return (
-      // TODO: đổi field userId trong
       <Card {...props}>
          <CardHeader title="Latest Orders" />
          <PerfectScrollbar>
-            <Box sx={{ minWidth: 800 }}>
+            <Box>
                <Table>
                   <TableHead>
                      <TableRow>
-                        <TableCell padding="checkbox">
-                           <Checkbox
-                              checked={selectedOrderIds.length === orders?.length}
-                              color="primary"
-                              indeterminate={
-                                 selectedOrderIds.length > 0 &&
-                                 selectedOrderIds.length < orders.length
-                              }
-                              onChange={handleSelectAll}
-                           />
-                        </TableCell>
-                        <TableCell>Order ID</TableCell>
-                        <TableCell>Customer</TableCell>
-                        <TableCell sortDirection="desc">
-                           <Tooltip enterDelay={300} title="Sort">
-                              <TableSortLabel active direction="desc">
-                                 Date
-                              </TableSortLabel>
-                           </Tooltip>
-                        </TableCell>
-                        <TableCell>Status</TableCell>
+                        <TableCell align="left">Customer</TableCell>
+                        <TableCell align="center">Time Flies</TableCell>
+                        <TableCell align="center">Payment</TableCell>
+                        <TableCell align="center">Total</TableCell>
+                        <TableCell align="center">Status</TableCell>
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {orders &&
-                        orders.map((order: Order) => (
-                           <TableRow
-                              hover
-                              key={order._id}
-                              onClick={event => handleSelectOne(order._id)}
-                           >
-                              <TableCell padding="checkbox">
-                                 <Checkbox
-                                    checked={selectedOrderIds.indexOf(order._id) !== -1}
-                                    onChange={event => handleSelectOne(order._id)}
-                                    value="true"
-                                 />
-                              </TableCell>
-                              <TableCell>{order._id}</TableCell>
-                              <TableCell>{order.deliveryInfo.name}</TableCell>
-                              <TableCell>
-                                 {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
-                              </TableCell>
-                              <TableCell>
-                                 <SeverityPill
-                                    color={
-                                       (order.status === 'DELIVERIED' && 'success') ||
-                                       (order.status === 'REFUNDED' && 'error') ||
-                                       'warning'
-                                    }
-                                 >
-                                    {order.status}
-                                 </SeverityPill>
-                              </TableCell>
-                           </TableRow>
-                        ))}
+                     {orders
+                        ? orders.map((order: Order) => (
+                             <TableRow hover key={order._id}>
+                                <TableCell align="left">{order.deliveryInfo.name}</TableCell>
+                                <TableCell align="center">
+                                   {formatDistanceToNow(parseISO(order.createdAt), {
+                                      addSuffix: true
+                                   })}
+                                </TableCell>
+                                <TableCell align="center">{order.payment}</TableCell>
+                                <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
+                                <TableCell align="center">
+                                   <SeverityPill
+                                      color={
+                                         {
+                                            PENDING: 'info',
+                                            DELIVERIED: 'secondary',
+                                            REFUNDED: 'error',
+                                            PROCESSING: 'primary',
+                                            CANCELED: 'warning'
+                                         }[order.status || 'PENDING']
+                                      }
+                                   >
+                                      {order.status}
+                                   </SeverityPill>
+                                </TableCell>
+                             </TableRow>
+                          ))
+                        : Array.from(new Array(NUMBER_ORDERS)).map((item, idx) => (
+                             <TableRow hover key={idx}>
+                                <TableCell align="left">
+                                   <Skeleton variant="text" />
+                                </TableCell>
+                                <TableCell align="center">
+                                   <Skeleton variant="text" />
+                                </TableCell>
+                                <TableCell align="center">
+                                   <Skeleton variant="text" />
+                                </TableCell>
+                                <TableCell align="center">
+                                   <Skeleton variant="text" />
+                                </TableCell>
+                                <TableCell align="center">
+                                   <Skeleton variant="text" />
+                                </TableCell>
+                             </TableRow>
+                          ))}
                   </TableBody>
                </Table>
             </Box>

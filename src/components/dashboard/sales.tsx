@@ -147,7 +147,7 @@ export const Sales = (props: any) => {
                {data && <Line data={data} options={options} />}
             </Box>
          </CardContent>
-         <Divider />
+         {/* <Divider />
          <Box
             sx={{
                display: 'flex',
@@ -158,7 +158,7 @@ export const Sales = (props: any) => {
             <Button color="primary" endIcon={<ArrowRightIcon fontSize="small" />} size="small">
                Overview
             </Button>
-         </Box>
+         </Box> */}
       </Card>
    )
 }
