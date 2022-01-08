@@ -16,8 +16,10 @@ export interface Order {
 }
 
 export interface ProductOrder {
-   _id: string
    productId: string
+   title: string
+   img: string
+   price: number
    quantity: number
    amount: number
 }

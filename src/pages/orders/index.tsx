@@ -9,25 +9,27 @@ import {
    Typography
 } from '@mui/material'
 import { orderApi } from 'api-client'
+import axiosClient from 'api-client/axios-client'
 import { DashboardLayout } from 'components/layouts/dashboard-layout'
-import { OrderDetail } from 'components/order/order-detail'
+import { OrderDetailModal } from 'components/order/order-detail'
 import { OrderListResults } from 'components/order/order-list-results'
-import { ResponseListData, Order, PaginationParams } from 'models'
+import { Order, PaginationParams, ResponseListData } from 'models'
 import Head from 'next/head'
+import queryString from 'query-string'
 import { ChangeEvent, MouseEvent, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import useSWR from 'swr'
-import queryString from 'query-string'
-import axiosClient from 'api-client/axios-client'
+
+const DEFAULT_PAGINATION = {
+   totalItems: 10,
+   totalPages: 1,
+   currentPage: 1,
+   pageSize: 10
+}
 
 const Orders = () => {
    const [filters, setFilters] = useState({ status: '', orderBy: 'updatedAt-desc' })
-   const [pagination, setPagination] = useState<PaginationParams>({
-      totalItems: 10,
-      totalPages: 1,
-      currentPage: 1,
-      pageSize: 10
-   })
+   const [pagination, setPagination] = useState<PaginationParams>(DEFAULT_PAGINATION)
 
    const fetcher = (url: string) => {
       return axiosClient
@@ -97,6 +99,7 @@ const Orders = () => {
    }
 
    const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+      setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          status: newValue
@@ -104,6 +107,7 @@ const Orders = () => {
    }
 
    const handleSortOrder = (orderBy: string) => {
+      setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          orderBy
@@ -172,7 +176,7 @@ const Orders = () => {
             </Container>
          </Box>
 
-         <OrderDetail
+         <OrderDetailModal
             order={selectedOrder}
             open={open}
             onClose={handleModalClose}

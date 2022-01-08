@@ -4,7 +4,7 @@ import { ReactElement, ReactNode } from 'react'
 import { EmotionCache } from '@emotion/react'
 
 export interface ResponseData<T> {
-   data?: T | null
+   data: T
    errorCode: number
    message: string
 }

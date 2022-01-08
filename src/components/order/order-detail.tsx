@@ -1,5 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit'
 import {
+   Avatar,
    Button,
    Divider,
    List,
@@ -20,7 +21,7 @@ import { Order, ProductOrder } from 'models'
 import React, { useState } from 'react'
 import { EditOrderForm } from './edit-order-form'
 
-export interface OrderDetailProps {
+export interface OrderDetailModalProps {
    order?: Order
    open: boolean
    onUpdate: (id: string) => (order: Partial<Order>) => Promise<void>
@@ -28,7 +29,13 @@ export interface OrderDetailProps {
    onClose: () => void
 }
 
-export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderDetailProps) {
+export function OrderDetailModal({
+   order,
+   open,
+   onUpdate,
+   onDelete,
+   onClose
+}: OrderDetailModalProps) {
    const [mode, setMode] = useState<'edit' | 'view'>('view')
 
    const handleApprove = async () => {
@@ -243,8 +250,13 @@ export function OrderDetail({ order, open, onUpdate, onDelete, onClose }: OrderD
                   </TableHead>
                   <TableBody>
                      {order?.products.map((product: ProductOrder) => (
-                        <TableRow key={product?._id}>
-                           <TableCell>{product?.productId}</TableCell>
+                        <TableRow key={product?.productId}>
+                           <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                 <Avatar variant="rounded" src={product.img}></Avatar>
+                                 {product.title}
+                              </Box>
+                           </TableCell>
                            <TableCell align="center">{product?.quantity}</TableCell>
                            <TableCell align="right">${product?.amount.toFixed(2)}</TableCell>
                         </TableRow>

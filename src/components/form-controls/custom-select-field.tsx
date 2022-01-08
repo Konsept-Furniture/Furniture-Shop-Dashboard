@@ -51,10 +51,7 @@ export function CustomSelectField({
          target: { value }
       } = event
 
-      onChange(
-         // On autofill we get a the stringified value.
-         typeof value === 'string' && value.includes(',') ? value.split(',') : value
-      )
+      onChange(typeof value === 'string' && value.includes(',') ? value.split(',') : value)
    }
 
    const {

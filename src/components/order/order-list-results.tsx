@@ -1,4 +1,6 @@
 import {
+   Avatar,
+   Box,
    Skeleton,
    Table,
    TableBody,
@@ -23,7 +25,7 @@ const headCells: HeadCell[] = [
       id: 'name',
       align: 'left',
       label: 'Customer',
-      sortable: true
+      sortable: false
    },
    {
       id: 'products',
@@ -38,7 +40,7 @@ const headCells: HeadCell[] = [
       sortable: true
    },
    {
-      id: 'price',
+      id: 'amount',
       align: 'center',
       label: 'Price',
       sortable: true
@@ -106,19 +108,20 @@ export const OrderListResults = ({
          <TableBody>
             {orderList
                ? orderList.map((order: Order) => (
-                    <TableRow
-                       hover
-                       key={order._id}
-                       // selected={selectedOrderIds.indexOf(order._id) !== -1}
-                       onClick={async () => await onRowClick(order)}
-                    >
+                    <TableRow hover key={order._id} onClick={async () => await onRowClick(order)}>
                        <TableCell align="left" sx={{ minWidth: 200 }}>
                           {order.deliveryInfo.name}
                        </TableCell>
                        <TableCell align="left">
-                          {order.products
-                             .map((product: ProductOrder) => product.productId)
-                             .join('\n')}
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                             {order.products.map(product => (
+                                <Avatar
+                                   key={product.productId}
+                                   variant="rounded"
+                                   src={product.img}
+                                ></Avatar>
+                             ))}
+                          </Box>
                        </TableCell>
                        <TableCell align="center">
                           {format(parseISO(order.createdAt), 'dd/MM/yyyy')}

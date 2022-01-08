@@ -29,14 +29,14 @@ import queryString from 'query-string'
 import { Download as DownloadIcon } from '../icons/download'
 import { Upload as UploadIcon } from '../icons/upload'
 
-const defaultPagination = {
+const DEFAULT_PAGINATION = {
    totalItems: 10,
    totalPages: 1,
    currentPage: 1,
    pageSize: 12
 }
 const Products = () => {
-   const [pagination, setPagination] = useState<PaginationParams>(defaultPagination)
+   const [pagination, setPagination] = useState<PaginationParams>(DEFAULT_PAGINATION)
    const [filters, setFilters] = useState<Partial<ProductQueryParams>>({
       orderBy: '',
       inStock: '',
@@ -138,7 +138,7 @@ const Products = () => {
    }
 
    const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
-      setPagination(defaultPagination)
+      setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          inStock: newValue
@@ -146,14 +146,14 @@ const Products = () => {
    }
 
    const handleSearch = (search: string) => {
-      setPagination(defaultPagination)
+      setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          search
       })
    }
    const handleChangeSorting = (orderBy: string) => {
-      setPagination(defaultPagination)
+      setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          orderBy

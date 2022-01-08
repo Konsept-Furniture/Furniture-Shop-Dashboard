@@ -11,6 +11,13 @@ export const theme = createTheme({
       }
    },
    components: {
+      MuiIconButton: {
+         styleOverrides: {
+            root: {
+               borderRadius: '8px'
+            }
+         }
+      },
       MuiButton: {
          defaultProps: {
             disableElevation: true
@@ -160,7 +167,7 @@ export const theme = createTheme({
          900: '#111827'
       },
       action: {
-         active: '#8d6e63',
+         active: 'rgb(107, 114, 128)',
          focus: 'rgba(55, 65, 81, 0.12)',
          hover: 'rgba(55, 65, 81, 0.04)',
          selected: 'rgba(55, 65, 81, 0.08)',
