@@ -1,95 +1,135 @@
-import { Box, Container, Pagination } from '@mui/material'
+import {
+   Box,
+   Button,
+   Container,
+   Divider,
+   Pagination,
+   Paper,
+   Tab,
+   Tabs,
+   Typography
+} from '@mui/material'
 import { productApi } from 'api-client'
+import axiosClient from 'api-client/axios-client'
 import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { ProductList, ProductListToolbar } from 'components/product'
 import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
-import { PaginationParams, Product, ProductPayload } from 'models'
+import {
+   PaginationParams,
+   Product,
+   ProductPayload,
+   ProductQueryParams,
+   ResponseListData
+} from 'models'
 import Head from 'next/head'
 import { useSnackbar } from 'notistack'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
+import queryString from 'query-string'
+import { Download as DownloadIcon } from '../icons/download'
+import { Upload as UploadIcon } from '../icons/upload'
 
+const defaultPagination = {
+   totalItems: 10,
+   totalPages: 1,
+   currentPage: 1,
+   pageSize: 12
+}
 const Products = () => {
-   useSWR('categories', {
-      dedupingInterval: 60 * 60 * 1000, // 1hr
-      revalidateOnFocus: false,
-      revalidateOnMount: true
+   const [pagination, setPagination] = useState<PaginationParams>(defaultPagination)
+   const [filters, setFilters] = useState<Partial<ProductQueryParams>>({
+      orderBy: '',
+      inStock: '',
+      search: ''
    })
 
-   const { enqueueSnackbar } = useSnackbar()
+   const fetcher = (url: string) => {
+      return axiosClient
+         .get<any, ResponseListData<Product>>(url)
+         .then((res: ResponseListData<Product>) => {
+            setPagination(res.pagination)
+            return res.data
+         })
+   }
+
+   const { data: productList, mutate } = useSWR(
+      `products?page=${pagination.currentPage}&pageSize=${
+         pagination.pageSize
+      }&${queryString.stringify(filters, { skipEmptyString: true })}`,
+      fetcher,
+      {
+         revalidateOnFocus: true
+      }
+   )
+
    const [isEdit, setIsEdit] = useState(false)
    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
    const [editProduct, setEditProduct] = useState<Product>()
-   const [loading, setLoading] = useState(false)
-   const [products, setProducts] = useState<Product[]>([])
-   const [pagination, SetPagination] = useState<PaginationParams>({
-      currentPage: 1,
-      pageSize: 12,
-      totalItems: 0,
-      totalPages: 1
-   })
-
-   //TODO: apply debounce on searching products by title
-   const getProductList = async (_pagination: Partial<PaginationParams>) => {
-      setLoading(true)
-      try {
-         const payload = {
-            page: _pagination.currentPage,
-            pageSize: _pagination.pageSize
-         }
-         const res = await productApi.getList(payload)
-         setProducts(res.data)
-         SetPagination(res.pagination)
-      } catch (error) {
-         console.log('error to get product list', error)
-      }
-      setLoading(false)
+   const productListTitleRef = useRef<HTMLElement>(null)
+   const executeScroll = () => {
+      if (productListTitleRef.current) productListTitleRef.current.scrollIntoView()
    }
 
    const handleChangePagination = async (event: ChangeEvent<unknown>, value: number) => {
-      await getProductList({
+      executeScroll()
+      await setPagination({
          ...pagination,
          currentPage: value
       })
    }
 
    const handleAddEditProduct = async (product: ProductPayload) => {
-      console.log('edit product', editProduct?._id, product)
-
       if (editProduct?._id) {
          try {
-            const res = await productApi.update(editProduct._id, product)
-            console.log(res)
+            await productApi.update(editProduct._id, product).then(res => {
+               if (!productList) return
+
+               const updatedProduct = res.data
+               const idx = productList.findIndex(product => product._id == updatedProduct?._id)
+               const newProductList = [...productList]
+
+               if (updatedProduct && idx >= 0) newProductList[idx] = updatedProduct
+               mutate(newProductList, true)
+            })
             await handleCloseAddEditModal()
-            getProductList(pagination)
          } catch (error) {
             console.log('error to edit product', error)
          }
       } else {
          try {
-            const res = await productApi.add(product)
-            console.log(res)
+            await productApi.add(product).then(res => {
+               if (!productList) return
+
+               const addedProduct = res.data
+               if (addedProduct) {
+                  const newProductList = [addedProduct, ...productList].slice(
+                     0,
+                     pagination.pageSize
+                  )
+
+                  if (newProductList) {
+                     mutate(newProductList, true)
+                  }
+               }
+            })
             await handleCloseAddEditModal()
-            getProductList(pagination)
          } catch (error) {
             console.log('error to add product', error)
          }
       }
    }
 
-   const handleDeleteProduct = async (product: Product) => {
-      console.log('delete product', product)
-      // try {
-      //    const res = await productApi.delete(product)
-      //    enqueueSnackbar(res.message, {
-      //       variant: 'success'
-      //    })
-      //    getProductList(pagination)
-      // } catch (error: any) {
-      //    enqueueSnackbar(error.message, {
-      //       variant: 'error'
-      //    })
-      // }
+   const handleDeleteProduct = async (id: string) => {
+      try {
+         await productApi.delete(id).then(() => {
+            if (!productList) return
+
+            const newProductList = productList.filter(product => product._id !== id)
+            mutate(newProductList, true)
+         })
+      } catch (error: any) {
+         console.log('error to delete product', error)
+      }
    }
 
    const handleCloseAddEditModal = () => {
@@ -97,9 +137,28 @@ const Products = () => {
       setEditProduct(undefined)
    }
 
-   useEffect(() => {
-      getProductList(pagination)
-   }, [pagination])
+   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+      setPagination(defaultPagination)
+      setFilters({
+         ...filters,
+         inStock: newValue
+      })
+   }
+
+   const handleSearch = (search: string) => {
+      setPagination(defaultPagination)
+      setFilters({
+         ...filters,
+         search
+      })
+   }
+   const handleChangeSorting = (orderBy: string) => {
+      setPagination(defaultPagination)
+      setFilters({
+         ...filters,
+         orderBy
+      })
+   }
 
    return (
       <>
@@ -114,14 +173,54 @@ const Products = () => {
             }}
          >
             <Container maxWidth={false}>
-               <ProductListToolbar
-                  onAddProductClick={() => {
-                     setIsEdit(false)
-                     setIsEditModalOpen(true)
+               <Box
+                  sx={{
+                     alignItems: 'center',
+                     display: 'flex',
+                     justifyContent: 'space-between',
+                     flexWrap: 'wrap',
+                     m: -1
                   }}
-               />
+               >
+                  <Typography sx={{ m: 1 }} variant="h4" ref={productListTitleRef}>
+                     Products
+                  </Typography>
+                  <Box sx={{ m: 1 }}>
+                     <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
+                        Import
+                     </Button>
+                     <Button startIcon={<UploadIcon fontSize="small" />} sx={{ mr: 1 }}>
+                        Export
+                     </Button>
+                     <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() => {
+                           setIsEdit(false)
+                           setIsEditModalOpen(true)
+                        }}
+                     >
+                        Add products
+                     </Button>
+                  </Box>
+               </Box>
+
+               <Paper sx={{ mt: 1 }}>
+                  <Tabs value={filters.inStock} onChange={handleChangeTab}>
+                     <Tab label="All" value="" />
+                     <Tab label="Available" value="true" />
+                     <Tab label="Out of stock" value="false" />
+                  </Tabs>
+                  <Divider />
+                  <ProductListToolbar
+                     filters={filters}
+                     onSearch={handleSearch}
+                     onChangeSorting={handleChangeSorting}
+                  />
+               </Paper>
                <ProductList
-                  products={products}
+                  products={productList}
+                  pagination={pagination}
                   onEditClick={(product: Product) => {
                      setIsEditModalOpen(true)
                      setEditProduct(product)

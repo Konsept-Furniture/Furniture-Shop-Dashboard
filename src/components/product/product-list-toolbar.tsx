@@ -1,51 +1,52 @@
 import {
    Box,
-   Button,
    Card,
    CardContent,
-   TextField,
+   Grid,
    InputAdornment,
+   MenuItem,
+   Select,
+   SelectChangeEvent,
    SvgIcon,
-   Typography,
+   TextField
 } from '@mui/material'
-import { Download as DownloadIcon } from '../../icons/download'
 import { Search as SearchIcon } from '../../icons/search'
-import { Upload as UploadIcon } from '../../icons/upload'
+import queryString from 'query-string'
+import { ReactNode, useRef } from 'react'
+import { ProductQueryParams } from 'models'
 
-export const ProductListToolbar = ({ onAddProductClick, ...restProps }: any) => {
-   const handleAddProductClick = () => {
-      if (onAddProductClick) onAddProductClick()
+export interface ProductListToolbarProps {
+   onSearch: Function
+   onChangeSorting: Function
+   filters: Partial<ProductQueryParams>
+}
+export const ProductListToolbar = ({
+   onSearch,
+   onChangeSorting,
+   filters,
+   ...restProps
+}: ProductListToolbarProps) => {
+   const ref = useRef<NodeJS.Timeout | null>(null)
+
+   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (ref.current) {
+         clearTimeout(ref.current)
+      }
+      ref.current = setTimeout(() => {
+         onSearch(e.target.value.trim())
+      }, 500)
    }
+
+   const handleChangeSort = (event: SelectChangeEvent) => {
+      onChangeSorting(event.target.value as string)
+   }
+
    return (
       <Box {...restProps}>
-         <Box
-            sx={{
-               alignItems: 'center',
-               display: 'flex',
-               justifyContent: 'space-between',
-               flexWrap: 'wrap',
-               m: -1,
-            }}
-         >
-            <Typography sx={{ m: 1 }} variant="h4">
-               Products
-            </Typography>
-            <Box sx={{ m: 1 }}>
-               <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
-                  Import
-               </Button>
-               <Button startIcon={<UploadIcon fontSize="small" />} sx={{ mr: 1 }}>
-                  Export
-               </Button>
-               <Button color="primary" variant="contained" onClick={handleAddProductClick}>
-                  Add products
-               </Button>
-            </Box>
-         </Box>
-         <Box sx={{ mt: 3 }}>
-            <Card>
-               <CardContent>
-                  <Box sx={{ maxWidth: 500 }}>
+         <Card>
+            <CardContent>
+               <Grid container spacing={2}>
+                  <Grid item sm={12} md={9}>
                      <TextField
                         fullWidth
                         InputProps={{
@@ -55,15 +56,31 @@ export const ProductListToolbar = ({ onAddProductClick, ...restProps }: any) => 
                                     <SearchIcon />
                                  </SvgIcon>
                               </InputAdornment>
-                           ),
+                           )
                         }}
                         placeholder="Search product"
                         variant="outlined"
+                        onChange={handleChangeSearch}
                      />
-                  </Box>
-               </CardContent>
-            </Card>
-         </Box>
+                  </Grid>
+                  <Grid item sm={12} md={3}>
+                     <Select
+                        fullWidth
+                        value={filters.orderBy ? filters.orderBy : 'updatedAt-desc'}
+                        onChange={handleChangeSort}
+                     >
+                        <MenuItem value="updatedAt-desc">
+                           <em>Default Sorting</em>
+                        </MenuItem>
+
+                        <MenuItem value="createdAt-desc">Sort by latest</MenuItem>
+                        <MenuItem value="price-asc">Sort by price: low to high</MenuItem>
+                        <MenuItem value="price-desc">Sort by price: high to low</MenuItem>
+                     </Select>
+                  </Grid>
+               </Grid>
+            </CardContent>
+         </Card>
       </Box>
    )
 }

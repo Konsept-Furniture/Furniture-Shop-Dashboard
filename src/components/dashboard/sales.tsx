@@ -1,34 +1,64 @@
 import { Bar, Line } from 'react-chartjs-2'
-import { Box, Button, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material'
+import {
+   MenuItem,
+   Box,
+   Button,
+   Card,
+   CardContent,
+   CardHeader,
+   Divider,
+   Select,
+   useTheme,
+   SelectChangeEvent
+} from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import IconReport from 'assets/IconReport'
+import { useState } from 'react'
+import axiosClient from 'api-client/axios-client'
+import { IncomePeriod, ResponseData } from 'models'
+import useSWR from 'swr'
 
+interface Dataset {
+   backgroundColor: string
+   borderColor: string
+   data: number[]
+   label: string
+   cubicInterpolationMode: 'monotone' | 'default'
+}
+
+interface ChartData {
+   datasets: Dataset[]
+   labels: string[]
+}
 export const Sales = (props: any) => {
    const theme = useTheme()
+   const [period, setPeriod] = useState('week')
 
-   const data = {
-      datasets: [
-         {
-            backgroundColor: '#3F51B5',
-            borderColor: '#3F51B5',
-            data: [18, 5, 19, 27, 29, 19, 20],
-            label: 'This year'
-            // cubicInterpolationMode: 'monotone',
-            // tension: 0.4
-         },
-         {
-            backgroundColor: '#e9e9e9',
-            // borderColor: '#EEEEEE',
-            data: [11, 20, 12, 29, 30, 25, 13],
-            label: 'Last year',
-            maxBarThickness: 10
-            // cubicInterpolationMode: 'monotone',
-            // tension: 0.4
-         }
-      ],
-      labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 aug']
+   const fetcher = (url: string) => {
+      return axiosClient
+         .get<any, ResponseData<IncomePeriod>>(url)
+         .then((res: ResponseData<IncomePeriod>): ChartData | null => {
+            if (res.data) {
+               const newDatasets: Dataset[] = res.data.datasets.map(dataset => ({
+                  backgroundColor: parseInt(dataset.ordinal) === 1 ? '#3F51B5' : '#e9e9e9',
+                  borderColor: parseInt(dataset.ordinal) === 1 ? '#3F51B5' : '#e9e9e9',
+                  data: dataset.data,
+                  label: dataset.label,
+                  cubicInterpolationMode: 'monotone'
+                  // tension: 0.6
+               }))
+               return {
+                  datasets: newDatasets,
+                  labels: res.data.labels
+               }
+            }
+            return null
+         })
    }
+   const { data } = useSWR(`orders/stats/income?type=${period}`, fetcher, {
+      revalidateOnFocus: true
+   })
 
    const options = {
       cornerRadius: 20,
@@ -78,11 +108,15 @@ export const Sales = (props: any) => {
       }
    }
 
+   const handleChangePeriod = (event: SelectChangeEvent) => {
+      setPeriod(event.target.value as string)
+   }
+
    return (
       <Card {...props}>
          <CardHeader
             action={
-               <>
+               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Button
                      startIcon={<IconReport width={20} />}
                      variant="outlined"
@@ -90,10 +124,15 @@ export const Sales = (props: any) => {
                   >
                      Reports
                   </Button>
-                  <Button endIcon={<ArrowDropDownIcon fontSize="small" />} size="small">
+                  <Select value={period} onChange={handleChangePeriod} size="small">
+                     <MenuItem value="week">Last 7 days</MenuItem>
+                     <MenuItem value="month">Last month</MenuItem>
+                     <MenuItem value="year">Last year</MenuItem>
+                  </Select>
+                  {/* <Button endIcon={<ArrowDropDownIcon fontSize="small" />} size="small">
                      Last 7 days
-                  </Button>
-               </>
+                  </Button> */}
+               </Box>
             }
             title="Latest Sales"
          />
@@ -105,7 +144,7 @@ export const Sales = (props: any) => {
                   position: 'relative'
                }}
             >
-               <Line data={data} options={options} />
+               {data && <Line data={data} options={options} />}
             </Box>
          </CardContent>
          <Divider />

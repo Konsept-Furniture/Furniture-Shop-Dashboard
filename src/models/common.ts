@@ -9,6 +9,17 @@ export interface ResponseData<T> {
    message: string
 }
 
+export interface IncomeDataset {
+   ordinal: string
+   data: number[]
+   label: string
+}
+
+export interface IncomePeriod {
+   datasets: IncomeDataset[]
+   labels: string[]
+}
+
 //LAYOUT
 export interface LayoutProps {
    children: ReactNode

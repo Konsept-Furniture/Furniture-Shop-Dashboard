@@ -2,6 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import Inventory2Icon from '@mui/icons-material/Inventory2'
 import {
+   Avatar,
    Box,
    Card,
    CardContent,
@@ -9,27 +10,29 @@ import {
    Divider,
    Grid,
    IconButton,
+   Skeleton,
    Tooltip,
-   Typography,
+   Typography
 } from '@mui/material'
 import { Product } from 'models'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { ConfirmDialog } from './confirm-dialog'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 
 interface ProductCardProps {
-   product: Product
+   product?: Product
    onEditClick?: Function
    onDeleteClick?: Function
 }
 export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: ProductCardProps) => {
    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-   return (
+   return product ? (
       <Card
          sx={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
+            height: '100%'
          }}
          {...rest}
       >
@@ -53,7 +56,7 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
                   item
                   sx={{
                      alignItems: 'center',
-                     display: 'flex',
+                     display: 'flex'
                   }}
                >
                   <Inventory2Icon color="action" />
@@ -65,7 +68,7 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
                   item
                   sx={{
                      alignItems: 'center',
-                     display: 'flex',
+                     display: 'flex'
                   }}
                >
                   <Tooltip title="Edit" placement="top">
@@ -89,17 +92,49 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
 
          <ConfirmDialog
             isOpen={isDeleteDialogOpen}
-            title="Are you sure to delete this product?"
+            title="Are you sure?"
+            body="Are you sure to delete this order?"
             onClose={() => setIsDeleteDialogOpen(false)}
             onSubmit={async () => {
-               if (onDeleteClick) await onDeleteClick(product)
+               if (onDeleteClick) await onDeleteClick(product._id)
                setIsDeleteDialogOpen(false)
             }}
+            icon={
+               <Avatar sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}>
+                  <ReportProblemIcon />
+               </Avatar>
+            }
          />
+      </Card>
+   ) : (
+      <Card
+         sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+         }}
+         {...rest}
+      >
+         <Skeleton variant="rectangular" height={220} />
+         {/* <CardMedia component="img" height="220" component={<Skeleton variant="rectangular" />} /> */}
+         <CardContent>
+            <Typography align="center" color="textPrimary" gutterBottom variant="h5">
+               <Skeleton variant="text" />
+            </Typography>
+            <Typography noWrap align="center" color="textPrimary" variant="body1">
+               <Skeleton variant="text" />
+            </Typography>
+         </CardContent>
+
+         <Box sx={{ flexGrow: 1 }} />
+         <Divider />
+         <Box sx={{ p: 2 }}>
+            <Skeleton variant="text" />
+         </Box>
       </Card>
    )
 }
 
 ProductCard.propTypes = {
-   product: PropTypes.object.isRequired,
+   product: PropTypes.object.isRequired
 }

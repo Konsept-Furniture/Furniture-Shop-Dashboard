@@ -19,7 +19,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import useSWR from 'swr'
 import queryString from 'query-string'
 import axiosClient from 'api-client/axios-client'
-import { OrderListToolbar } from 'components/order/order-list-toolbar'
 
 const Orders = () => {
    const [filters, setFilters] = useState({ status: '', orderBy: 'updatedAt-desc' })
@@ -42,7 +41,7 @@ const Orders = () => {
    const { data: orderList, mutate } = useSWR(
       `orders?page=${pagination.currentPage}&pageSize=${
          pagination.pageSize
-      }&${queryString.stringify(filters)}`,
+      }&${queryString.stringify(filters, { skipEmptyString: true })}`,
       fetcher,
       {
          revalidateOnFocus: true
@@ -51,9 +50,6 @@ const Orders = () => {
 
    const [open, setOpen] = useState(false)
    const [selectedOrder, setSelectedOrder] = useState<Order>()
-
-   const [order, setOrder] = useState('asc')
-   const [orderBy, setOrderBy] = useState('')
 
    const handleModalClose = () => {
       setOpen(false)
@@ -141,7 +137,7 @@ const Orders = () => {
                      Orders
                   </Typography>
                </Box>
-               <Box>
+               <Box sx={{ mt: 1 }}>
                   <Card>
                      <Tabs value={filters.status} onChange={handleChangeTab}>
                         <Tab label="All" value="" />

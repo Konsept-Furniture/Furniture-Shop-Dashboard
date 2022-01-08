@@ -118,11 +118,11 @@ export const DashboardNavbar = props => {
                horizontal: 'right'
             }}
             PaperProps={{
-               sx: { maxWidth: '100%', width: 300 }
+               sx: { maxWidth: '100%', width: 300, border: '1px solid #E6E8F0' }
             }}
          >
             <Box sx={{ p: 1, display: 'flex', gap: 2 }}>
-               <Box>
+               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Avatar
                      sx={{
                         height: 40,
@@ -134,16 +134,24 @@ export const DashboardNavbar = props => {
                      <UserCircleIcon fontSize="small" />
                   </Avatar>
                </Box>
-               <Box sx={{ flex: 1 }}>
-                  <Typography variant="subtitle2">{profile.email}</Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                     {profile.name || ''}
+               <Box
+                  sx={{
+                     flex: 1,
+                     display: 'flex',
+                     alignItems: 'start',
+                     justifyContent: 'center',
+                     flexDirection: 'column'
+                  }}
+               >
+                  <Typography variant="subtitle1">{profile.name || ''}</Typography>
+                  <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 400 }}>
+                     {profile.email}
                   </Typography>
                </Box>
             </Box>
             <Divider />
             <MenuItem
-               sx={{ mt: 2, p: 2 }}
+               sx={{ mt: 1, p: 2 }}
                onClick={() => {
                   router.push('/account')
                   setAnchorEl(null)

@@ -1,5 +1,4 @@
-import { Order, ResponseData } from './../models'
-import { LoginPayload } from './../models'
+import { IncomePeriod, Order, ResponseData } from './../models'
 import axiosClient from './axios-client'
 
 export const orderApi = {
@@ -8,5 +7,8 @@ export const orderApi = {
    },
    delete(id?: string): Promise<ResponseData<string>> {
       return axiosClient.delete(`/orders/${id}`)
+   },
+   getStat(period: 'week' | 'month' | 'year'): Promise<ResponseData<IncomePeriod>> {
+      return axiosClient.get(`orders/stats/income?type=${period}`)
    }
 }

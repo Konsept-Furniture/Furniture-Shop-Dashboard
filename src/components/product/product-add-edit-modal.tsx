@@ -1,4 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
+import {
+   Button,
+   Dialog,
+   DialogActions,
+   DialogContent,
+   DialogTitle,
+   InputAdornment
+} from '@mui/material'
 import React, { ReactNode, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
@@ -127,7 +134,14 @@ export function ProductAddEditModal({
                         : []
                   }
                />
-               <CustomTextField control={control} name="price" label="Price" />
+               <CustomTextField
+                  control={control}
+                  name="price"
+                  label="Price"
+                  InputProps={{
+                     startAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+               />
                <CustomTextField control={control} name="quantity" label="Quantity" />
             </form>
          </DialogContent>

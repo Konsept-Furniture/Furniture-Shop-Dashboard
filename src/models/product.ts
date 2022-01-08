@@ -25,3 +25,8 @@ export interface ProductPayload {
    price?: number
    quantity?: number
 }
+
+export interface ProductQueryParams extends Record<keyof Product, string> {
+   orderBy?: string
+   search?: string
+}
