@@ -82,17 +82,7 @@ export const DashboardSidebar = props => {
                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
                   <NextLink href="/" passHref>
                      <a style={{ mt: 2, textDecoration: 'none' }}>
-                        {/* <Logo
-                           sx={{
-                              height: 42,
-                              width: 42
-                           }}
-                        /> */}
-                        {/* <img
-                           width="100"
-                           // height=""
-                           src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
-                        /> */}
+                        {}
                         <Typography variant="h3" sx={{ color: '#ffffff' }}>
                            Konsept
                         </Typography>
