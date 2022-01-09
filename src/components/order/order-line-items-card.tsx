@@ -22,7 +22,7 @@ export interface OrderLineItemsCardProps {
 export function OrderLineItemsCard({ order }: OrderLineItemsCardProps) {
    return (
       <Card>
-         <CardHeader title="Order items" />
+         <CardHeader title="Line items" />
          <Divider />
          <CardContent sx={{ p: 0 }}>
             <Table>

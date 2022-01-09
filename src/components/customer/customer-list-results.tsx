@@ -50,13 +50,13 @@ const headCells: HeadCell[] = [
       id: 'orderCount',
       align: 'center',
       label: 'Orders',
-      sortable: true
+      sortable: false
    },
    {
       id: 'amountTotal',
       align: 'center',
       label: 'Spent',
-      sortable: true
+      sortable: false
    },
    {
       id: 'actions',
@@ -132,7 +132,7 @@ export const CustomerListResults = ({
                              </TableCell>
                              <TableCell align="left">{customer.email}</TableCell>
                              <TableCell align="center">{customer.phone}</TableCell>
-                             <TableCell align="center">
+                             <TableCell align="center" sx={{ pr: 5 }}>
                                 {format(parseISO(customer.createdAt), 'dd/MM/yyyy')}
                              </TableCell>
                              <TableCell align="center">{customer.orderCount}</TableCell>

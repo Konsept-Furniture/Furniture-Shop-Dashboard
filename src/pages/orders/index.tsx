@@ -155,7 +155,6 @@ const Orders = () => {
                         <Box sx={{ width: '100%' }}>
                            <OrderListResults
                               orderList={orderList}
-                              pagination={pagination}
                               onSortByColumn={handleSortOrder}
                            />
                         </Box>

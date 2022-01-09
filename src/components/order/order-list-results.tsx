@@ -37,13 +37,13 @@ const headCells: HeadCell[] = [
       id: 'createdAt',
       align: 'center',
       label: 'Ordered date',
-      sortable: false
+      sortable: true
    },
    {
       id: 'amount',
       align: 'center',
       label: 'Price',
-      sortable: false
+      sortable: true
    },
    {
       id: 'payment',
@@ -67,23 +67,23 @@ const headCells: HeadCell[] = [
 
 export const OrderListResults = ({
    orderList,
-   pagination,
    onSortByColumn,
    ...rest
 }: {
    orderList?: Order[]
-   pagination: PaginationParams
    onRowClick?: (order: Order) => void
-   onSortByColumn: Function
+   onSortByColumn?: Function
 }) => {
    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
    const [orderBy, setOrderBy] = useState('')
 
    const handleSort = (property: string) => async (event: React.MouseEvent) => {
-      const isAsc = orderBy === property && order === 'asc'
-      setOrder(isAsc ? 'desc' : 'asc')
-      setOrderBy(property)
-      onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
+      if (onSortByColumn) {
+         const isAsc = orderBy === property && order === 'asc'
+         setOrder(isAsc ? 'desc' : 'asc')
+         setOrderBy(property)
+         onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
+      }
    }
    return (
       <Table {...rest}>
@@ -95,7 +95,7 @@ export const OrderListResults = ({
                      align={cell.align}
                      sortDirection={orderBy === cell.id ? order : false}
                   >
-                     {cell.sortable ? (
+                     {cell.sortable && onSortByColumn ? (
                         <TableSortLabel
                            active={orderBy === cell.id}
                            direction={orderBy === cell.id ? order : 'asc'}
@@ -142,10 +142,12 @@ export const OrderListResults = ({
                              ))}
                           </Box>
                        </TableCell>
-                       <TableCell align="center">
+                       <TableCell align="center" sx={{ pr: 5 }}>
                           {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
                        </TableCell>
-                       <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
+                       <TableCell align="center" sx={{ pr: 5 }}>
+                          ${order.amount.toFixed(2)}
+                       </TableCell>
                        <TableCell align="center">{order.payment}</TableCell>
                        <TableCell align="center" sx={{ minWidth: 200 }}>
                           <SeverityPill
@@ -180,7 +182,7 @@ export const OrderListResults = ({
                        </TableCell>
                     </TableRow>
                  ))
-               : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
+               : Array.from(new Array(10)).map((item, idx) => (
                     <TableRow hover key={idx}>
                        <TableCell align="left">
                           <Skeleton variant="text" />
