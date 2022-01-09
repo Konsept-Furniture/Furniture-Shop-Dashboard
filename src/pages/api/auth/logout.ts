@@ -5,15 +5,15 @@ import Cookies from 'cookies'
 
 export const config = {
    api: {
-      bodyParser: false,
-   },
+      bodyParser: false
+   }
 }
 export default function handler(req: NextApiRequest, res: NextApiResponse<ResponseData<string>>) {
    if (req.method !== 'POST') {
       return res.status(404).json({
-         data: null,
+         data: '',
          errorCode: 0,
-         message: 'Method is not supported',
+         message: 'Method is not supported'
       })
    }
 
@@ -21,8 +21,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Respon
    cookies.set('access_token')
 
    res.status(200).json({
-      data: null,
+      data: '',
       errorCode: 0,
-      message: 'logout successfully',
+      message: 'logout successfully'
    })
 }
