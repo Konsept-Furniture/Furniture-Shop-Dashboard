@@ -45,38 +45,21 @@ export const CustomerListToolbar = ({
    return (
       <Box {...restProps}>
          <Box sx={{ m: 3 }}>
-            <Grid container spacing={2}>
-               <Grid item sm={12} md={9}>
-                  <TextField
-                     fullWidth
-                     InputProps={{
-                        startAdornment: (
-                           <InputAdornment position="start">
-                              <SvgIcon color="action" fontSize="small">
-                                 <SearchIcon />
-                              </SvgIcon>
-                           </InputAdornment>
-                        )
-                     }}
-                     placeholder="Search customer by name, phone, email"
-                     variant="outlined"
-                     onChange={handleChangeSearch}
-                  />
-               </Grid>
-               <Grid item sm={12} md={3}>
-                  <Select
-                     fullWidth
-                     value={filters.orderBy ? filters.orderBy : 'updatedAt-desc'}
-                     onChange={handleChangeSort}
-                  >
-                     <MenuItem value="updatedAt-desc">Default Sorting</MenuItem>
-
-                     <MenuItem value="createdAt-desc">Sort by latest</MenuItem>
-                     <MenuItem value="price-asc">Sort by price: low to high</MenuItem>
-                     <MenuItem value="price-desc">Sort by price: high to low</MenuItem>
-                  </Select>
-               </Grid>
-            </Grid>
+            <TextField
+               fullWidth
+               InputProps={{
+                  startAdornment: (
+                     <InputAdornment position="start">
+                        <SvgIcon color="action" fontSize="small">
+                           <SearchIcon />
+                        </SvgIcon>
+                     </InputAdornment>
+                  )
+               }}
+               placeholder="Search customer by name, phone, email"
+               variant="outlined"
+               onChange={handleChangeSearch}
+            />
          </Box>
       </Box>
    )

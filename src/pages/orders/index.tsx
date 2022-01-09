@@ -123,8 +123,7 @@ const Orders = () => {
             component="main"
             sx={{
                flexGrow: 1,
-               pt: 4,
-               pb: 8
+               py: 8
             }}
          >
             <Container maxWidth={false}>
@@ -157,7 +156,6 @@ const Orders = () => {
                            <OrderListResults
                               orderList={orderList}
                               pagination={pagination}
-                              onRowClick={handleOrderRowClick}
                               onSortByColumn={handleSortOrder}
                            />
                         </Box>

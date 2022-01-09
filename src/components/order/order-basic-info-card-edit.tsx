@@ -8,46 +8,60 @@ import {
    CardHeader,
    Divider,
    Grid,
-   InputAdornment
+   InputAdornment,
+   Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { CustomSelectField, CustomTextField } from 'components/form-controls'
 import { OrderStatus } from 'constants/enums/order-status'
 import { regexVietnamesePhoneNumber } from 'constants/regexes'
-import { EditOrderFormValues, Order } from 'models'
+import { District, EditOrderFormValues, Order, Province } from 'models'
 import React, { MouseEvent, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import * as yup from 'yup'
 import Link from 'next/link'
 import { ConfirmDialog } from 'components/product/confirm-dialog'
 import ReportProblemIcon from '@mui/icons-material/ReportProblem'
+import axios, { AxiosResponse } from 'axios'
+import useSWR from 'swr'
 
 export interface OrderBasicInfoCardEditProps {
    order?: Order
    onSave: Function
    onDelete: Function
 }
-const schema = yup.object().shape({
-   customerName: yup.string().max(255).required(),
-   street: yup.string().max(255).required(),
-   ward: yup.string().max(255).required(),
-   district: yup.string().max(255).required(),
-   province: yup.string().max(255).required(),
-   notes: yup.string().max(255),
-   // TODO: validate phone
-   phone: yup
-      .string()
-      .max(255)
-      .required()
-      .test('is-vietnamese-phonenumber', 'Incorrect phone number format.', number => {
-         if (!number) return true
 
-         return regexVietnamesePhoneNumber.test(number)
-      }),
-   email: yup.string().email().max(255).nullable().required(),
+function fetcher<T>(url: string) {
+   return axios.get<any, AxiosResponse<T>>(url).then((res: AxiosResponse<T>): T => {
+      return res.data
+   })
+}
+
+const schema = yup.object().shape({
+   deliveryInfo: yup.object().shape({
+      name: yup.string().max(255).required(),
+      phone: yup
+         .string()
+         .max(255)
+         .required()
+         .test('is-vietnamese-phonenumber', 'Incorrect phone number format.', number => {
+            if (!number) return true
+
+            return regexVietnamesePhoneNumber.test(number)
+         }),
+      email: yup.string().email().max(255).nullable().required(),
+      address: yup.object().shape({
+         street: yup.string().max(255).required(),
+         ward: yup.string().max(255).required(),
+         district: yup.string().max(255).required(),
+         province: yup.string().max(255).required()
+      })
+   }),
    amount: yup.number().integer().required().nullable().typeError('you must specify a number'),
-   status: yup.string().max(255).required()
+   status: yup.string().max(255).required(),
+   notes: yup.string().max(255)
 })
+
 export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicInfoCardEditProps) {
    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
    const {
@@ -59,18 +73,48 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
       resolver: yupResolver(schema)
    })
 
+   const watchProvince = useWatch({
+      control,
+      name: 'deliveryInfo.address.province'
+   })
+   const watchDistrict = useWatch({
+      control,
+      name: 'deliveryInfo.address.district'
+   })
+
+   const { data: provinceList } = useSWR<Province[]>(
+      () => (order ? 'https://provinces.open-api.vn/api/p' : null),
+      fetcher,
+      {
+         revalidateOnFocus: false
+      }
+   )
+   const { data: selectedProvince } = useSWR<Province>(
+      () =>
+         order && watchProvince
+            ? `https://provinces.open-api.vn/api/p/${watchProvince}?depth=2`
+            : null,
+      fetcher,
+      {
+         revalidateOnFocus: false
+      }
+   )
+   const { data: selectedDistrict } = useSWR<District>(
+      () =>
+         order && watchDistrict
+            ? `https://provinces.open-api.vn/api/d/${watchDistrict}?depth=2`
+            : null,
+      fetcher,
+      {
+         revalidateOnFocus: false
+      }
+   )
    useEffect(() => {
       if (order) {
          console.log(order.status)
          reset({
-            customerName: order.deliveryInfo.name,
-            street: order.deliveryInfo.address.street,
-            ward: order.deliveryInfo.address.ward,
-            district: order.deliveryInfo.address.district,
-            province: order.deliveryInfo.address.province,
+            deliveryInfo: order.deliveryInfo,
             notes: order.notes,
-            phone: order.deliveryInfo.phone,
-            email: order.deliveryInfo.email,
             amount: order.amount,
             status: order.status
          })
@@ -81,17 +125,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
       console.log(values)
       if (onSave) {
          const payload = {
-            deliveryInfo: {
-               address: {
-                  street: values.street,
-                  ward: values.ward,
-                  district: values.district,
-                  province: values.province
-               },
-               name: values.customerName,
-               phone: values.phone,
-               email: values.email
-            },
+            deliveryInfo: values.deliveryInfo,
             notes: values.notes,
             amount: values.amount,
             status: values.status
@@ -106,73 +140,100 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
 
    return (
       <Card>
-         <CardHeader title="Basic info" />
+         <CardHeader title="Edit order" />
          <Divider />
          <CardContent>
             <form onSubmit={handleSubmit(handleSave)}>
                <Grid container spacing={3}>
-                  <Grid item md={6} xs={12}>
+                  <Grid item md={12} xs={12}>
                      <CustomTextField
                         disabled={isSubmitting}
                         control={control}
-                        name="customerName"
-                        label="Customer Name"
+                        name="deliveryInfo.name"
+                        label="Recipient's Name"
                      />
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
                         disabled={isSubmitting}
                         control={control}
-                        name="street"
+                        name="deliveryInfo.phone"
+                        label="Recipient's Phone Number"
+                     />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                     <CustomTextField
+                        disabled={isSubmitting}
+                        control={control}
+                        name="deliveryInfo.email"
+                        label="Recipient's Email"
+                     />
+                  </Grid>
+               </Grid>
+               <Typography variant="subtitle2">Address</Typography>
+               <Grid container columnSpacing={3}>
+                  <Grid item md={12} xs={12}>
+                     <CustomTextField
+                        disabled={isSubmitting}
+                        control={control}
+                        name="deliveryInfo.address.street"
                         label="Street"
                      />
                   </Grid>
-                  <Grid item md={6} xs={12}>
-                     <CustomTextField
+                  <Grid item md={4} xs={12}>
+                     <CustomSelectField
                         disabled={isSubmitting}
                         control={control}
-                        name="ward"
-                        label="Ward"
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <CustomTextField
-                        disabled={isSubmitting}
-                        control={control}
-                        name="district"
-                        label="District"
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <CustomTextField
-                        disabled={isSubmitting}
-                        control={control}
-                        name="province"
+                        name="deliveryInfo.address.province"
                         label="Province"
+                        options={
+                           provinceList
+                              ? provinceList.map(province => ({
+                                   label: province.name,
+                                   value: province.code.toString()
+                                }))
+                              : []
+                        }
                      />
                   </Grid>
-                  <Grid item md={6} xs={12}>
+                  <Grid item md={4} xs={12}>
+                     <CustomSelectField
+                        disabled={isSubmitting}
+                        control={control}
+                        name="deliveryInfo.address.district"
+                        label="District"
+                        options={
+                           selectedProvince
+                              ? selectedProvince.districts.map(district => ({
+                                   label: district.name,
+                                   value: district.code
+                                }))
+                              : []
+                        }
+                     />
+                  </Grid>
+                  <Grid item md={4} xs={12}>
+                     <CustomSelectField
+                        disabled={isSubmitting}
+                        control={control}
+                        name="deliveryInfo.address.ward"
+                        label="Ward"
+                        options={
+                           selectedDistrict
+                              ? selectedDistrict.wards.map(ward => ({
+                                   label: ward.name,
+                                   value: ward.code
+                                }))
+                              : []
+                        }
+                     />
+                  </Grid>
+                  <Grid item md={12} xs={12}>
                      <CustomTextField
                         disabled={isSubmitting}
                         control={control}
                         name="notes"
                         label="Notes"
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <CustomTextField
-                        disabled={isSubmitting}
-                        control={control}
-                        name="phone"
-                        label="Phone"
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <CustomTextField
-                        disabled={isSubmitting}
-                        control={control}
-                        name="email"
-                        label="Email"
                      />
                   </Grid>
                   <Grid item md={6} xs={12}>

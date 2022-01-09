@@ -168,54 +168,6 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                         </Typography>
                      </Box>
                   </ListItem>
-                  <Divider />
-
-                  <ListItem
-                     sx={{ px: 3, py: 1.5, display: 'flex', flexDirection: 'row', my: 0 }}
-                     alignItems="center"
-                     disablePadding
-                  >
-                     <Typography variant="subtitle2" sx={{ minWidth: 180 }}>
-                        Payment Method
-                     </Typography>
-                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2" color="text">
-                           {/* {customer.payment} */}
-                        </Typography>
-                     </Box>
-                  </ListItem>
-                  <Divider />
-
-                  <ListItem
-                     sx={{ px: 3, py: 1.5, display: 'flex', flexDirection: 'row', my: 0 }}
-                     alignItems="center"
-                     disablePadding
-                  >
-                     <Typography variant="subtitle2" sx={{ minWidth: 180 }}>
-                        Total Amount
-                     </Typography>
-                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2" color="text">
-                           {/* ${customer.amount.toFixed(2)} */}
-                        </Typography>
-                     </Box>
-                  </ListItem>
-                  <Divider />
-
-                  <ListItem
-                     sx={{ px: 3, pt: 1.5, display: 'flex', flexDirection: 'row', my: 0 }}
-                     alignItems="center"
-                     disablePadding
-                  >
-                     <Typography variant="subtitle2" sx={{ minWidth: 180 }}>
-                        Status
-                     </Typography>
-                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2" color="text">
-                           {/* {customer.status} */}
-                        </Typography>
-                     </Box>
-                  </ListItem>
                </List>
             ) : (
                <List>

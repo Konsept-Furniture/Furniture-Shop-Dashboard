@@ -1,25 +1,25 @@
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import {
    Avatar,
    Box,
+   IconButton,
    Skeleton,
    Table,
    TableBody,
    TableCell,
    TableHead,
    TableRow,
-   TableSortLabel
+   TableSortLabel,
+   Tooltip,
+   Typography
 } from '@mui/material'
 import { SeverityPill } from 'components/severity-pill'
 import { format, parseISO } from 'date-fns'
-import { Order, PaginationParams, ProductOrder } from 'models'
+import PencilIcon from 'icons/pencil'
+import { HeadCell, Order, PaginationParams } from 'models'
 import { useState } from 'react'
+import Link from 'next/link'
 
-type HeadCell = {
-   id: string
-   align: 'left' | 'center' | 'right' | 'justify' | 'inherit'
-   label: string
-   sortable: boolean
-}
 const headCells: HeadCell[] = [
    {
       id: 'name',
@@ -37,13 +37,13 @@ const headCells: HeadCell[] = [
       id: 'createdAt',
       align: 'center',
       label: 'Ordered date',
-      sortable: true
+      sortable: false
    },
    {
       id: 'amount',
       align: 'center',
       label: 'Price',
-      sortable: true
+      sortable: false
    },
    {
       id: 'payment',
@@ -56,19 +56,24 @@ const headCells: HeadCell[] = [
       align: 'center',
       label: 'Status',
       sortable: false
+   },
+   {
+      id: 'actions',
+      align: 'center',
+      label: 'Actions',
+      sortable: false
    }
 ]
 
 export const OrderListResults = ({
    orderList,
    pagination,
-   onRowClick,
    onSortByColumn,
    ...rest
 }: {
    orderList?: Order[]
    pagination: PaginationParams
-   onRowClick: (order: Order) => void
+   onRowClick?: (order: Order) => void
    onSortByColumn: Function
 }) => {
    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
@@ -108,18 +113,32 @@ export const OrderListResults = ({
          <TableBody>
             {orderList
                ? orderList.map((order: Order) => (
-                    <TableRow hover key={order._id} onClick={async () => await onRowClick(order)}>
+                    <TableRow hover key={order._id}>
                        <TableCell align="left" sx={{ minWidth: 200 }}>
-                          {order.deliveryInfo.name}
+                          <Link href={`customers/${order.user._id}`} passHref>
+                             <Typography
+                                sx={{
+                                   cursor: 'pointer',
+                                   ':hover': {
+                                      textDecoration: 'underline'
+                                   }
+                                }}
+                                variant="body2"
+                             >
+                                {order.user.name}
+                             </Typography>
+                          </Link>
                        </TableCell>
                        <TableCell align="left">
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                              {order.products.map(product => (
-                                <Avatar
+                                <Tooltip
                                    key={product.productId}
-                                   variant="rounded"
-                                   src={product.img}
-                                ></Avatar>
+                                   title={product.title}
+                                   placement="top"
+                                >
+                                   <Avatar variant="rounded" src={product.img} />
+                                </Tooltip>
                              ))}
                           </Box>
                        </TableCell>
@@ -143,6 +162,22 @@ export const OrderListResults = ({
                              {order.status}
                           </SeverityPill>
                        </TableCell>
+                       <TableCell align="center">
+                          <Link href={`orders/${order._id}/edit`} passHref>
+                             <Tooltip title="Edit Order" placement="top">
+                                <IconButton size="small">
+                                   <PencilIcon width={20} />
+                                </IconButton>
+                             </Tooltip>
+                          </Link>
+                          <Link href={`orders/${order._id}`} passHref>
+                             <Tooltip title="View Details" placement="top">
+                                <IconButton size="small">
+                                   <ArrowForwardIcon fontSize="small" />
+                                </IconButton>
+                             </Tooltip>
+                          </Link>
+                       </TableCell>
                     </TableRow>
                  ))
                : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
@@ -151,6 +186,9 @@ export const OrderListResults = ({
                           <Skeleton variant="text" />
                        </TableCell>
                        <TableCell align="left">
+                          <Skeleton variant="text" />
+                       </TableCell>
+                       <TableCell align="center">
                           <Skeleton variant="text" />
                        </TableCell>
                        <TableCell align="center">

@@ -1,22 +1,20 @@
-import { formatDistance, parseISO, subHours } from 'date-fns'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import {
    Box,
    Button,
    Card,
    CardHeader,
    Divider,
-   IconButton,
    List,
    ListItem,
    ListItemAvatar,
    ListItemText,
    Skeleton
 } from '@mui/material'
-import ArrowRightIcon from '@mui/icons-material/ArrowRight'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { formatDistance, parseISO } from 'date-fns'
+import { Product } from 'models'
 import NextLink from 'next/link'
 import useSWR from 'swr'
-import { Product } from 'models'
 
 const NUMBER_PRODUCTS: number = 6
 
@@ -31,9 +29,6 @@ const ProductSkeleton = ({ numberProducts }: { numberProducts: number }) => (
                primary={<Skeleton variant="text" />}
                secondary={<Skeleton variant="text" />}
             />
-            <IconButton edge="end" size="small">
-               <MoreVertIcon />
-            </IconButton>
          </ListItem>
       ))}
    </List>
@@ -76,9 +71,6 @@ export const LatestProducts = (props: any) => {
                            { addSuffix: true }
                         )}`}
                      />
-                     <IconButton edge="end" size="small">
-                        <MoreVertIcon />
-                     </IconButton>
                   </ListItem>
                ))}
             </List>

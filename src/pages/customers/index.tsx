@@ -1,13 +1,23 @@
 import Head from 'next/head'
-import { Box, Card, Container, TablePagination, Typography } from '@mui/material'
-import { CustomerListResults } from '../../components/customer/customer-list-results'
-import { CustomerListToolbar } from '../../components/customer/customer-list-toolbar'
+import {
+   Box,
+   Button,
+   Card,
+   Container,
+   Divider,
+   Tab,
+   TablePagination,
+   Tabs,
+   Typography
+} from '@mui/material'
 import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { ChangeEvent, MouseEvent, useState } from 'react'
-import { PaginationParams, ResponseListData, User } from 'models'
+import { CustomerQueryParams, PaginationParams, ResponseListData, User } from 'models'
 import axiosClient from 'api-client/axios-client'
 import useSWR from 'swr'
 import queryString from 'query-string'
+import { Download as DownloadIcon } from '../../icons/download'
+import { CustomerListResults, CustomerListToolbar } from 'components/customer'
 
 const DEFAULT_PAGINATION = {
    totalItems: 10,
@@ -17,14 +27,16 @@ const DEFAULT_PAGINATION = {
 }
 
 const Customers = () => {
-   const [filters, setFilters] = useState({ status: '', orderBy: 'updatedAt-desc' })
+   const [filters, setFilters] = useState<CustomerQueryParams>({
+      search: '',
+      orderBy: 'updatedAt-desc'
+   })
    const [pagination, setPagination] = useState<PaginationParams>(DEFAULT_PAGINATION)
 
    const fetcher = (url: string) => {
       return axiosClient
          .get<any, ResponseListData<User>>(url)
          .then((res: ResponseListData<User>) => {
-            console.log('🚀 ~ file: customers.tsx ~ line 27 ~ .then ~ res', res)
             setPagination(res.pagination)
             return res.data
          })
@@ -49,19 +61,26 @@ const Customers = () => {
       setPagination({ ...pagination, currentPage: newPage + 1 })
    }
 
-   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+   const handleSearch = (search: string) => {
       setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
-         status: newValue
+         search
       })
    }
-
-   const handleSortOrder = (orderBy: string) => {
+   const handleChangeSorting = (orderBy: string) => {
       setPagination(DEFAULT_PAGINATION)
       setFilters({
          ...filters,
          orderBy
+      })
+   }
+
+   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+      setPagination(DEFAULT_PAGINATION)
+      setFilters({
+         ...filters
+         // inStock: newValue
       })
    }
 
@@ -90,17 +109,30 @@ const Customers = () => {
                   <Typography sx={{ m: 1 }} variant="h4">
                      Customers
                   </Typography>
+                  <Box sx={{ m: 1 }}>
+                     <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
+                        Export
+                     </Button>
+                  </Box>
                </Box>
                <Box sx={{ mt: 1 }}>
                   <Card>
-                     {/* <CustomerListToolbar /> */}
-                     <Box sx={{ mt: 3 }}>
-                        <CustomerListResults
-                           customerList={customerList}
-                           pagination={pagination}
-                           onSortByColumn={handleSortOrder}
-                        />
-                     </Box>
+                     <Tabs value={''} onChange={handleChangeTab}>
+                        <Tab label="All" value="" />
+                        <Tab label="Prospect" value="prospect" />
+                        <Tab label="Returning" value="returning" />
+                     </Tabs>
+                     <Divider />
+                     <CustomerListToolbar
+                        filters={filters}
+                        onSearch={handleSearch}
+                        onChangeSorting={handleChangeSorting}
+                     />
+                     <CustomerListResults
+                        customerList={customerList}
+                        pagination={pagination}
+                        onSortByColumn={handleChangeSorting}
+                     />
                      <TablePagination
                         component="div"
                         count={pagination.totalItems}

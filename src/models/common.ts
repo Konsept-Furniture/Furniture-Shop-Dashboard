@@ -20,6 +20,13 @@ export interface IncomePeriod {
    labels: string[]
 }
 
+export interface HeadCell {
+   id: string
+   align: 'left' | 'center' | 'right' | 'justify' | 'inherit'
+   label: string
+   sortable: boolean
+}
+
 //LAYOUT
 export interface LayoutProps {
    children: ReactNode

@@ -36,13 +36,7 @@ export interface Address {
    province: string
 }
 export type EditOrderFormValues = {
-   customerName: string
-   street: string
-   ward: string
-   district: string
-   province: string
-   phone: string
-   email: string
+   deliveryInfo: DeliveryInfo
    notes: string
    status: 'PENDING' | 'PROCESSING' | 'DELIVERIED' | 'REFUNDED' | 'CANCELED'
    amount: number

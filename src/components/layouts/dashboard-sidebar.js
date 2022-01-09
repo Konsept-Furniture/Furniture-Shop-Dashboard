@@ -16,8 +16,8 @@ import { Users as UsersIcon } from '../../icons/users'
 import { Order as OrderIcon } from '../../icons/order'
 import { XCircle as XCircleIcon } from '../../icons/x-circle'
 import { Logo } from '../logo'
-import { NavItem } from '../nav-item'
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import { NavItem } from 'components/nav-item'
 
 const items = [
    {

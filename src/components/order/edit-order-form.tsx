@@ -67,17 +67,7 @@ export function EditOrderForm({ order, onSave, onCancel, onDelete }: EditOrderFo
       console.log(values)
       if (onSave) {
          const payload = {
-            deliveryInfo: {
-               address: {
-                  street: values.street,
-                  ward: values.ward,
-                  district: values.district,
-                  province: values.province
-               },
-               name: values.customerName,
-               phone: values.phone,
-               email: values.email
-            },
+            deliveryInfo: values.deliveryInfo,
             notes: values.notes,
             amount: values.amount,
             status: values.status

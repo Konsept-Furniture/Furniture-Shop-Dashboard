@@ -11,6 +11,8 @@ export interface User {
    deleted: boolean
    createdAt: string
    updatedAt: string
+   amountTotal?: number
+   orderCount?: number
 }
 
 export type EditProfileFormValues = {
@@ -37,7 +39,7 @@ export interface EditCustomerFormValues {
       address: Address
    }
 }
-export interface CustomerQueryParams extends Record<keyof User, string> {
+export interface CustomerQueryParams extends Partial<Record<keyof User, string>> {
    orderBy?: string
    search?: string
 }

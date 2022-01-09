@@ -1,25 +1,70 @@
-import { useState } from 'react'
-import PerfectScrollbar from 'react-perfect-scrollbar'
-import { format, parseISO } from 'date-fns'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import {
    Avatar,
    Box,
-   Button,
-   Card,
    IconButton,
    Skeleton,
    Table,
    TableBody,
    TableCell,
    TableHead,
-   TablePagination,
    TableRow,
+   TableSortLabel,
+   Tooltip,
    Typography
 } from '@mui/material'
-import { getInitials } from '../../utils/get-initials'
-import { PaginationParams, User } from 'models'
+import { format, parseISO } from 'date-fns'
 import PencilIcon from 'icons/pencil'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { HeadCell, PaginationParams, User } from 'models'
+import Link from 'next/link'
+import { useState } from 'react'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { getInitials } from '../../utils/get-initials'
+
+const headCells: HeadCell[] = [
+   {
+      id: 'name',
+      align: 'left',
+      label: 'Customer',
+      sortable: false
+   },
+   {
+      id: 'email',
+      align: 'left',
+      label: 'Email',
+      sortable: false
+   },
+   {
+      id: 'phone',
+      align: 'center',
+      label: 'Phone Number',
+      sortable: false
+   },
+   {
+      id: 'createdAt',
+      align: 'center',
+      label: 'Registration Date',
+      sortable: true
+   },
+   {
+      id: 'orderCount',
+      align: 'center',
+      label: 'Orders',
+      sortable: true
+   },
+   {
+      id: 'amountTotal',
+      align: 'center',
+      label: 'Spent',
+      sortable: true
+   },
+   {
+      id: 'actions',
+      align: 'center',
+      label: 'Actions',
+      sortable: false
+   }
+]
 export const CustomerListResults = ({
    customerList,
    pagination,
@@ -30,77 +75,118 @@ export const CustomerListResults = ({
    pagination: PaginationParams
    onSortByColumn: Function
 }) => {
+   const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+   const [orderBy, setOrderBy] = useState('')
+
+   const handleSort = (property: string) => async (event: React.MouseEvent) => {
+      const isAsc = orderBy === property && order === 'asc'
+      setOrder(isAsc ? 'desc' : 'asc')
+      setOrderBy(property)
+      onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
+   }
    return (
-      <Card {...rest}>
-         <PerfectScrollbar>
-            <Box sx={{ minWidth: 1050 }}>
-               <Table>
-                  <TableHead>
-                     <TableRow>
-                        <TableCell align="left">Name</TableCell>
-                        <TableCell align="left">Email</TableCell>
-                        <TableCell align="center">Phone</TableCell>
-                        <TableCell align="center">Registration date</TableCell>
-                        <TableCell align="center">Actions</TableCell>
-                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                     {customerList
-                        ? customerList.map(customer => (
-                             <TableRow hover key={customer._id}>
-                                <TableCell align="left">
-                                   <Box
-                                      sx={{
-                                         alignItems: 'center',
-                                         display: 'flex'
-                                      }}
-                                   >
-                                      <Avatar src="/broken-image.jpg" sx={{ mr: 2 }}>
-                                         {getInitials(customer.name)}
-                                      </Avatar>
-                                      <Typography color="textPrimary" variant="body1">
-                                         {customer.name || 'N/A'}
-                                      </Typography>
-                                   </Box>
-                                </TableCell>
-                                <TableCell align="left">{customer.email}</TableCell>
-                                <TableCell align="center">{customer.phone}</TableCell>
-                                <TableCell align="center">
-                                   {format(parseISO(customer.createdAt), 'dd/MM/yyyy')}
-                                </TableCell>
-                                <TableCell align="center">
-                                   <IconButton size="small">
-                                      <PencilIcon width={20} />
-                                   </IconButton>
-                                   <IconButton size="small">
-                                      <ArrowForwardIcon fontSize="small" />
-                                   </IconButton>
-                                </TableCell>
-                             </TableRow>
-                          ))
-                        : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
-                             <TableRow hover key={idx}>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                             </TableRow>
-                          ))}
-                  </TableBody>
-               </Table>
-            </Box>
-         </PerfectScrollbar>
-      </Card>
+      <PerfectScrollbar>
+         <Box sx={{ minWidth: 1050 }}>
+            <Table>
+               <TableHead>
+                  <TableRow>
+                     {headCells.map(cell => (
+                        <TableCell
+                           key={cell.id}
+                           align={cell.align}
+                           sortDirection={orderBy === cell.id ? order : false}
+                        >
+                           {cell.sortable ? (
+                              <TableSortLabel
+                                 active={orderBy === cell.id}
+                                 direction={orderBy === cell.id ? order : 'asc'}
+                                 onClick={handleSort(cell.id)}
+                              >
+                                 {cell.label}
+                              </TableSortLabel>
+                           ) : (
+                              cell.label
+                           )}
+                        </TableCell>
+                     ))}
+                  </TableRow>
+               </TableHead>
+               <TableBody>
+                  {customerList
+                     ? customerList.map(customer => (
+                          <TableRow hover key={customer._id}>
+                             <TableCell align="left">
+                                <Box
+                                   sx={{
+                                      alignItems: 'center',
+                                      display: 'flex'
+                                   }}
+                                >
+                                   <Avatar src="/broken-image.jpg" sx={{ mr: 2 }}>
+                                      {getInitials(customer.name)}
+                                   </Avatar>
+                                   <Typography color="textPrimary" variant="body2">
+                                      {customer.name || 'N/A'}
+                                   </Typography>
+                                </Box>
+                             </TableCell>
+                             <TableCell align="left">{customer.email}</TableCell>
+                             <TableCell align="center">{customer.phone}</TableCell>
+                             <TableCell align="center">
+                                {format(parseISO(customer.createdAt), 'dd/MM/yyyy')}
+                             </TableCell>
+                             <TableCell align="center">{customer.orderCount}</TableCell>
+                             <TableCell align="center">
+                                <Typography color="success.main" variant="body2">
+                                   {customer.amountTotal && `$${customer.amountTotal.toFixed(2)}`}
+                                </Typography>
+                             </TableCell>
+                             <TableCell align="center">
+                                <Link href={`customers/${customer._id}/edit`} passHref>
+                                   <Tooltip title="Edit Customer" placement="top">
+                                      <IconButton size="small">
+                                         <PencilIcon width={20} />
+                                      </IconButton>
+                                   </Tooltip>
+                                </Link>
+                                <Link href={`customers/${customer._id}`} passHref>
+                                   <Tooltip title="View Details" placement="top">
+                                      <IconButton size="small">
+                                         <ArrowForwardIcon fontSize="small" />
+                                      </IconButton>
+                                   </Tooltip>
+                                </Link>
+                             </TableCell>
+                          </TableRow>
+                       ))
+                     : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
+                          <TableRow hover key={idx}>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                             <TableCell align="center">
+                                <Skeleton variant="text" />
+                             </TableCell>
+                          </TableRow>
+                       ))}
+               </TableBody>
+            </Table>
+         </Box>
+      </PerfectScrollbar>
    )
 }
