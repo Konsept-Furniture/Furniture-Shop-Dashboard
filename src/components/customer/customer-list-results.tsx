@@ -125,7 +125,7 @@ export const CustomerListResults = ({
                                    <Avatar src="/broken-image.jpg" sx={{ mr: 2 }}>
                                       {getInitials(customer.name)}
                                    </Avatar>
-                                   <Typography color="textPrimary" variant="body2">
+                                   <Typography sx={{ fontWeight: 'bold' }} color="textPrimary" variant="body2">
                                       {customer.name || 'N/A'}
                                    </Typography>
                                 </Box>

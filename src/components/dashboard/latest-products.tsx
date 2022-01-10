@@ -52,7 +52,7 @@ export const LatestProducts = (props: any) => {
          {products ? (
             <List>
                {products.map((product: Product, i: number) => (
-                  <ListItem divider={i < products.length - 1} key={product._id}>
+                  <ListItem sx={{ fontWeight: 'bold' }} divider={i < products.length - 1} key={product._id}>
                      <ListItemAvatar>
                         <img
                            alt={product.title}

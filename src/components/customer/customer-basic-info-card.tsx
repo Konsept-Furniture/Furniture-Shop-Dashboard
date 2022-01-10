@@ -73,7 +73,7 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                         Full Name
                      </Typography>
                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography sx={{ fontWeight: 'bold' }} variant="body2" color="text.secondary">
                            {customer.name}
                         </Typography>
                      </Box>
