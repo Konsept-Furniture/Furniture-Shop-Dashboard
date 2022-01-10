@@ -62,9 +62,6 @@ const Login = () => {
                      <Typography color="textPrimary" variant="h4">
                         Sign in
                      </Typography>
-                     <Typography color="textSecondary" gutterBottom variant="body2">
-                        Sign in on the internal platform
-                     </Typography>
                   </Box>
                   <TextField
                      fullWidth

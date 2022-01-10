@@ -84,6 +84,12 @@ export const CustomerListResults = ({
       setOrderBy(property)
       onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
    }
+   function randomColor() {
+      let hex = Math.floor(Math.random() * 0xFFFFFF);
+      let color = "#" + hex.toString(16);
+    
+      return color;
+    }
    return (
       <PerfectScrollbar>
          <Box sx={{ minWidth: 1050 }}>
@@ -122,7 +128,9 @@ export const CustomerListResults = ({
                                       display: 'flex'
                                    }}
                                 >
-                                   <Avatar src="/broken-image.jpg" sx={{ mr: 2 }}>
+                                   <Avatar style={{
+                                    backgroundColor: randomColor() }}
+                                   src="/broken-image.jpg"  sx={{ mr: 2 }}>
                                       {getInitials(customer.name)}
                                    </Avatar>
                                    <Typography sx={{ fontWeight: 'bold' }} color="textPrimary" variant="body2">
