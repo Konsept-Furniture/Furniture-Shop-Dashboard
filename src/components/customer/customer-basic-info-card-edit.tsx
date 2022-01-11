@@ -179,10 +179,9 @@ export function CustomerBasicInfoCardEdit({
    }
 
    function randomColor() {
-      let hex = Math.floor(Math.random() * 0xFFFFFF);
-      let color = "#" + hex.toString(16);
-    
-      return color;
+      let backgroundColor = ["#ab000d", "#5c007a", "#00227b", "#00701a", "#8c9900", "#c68400", "#40241a", "#29434e"]
+      let random = Math.floor(Math.random() * backgroundColor.length)
+      return backgroundColor[random]
     }
 
    return (

@@ -42,6 +42,7 @@ const Login = () => {
       }
    }
 
+
    return (
       <Box>
          <Head>
@@ -54,6 +55,7 @@ const Login = () => {
                display: 'flex',
                flexGrow: 1,
                minHeight: '100%',
+               flexDirection: 'column',
             }}
          >
             <Container maxWidth="sm">
