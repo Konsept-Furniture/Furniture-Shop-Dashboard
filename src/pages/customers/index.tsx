@@ -10,7 +10,6 @@ import {
    Tabs,
    Typography
 } from '@mui/material'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { ChangeEvent, MouseEvent, useState } from 'react'
 import { CustomerQueryParams, PaginationParams, ResponseListData, User } from 'models'
 import axiosClient from 'api-client/axios-client'
@@ -18,6 +17,7 @@ import useSWR from 'swr'
 import queryString from 'query-string'
 import { Download as DownloadIcon } from '../../icons/download'
 import { CustomerListResults, CustomerListToolbar } from 'components/customer'
+import { DashboardLayout } from 'components/layouts'
 
 const DEFAULT_PAGINATION = {
    totalItems: 10,

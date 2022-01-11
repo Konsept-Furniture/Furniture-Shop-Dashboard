@@ -56,18 +56,21 @@ export const SettingsPassword = ({ onSubmit, ...restProps }: { onSubmit: Functio
                   control={control}
                   name="oldPassword"
                   label="Old password"
+                  type="password"
                />
                <CustomTextField
                   disabled={isSubmitting}
                   control={control}
                   name="newPassword"
                   label="New password"
+                  type="password"
                />
                <CustomTextField
                   disabled={isSubmitting}
                   control={control}
                   name="confirmPassword"
                   label="Confirm new password"
+                  type="password"
                />
             </CardContent>
             <Divider />

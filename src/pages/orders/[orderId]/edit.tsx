@@ -3,7 +3,7 @@ import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded
 import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { orderApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
+import { DashboardLayout } from 'components/layouts'
 import { OrderBasicInfoCardEdit } from 'components/order/order-basic-info-card-edit'
 import { format, parseISO } from 'date-fns'
 import { Order, ResponseData } from 'models'

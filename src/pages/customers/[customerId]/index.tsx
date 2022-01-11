@@ -17,7 +17,7 @@ import {
 import axiosClient from 'api-client/axios-client'
 import { ButtonDropdownMenu } from 'components/button-dropdown-menu'
 import { CustomerBasicInfoCard } from 'components/customer'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
+import { DashboardLayout } from 'components/layouts'
 import PencilIcon from 'icons/pencil'
 import { ResponseData, User } from 'models'
 import Link from 'next/link'

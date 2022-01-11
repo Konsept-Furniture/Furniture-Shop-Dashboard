@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import { productApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { ProductList, ProductListToolbar } from 'components/product'
 import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
 import {
@@ -28,6 +27,7 @@ import useSWR from 'swr'
 import queryString from 'query-string'
 import { Download as DownloadIcon } from '../icons/download'
 import { Upload as UploadIcon } from '../icons/upload'
+import { DashboardLayout } from 'components/layouts'
 
 const DEFAULT_PAGINATION = {
    totalItems: 10,

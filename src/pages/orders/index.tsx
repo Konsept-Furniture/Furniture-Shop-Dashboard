@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { orderApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
+import { DashboardLayout } from 'components/layouts'
 import { OrderDetailModal } from 'components/order/order-detail'
 import { OrderListResults } from 'components/order/order-list-results'
 import { Order, PaginationParams, ResponseListData } from 'models'

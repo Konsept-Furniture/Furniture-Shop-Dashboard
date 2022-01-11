@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import MenuIcon from '@mui/icons-material/Menu'
+import PersonIcon from '@mui/icons-material/Person'
+import SearchIcon from '@mui/icons-material/Search'
 import {
    AppBar,
    Avatar,
-   Badge,
    Box,
    Button,
    Divider,
@@ -11,20 +12,15 @@ import {
    ListItemIcon,
    Menu,
    MenuItem,
-   Popover,
    Toolbar,
    Tooltip,
    Typography
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import SearchIcon from '@mui/icons-material/Search'
-import { Bell as BellIcon } from '../../icons/bell'
-import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
-import { Users as UsersIcon } from '../../icons/users'
 import { useAuth } from 'hooks'
-import { useState } from 'react'
-import PersonIcon from '@mui/icons-material/Person'
 import { useRouter } from 'next/router'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
    backgroundColor: theme?.palette.background.paper,
@@ -34,13 +30,13 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 export const DashboardNavbar = props => {
    const router = useRouter()
 
-   const { onSidebarOpen, onLogout, ...other } = props
-   const { profile } = useAuth()
+   const { onSidebarOpen, ...other } = props
+   const { profile, logout } = useAuth()
    const [anchorEl, setAnchorEl] = useState(null)
    const openPopover = Boolean(anchorEl)
 
    const handleLogoutClick = async () => {
-      if (onLogout) await onLogout()
+      await logout()
       setAnchorEl(null)
    }
    return (
@@ -173,6 +169,5 @@ export const DashboardNavbar = props => {
 }
 
 DashboardNavbar.propTypes = {
-   onSidebarOpen: PropTypes.func,
-   onLogout: PropTypes.func
+   onSidebarOpen: PropTypes.func
 }

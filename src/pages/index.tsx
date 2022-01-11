@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from '@mui/material'
 import { DashboardCards, LatestOrders, LatestProducts, Sales } from 'components/dashboard'
+import { DashboardLayout } from 'components/layouts'
 import Head from 'next/head'
-import { DashboardLayout } from '../components/layouts/dashboard-layout'
 
 const Dashboard = () => (
    <>

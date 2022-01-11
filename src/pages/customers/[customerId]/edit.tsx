@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Chip, Container, Grid, Skeleton, Typography } from
 import { customerApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
 import { CustomerBasicInfoCardEdit } from 'components/customer'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
+import { DashboardLayout } from 'components/layouts'
 import { ResponseData, User } from 'models'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

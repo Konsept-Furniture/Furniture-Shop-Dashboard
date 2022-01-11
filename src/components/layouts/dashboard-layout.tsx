@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { DashboardNavbar } from './dashboard-navbar'
@@ -17,18 +17,9 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
    }
 }))
 
-export const DashboardLayout = props => {
-   const { children } = props
+export const DashboardLayout = ({ children }: { children: ReactNode }) => {
    const router = useRouter()
    const [isSidebarOpen, setSidebarOpen] = useState(true)
-
-   const handleLogout = async () => {
-      try {
-         await authApi.logout().then(() => router.push('/login'))
-      } catch (error) {
-         console.log('eror to logout', error)
-      }
-   }
 
    return (
       <Auth>
@@ -45,7 +36,7 @@ export const DashboardLayout = props => {
                {children}
             </Box>
          </DashboardLayoutRoot>
-         <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} onLogout={handleLogout} />
+         <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} />
          <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
       </Auth>
    )

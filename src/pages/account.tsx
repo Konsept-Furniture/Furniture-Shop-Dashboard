@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import { Box, Container, Grid, Typography } from '@mui/material'
-import { DashboardLayout } from 'components/layouts/dashboard-layout'
 import { AccountProfile, AccountProfileDetails } from 'components/account'
 import { useAuth } from 'hooks'
 import { ChangePasswordFormValues, User } from 'models'
 import { authApi } from 'api-client'
 import { SettingsPassword } from 'components/settings/settings-password'
+import { DashboardLayout } from 'components/layouts'
 
 const Account = () => {
    const { updateProfile } = useAuth()
