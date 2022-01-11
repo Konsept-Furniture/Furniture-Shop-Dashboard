@@ -84,6 +84,11 @@ export const CustomerListResults = ({
       setOrderBy(property)
       onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
    }
+   function randomColor() {
+      let backgroundColor = ["#ab000d", "#5c007a", "#00227b", "#00701a", "#8c9900", "#c68400", "#40241a", "#29434e"]
+      let random = Math.floor(Math.random() * backgroundColor.length)
+      return backgroundColor[random]
+    }
    return (
       <PerfectScrollbar>
          <Box sx={{ minWidth: 1050 }}>
@@ -122,10 +127,12 @@ export const CustomerListResults = ({
                                       display: 'flex'
                                    }}
                                 >
-                                   <Avatar src="/broken-image.jpg" sx={{ mr: 2 }}>
+                                   <Avatar style={{
+                                    backgroundColor: randomColor() }}
+                                   src="/broken-image.jpg"  sx={{ mr: 2 }}>
                                       {getInitials(customer.name)}
                                    </Avatar>
-                                   <Typography color="textPrimary" variant="body2">
+                                   <Typography sx={{ fontWeight: 'bold' }} color="textPrimary" variant="body2">
                                       {customer.name || 'N/A'}
                                    </Typography>
                                 </Box>
@@ -137,7 +144,7 @@ export const CustomerListResults = ({
                              </TableCell>
                              <TableCell align="center">{customer.orderCount}</TableCell>
                              <TableCell align="center">
-                                <Typography color="success.main" variant="body2">
+                                <Typography sx={{ fontWeight: 'bold' }} color="success.main" variant="body2">
                                    {customer.amountTotal && `$${customer.amountTotal.toFixed(2)}`}
                                 </Typography>
                              </TableCell>

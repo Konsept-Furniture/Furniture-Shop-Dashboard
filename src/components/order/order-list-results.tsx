@@ -122,7 +122,9 @@ export const OrderListResults = ({
                                    ':hover': {
                                       textDecoration: 'underline'
                                    }
+                                   , fontWeight: 'bold' 
                                 }}
+                           
                                 variant="body2"
                              >
                                 {order.user.name}

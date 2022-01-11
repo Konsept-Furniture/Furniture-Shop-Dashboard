@@ -117,13 +117,6 @@ export const Sales = (props: any) => {
          <CardHeader
             action={
                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Button
-                     startIcon={<IconReport width={20} />}
-                     variant="outlined"
-                     onClick={() => {}}
-                  >
-                     Reports
-                  </Button>
                   <Select value={period} onChange={handleChangePeriod} size="small">
                      <MenuItem value="week">Last 7 days</MenuItem>
                      <MenuItem value="month">Last month</MenuItem>

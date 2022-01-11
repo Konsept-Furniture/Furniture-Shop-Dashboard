@@ -178,6 +178,12 @@ export function CustomerBasicInfoCardEdit({
       if (onDelete) onDelete()
    }
 
+   function randomColor() {
+      let backgroundColor = ["#ab000d", "#5c007a", "#00227b", "#00701a", "#8c9900", "#c68400", "#40241a", "#29434e"]
+      let random = Math.floor(Math.random() * backgroundColor.length)
+      return backgroundColor[random]
+    }
+
    return (
       <Card>
          <CardHeader title="Edit customer" />
@@ -336,7 +342,9 @@ export function CustomerBasicInfoCardEdit({
 
          <ConfirmDialog
             icon={
-               <Avatar sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}>
+               <Avatar style={{
+                  backgroundColor: randomColor()
+                }}>
                   <ReportProblemIcon />
                </Avatar>
             }
