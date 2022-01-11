@@ -1,8 +1,7 @@
+import { Box, Button, ListItem } from '@mui/material'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { Box, Button, ListItem } from '@mui/material'
-import { ReactNode } from 'react'
 
 export const NavItem = props => {
    const { href, icon, title, ...others } = props
@@ -27,7 +26,7 @@ export const NavItem = props => {
                sx={{
                   backgroundColor: active ? 'rgba(255,255,255, 0.08)' : 'transparent',
                   borderRadius: 1,
-                  color: active ? '#ffccbc' : '#ffffff',
+                  color: active ? 'success.light' : 'neutral.300',
                   fontWeight: active && 'fontWeightBold',
                   justifyContent: 'flex-start',
                   px: 3,
@@ -35,7 +34,7 @@ export const NavItem = props => {
                   textTransform: 'none',
                   width: '100%',
                   '& .MuiButton-startIcon': {
-                     color: active ? '#ffccbc' : '#ffffff'
+                     color: active ? 'success.light' : 'neutral.400'
                   },
                   '&:hover': {
                      backgroundColor: 'rgba(255,255,255, 0.08)'

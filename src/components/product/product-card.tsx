@@ -35,6 +35,7 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
             height: '100%'
          }}
          {...rest}
+         elevation={6}
       >
          <CardMedia component="img" height="220" image={product.img} alt={product.title} />
          <CardContent>
