@@ -185,7 +185,7 @@ export const theme = createTheme({
          light: '#757de8',
          dark: '#002984',
          contrastText: '#FFFFFF',
-         sideBar: '#3949ab'
+         sideBar: '#303f9f'
       },
       //xanh lá sẫm
       secondary: {
