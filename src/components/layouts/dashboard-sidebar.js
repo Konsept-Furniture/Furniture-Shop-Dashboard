@@ -92,7 +92,7 @@ export const DashboardSidebar = props => {
             </div>
             <Divider
                sx={{
-                  borderColor: '#2D3748',
+                  borderColor: '#394f73',
                   my: 3
                }}
             />
@@ -101,7 +101,7 @@ export const DashboardSidebar = props => {
                   <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
                ))}
             </Box>
-            <Divider sx={{ borderColor: '#2D3748' }} />
+            <Divider sx={{ borderColor: '#394f73' }} />
          </Box>
       </PerfectScrollbar>
    )

@@ -77,11 +77,8 @@ const Login = () => {
                               src="https://konsept.qodeinteractive.com/wp-content/uploads/2020/07/logo_mainpng.png"
                               width="180px"
                            />
-                           <Typography color="textPrimary" variant="h4" sx={{ mt: 2 }}>
+                           <Typography color="textPrimary" variant="h4">
                               Sign in
-                           </Typography>
-                           <Typography color="textSecondary" gutterBottom variant="body2">
-                              Sign in to manage your shop
                            </Typography>
                         </Box>
 
