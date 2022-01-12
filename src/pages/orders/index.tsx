@@ -50,52 +50,12 @@ const Orders = () => {
       }
    )
 
-   const [open, setOpen] = useState(false)
-   const [selectedOrder, setSelectedOrder] = useState<Order>()
-
-   const handleModalClose = () => {
-      setOpen(false)
-   }
-
    const handleLimitChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setPagination({ ...pagination, pageSize: Number.parseInt(event.target.value) })
    }
 
    const handlePageChange = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPagination({ ...pagination, currentPage: newPage + 1 })
-   }
-
-   const handleOrderRowClick = async (order: Order) => {
-      setOpen(true)
-      setSelectedOrder(order)
-   }
-
-   const handleUpdateOrder = (id: string) => async (payload: Partial<Order>) => {
-      try {
-         await orderApi.update(id, payload).then(res => {
-            if (!orderList) return
-
-            const updatedOrder = res.data
-            const idx = orderList.findIndex((order: Order) => order._id === updatedOrder?._id)
-            const newOrderList = [...orderList]
-
-            if (updatedOrder && idx >= 0) newOrderList[idx] = updatedOrder
-            mutate(newOrderList, true)
-
-            setOpen(false)
-         })
-      } catch (error) {
-         console.log('error to update order', error)
-      }
-   }
-   const handleDeleteOrder = async (id: string) => {
-      try {
-         await orderApi.delete(id).then(res => {
-            setOpen(false)
-         })
-      } catch (error) {
-         console.log('error to delete order', error)
-      }
    }
 
    const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
@@ -172,14 +132,6 @@ const Orders = () => {
                </Box>
             </Container>
          </Box>
-
-         <OrderDetailModal
-            order={selectedOrder}
-            open={open}
-            onClose={handleModalClose}
-            onUpdate={handleUpdateOrder}
-            onDelete={handleDeleteOrder}
-         />
       </>
    )
 }

@@ -9,7 +9,8 @@ import {
    TableBody,
    TableCell,
    TableHead,
-   TableRow
+   TableRow,
+   Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { Order, ProductOrder } from 'models'
@@ -40,7 +41,7 @@ export function OrderLineItemsCard({ order }: OrderLineItemsCardProps) {
                              <TableCell>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                    <Avatar variant="rounded" src={item.img}></Avatar>
-                                   {item.title}
+                                   <Typography variant="body2">{item.title}</Typography>
                                 </Box>
                              </TableCell>
                              <TableCell align="center">{item.quantity}</TableCell>

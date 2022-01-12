@@ -81,7 +81,7 @@ export const SettingsPassword = ({ onSubmit, ...restProps }: { onSubmit: Functio
                   p: 2
                }}
             >
-               <Button color="primary" variant="contained">
+               <Button color="primary" variant="contained" type="submit" disabled={isSubmitting}>
                   Update
                </Button>
             </Box>

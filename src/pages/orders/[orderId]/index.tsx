@@ -15,6 +15,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
 import { downloadFile } from 'utils'
+import Head from 'next/head'
+import { useSnackbar } from 'notistack'
 
 export interface OrderDetailPageProps {}
 
@@ -25,12 +27,38 @@ const fetcher = (url: string) => {
    })
 }
 function OrderDetailPage(props: OrderDetailPageProps) {
+   const { enqueueSnackbar } = useSnackbar()
    const router = useRouter()
    const { orderId } = router.query
 
-   const { data: order } = useSWR(`orders/${orderId}`, fetcher, {
+   const { data: order, mutate } = useSWR(`orders/${orderId}`, fetcher, {
       revalidateOnFocus: false
    })
+
+   const handleUpdateOrder = async (payload: Partial<Order>) => {
+      if (typeof orderId === 'string') {
+         try {
+            await orderApi.update(orderId, payload).then(res => {
+               console.log(res)
+               mutate(res.data, true)
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
+            })
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
+         }
+      }
+   }
+
+   const handleApproveOrder = async () => {
+      await handleUpdateOrder({ status: 'DELIVERIED' })
+   }
+   const handleRejectOrder = async () => {
+      await handleUpdateOrder({ status: 'CANCELED' })
+   }
 
    const handleExportInvoice = async () => {
       if (typeof orderId === 'string') {
@@ -38,14 +66,19 @@ function OrderDetailPage(props: OrderDetailPageProps) {
             await orderApi.exportBill(orderId).then(res => {
                downloadFile(res, `Invoice-${orderId}.pdf`)
             })
-         } catch (error) {
-            console.log('error to download invoice', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
 
    return (
       <>
+         <Head>
+            <title>Order Details | FurnitureStore Dashboard</title>
+         </Head>
          <Box
             component="main"
             sx={{
@@ -101,19 +134,35 @@ function OrderDetailPage(props: OrderDetailPageProps) {
                         </Typography>
                      </Grid>
                   )}
-                  <Grid item sx={{ display: 'flex', gap: 2 }}>
-                     <Link href={`/orders/${orderId}/edit`} passHref>
-                        <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
-                           Edit
-                        </Button>
-                     </Link>
+                  {order && (
+                     <Grid item sx={{ display: 'flex', gap: 2 }}>
+                        <Link href={`/orders/${orderId}/edit`} passHref>
+                           <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
+                              Edit
+                           </Button>
+                        </Link>
 
-                     <ButtonDropdownMenu label="Action">
-                        <MenuItem>Approve</MenuItem>
-                        <MenuItem>Reject</MenuItem>
-                        <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
-                     </ButtonDropdownMenu>
-                  </Grid>
+                        {order.status === 'PROCESSING' && (
+                           <ButtonDropdownMenu label="Actions">
+                              <MenuItem
+                                 onClick={handleApproveOrder}
+                                 sx={{
+                                    color: 'primary'
+                                 }}
+                              >
+                                 Approve
+                              </MenuItem>
+                              <MenuItem onClick={handleRejectOrder}>Reject</MenuItem>
+                              <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
+                           </ButtonDropdownMenu>
+                        )}
+                        {order.status === 'DELIVERIED' && (
+                           <ButtonDropdownMenu label="Actions">
+                              <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
+                           </ButtonDropdownMenu>
+                        )}
+                     </Grid>
+                  )}
                </Grid>
                <Box sx={{ ml: 1, mt: 4 }}>
                   <OrderBasicInfoCard order={order} />

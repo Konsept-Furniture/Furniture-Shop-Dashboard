@@ -36,6 +36,7 @@ const DEFAULT_PAGINATION = {
    pageSize: 12
 }
 const Products = () => {
+   const { enqueueSnackbar } = useSnackbar()
    const [pagination, setPagination] = useState<PaginationParams>(DEFAULT_PAGINATION)
    const [filters, setFilters] = useState<Partial<ProductQueryParams>>({
       orderBy: '',
@@ -90,10 +91,15 @@ const Products = () => {
 
                if (updatedProduct && idx >= 0) newProductList[idx] = updatedProduct
                mutate(newProductList, true)
+               handleCloseAddEditModal()
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-            await handleCloseAddEditModal()
-         } catch (error) {
-            console.log('error to edit product', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       } else {
          try {
@@ -111,24 +117,35 @@ const Products = () => {
                      mutate(newProductList, true)
                   }
                }
+
+               handleCloseAddEditModal()
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-            await handleCloseAddEditModal()
-         } catch (error) {
-            console.log('error to add product', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
 
    const handleDeleteProduct = async (id: string) => {
       try {
-         await productApi.delete(id).then(() => {
+         await productApi.delete(id).then(res => {
             if (!productList) return
 
             const newProductList = productList.filter(product => product._id !== id)
             mutate(newProductList, true)
+            enqueueSnackbar(res.message, {
+               variant: 'success'
+            })
          })
       } catch (error: any) {
-         console.log('error to delete product', error)
+         enqueueSnackbar(error.message, {
+            variant: 'error'
+         })
       }
    }
 

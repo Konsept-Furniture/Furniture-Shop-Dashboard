@@ -170,7 +170,18 @@ export function OrderBasicInfoCard({ order }: OrderBasicInfoCardProps) {
                         Status
                      </Typography>
                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2" color="text">
+                        <Typography
+                           variant="body2"
+                           color={
+                              {
+                                 PENDING: 'info',
+                                 DELIVERIED: 'secondary',
+                                 REFUNDED: 'error',
+                                 PROCESSING: 'primary',
+                                 CANCELED: 'warning'
+                              }[order.status || 'PENDING']
+                           }
+                        >
                            {order.status}
                         </Typography>
                      </Box>

@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 const NotFound = () => (
    <>
       <Head>
-         <title>404 | Material Kit</title>
+         <title>404 | FurnitureStore Dashboard</title>
       </Head>
       <Box
          component="main"
@@ -14,7 +14,7 @@ const NotFound = () => (
             alignItems: 'center',
             display: 'flex',
             flexGrow: 1,
-            minHeight: '100%',
+            minHeight: '100%'
          }}
       >
          <Container maxWidth="md">
@@ -22,7 +22,7 @@ const NotFound = () => (
                sx={{
                   alignItems: 'center',
                   display: 'flex',
-                  flexDirection: 'column',
+                  flexDirection: 'column'
                }}
             >
                <Typography align="center" color="textPrimary" variant="h1">
@@ -40,7 +40,7 @@ const NotFound = () => (
                         marginTop: 50,
                         display: 'inline-block',
                         maxWidth: '100%',
-                        width: 560,
+                        width: 560
                      }}
                   />
                </Box>

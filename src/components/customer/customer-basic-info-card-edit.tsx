@@ -32,6 +32,7 @@ import { ConfirmDialog } from 'components/product/confirm-dialog'
 import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import axios, { AxiosResponse } from 'axios'
 import useSWR from 'swr'
+import { LoadingBackdrop } from 'components/loading'
 
 export interface CustomerBasicInfoCardEditProps {
    customer?: User
@@ -82,6 +83,8 @@ export function CustomerBasicInfoCardEdit({
    onDelete
 }: CustomerBasicInfoCardEditProps) {
    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+   const [loading, setLoading] = useState(false)
+
    const {
       control,
       formState: { isSubmitting },
@@ -175,17 +178,31 @@ export function CustomerBasicInfoCardEdit({
    }
 
    const handleDeleteClick = async (event: MouseEvent) => {
-      if (onDelete) onDelete()
+      setOpenConfirmDialog(false)
+      setLoading(true)
+      if (onDelete) await onDelete()
+      setLoading(false)
    }
 
    function randomColor() {
-      let backgroundColor = ["#ab000d", "#5c007a", "#00227b", "#00701a", "#8c9900", "#c68400", "#40241a", "#29434e"]
+      let backgroundColor = [
+         '#ab000d',
+         '#5c007a',
+         '#00227b',
+         '#00701a',
+         '#8c9900',
+         '#c68400',
+         '#40241a',
+         '#29434e'
+      ]
       let random = Math.floor(Math.random() * backgroundColor.length)
       return backgroundColor[random]
-    }
+   }
 
    return (
       <Card>
+         <LoadingBackdrop open={loading} />
+
          <CardHeader title="Edit customer" />
          <Divider />
          <CardContent>
@@ -194,7 +211,7 @@ export function CustomerBasicInfoCardEdit({
                <Grid container columnSpacing={3} sx={{ mb: 2 }}>
                   <Grid item md={9} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         name="name"
                         label="Full Name"
@@ -210,7 +227,7 @@ export function CustomerBasicInfoCardEdit({
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         type="number"
                         name="phone"
@@ -219,7 +236,7 @@ export function CustomerBasicInfoCardEdit({
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         name="email"
                         label="Email"
@@ -233,7 +250,7 @@ export function CustomerBasicInfoCardEdit({
                <Grid container columnSpacing={3}>
                   <Grid item md={12} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         name="deliveryInfo.name"
                         label="Recipient's Name"
@@ -241,7 +258,7 @@ export function CustomerBasicInfoCardEdit({
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         type="number"
                         name="deliveryInfo.phone"
@@ -250,7 +267,7 @@ export function CustomerBasicInfoCardEdit({
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !customer}
                         control={control}
                         name="deliveryInfo.email"
                         label="Recipient's Email"
@@ -264,7 +281,7 @@ export function CustomerBasicInfoCardEdit({
                   <Grid container columnSpacing={3}>
                      <Grid item md={12} xs={12}>
                         <CustomTextField
-                           disabled={isSubmitting}
+                           disabled={isSubmitting || !customer}
                            control={control}
                            name="deliveryInfo.address.street"
                            label="Street"
@@ -272,7 +289,7 @@ export function CustomerBasicInfoCardEdit({
                      </Grid>
                      <Grid item md={4} xs={12}>
                         <CustomSelectField
-                           disabled={isSubmitting}
+                           disabled={isSubmitting || !customer}
                            control={control}
                            name="deliveryInfo.address.province"
                            label="Province"
@@ -288,7 +305,7 @@ export function CustomerBasicInfoCardEdit({
                      </Grid>
                      <Grid item md={4} xs={12}>
                         <CustomSelectField
-                           disabled={isSubmitting}
+                           disabled={isSubmitting || !customer}
                            control={control}
                            name="deliveryInfo.address.district"
                            label="District"
@@ -304,7 +321,7 @@ export function CustomerBasicInfoCardEdit({
                      </Grid>
                      <Grid item md={4} xs={12}>
                         <CustomSelectField
-                           disabled={isSubmitting}
+                           disabled={isSubmitting || !customer}
                            control={control}
                            name="deliveryInfo.address.ward"
                            label="Ward"
@@ -330,7 +347,11 @@ export function CustomerBasicInfoCardEdit({
                   <Link href={`/customers/${customer._id}`} passHref>
                      <Button variant="outlined">Cancel</Button>
                   </Link>
-                  <Button variant="contained" onClick={handleSubmit(handleSave)}>
+                  <Button
+                     variant="contained"
+                     onClick={handleSubmit(handleSave)}
+                     disabled={isSubmitting}
+                  >
                      Update
                   </Button>
                </Box>
@@ -342,9 +363,7 @@ export function CustomerBasicInfoCardEdit({
 
          <ConfirmDialog
             icon={
-               <Avatar style={{
-                  backgroundColor: randomColor()
-                }}>
+               <Avatar sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}>
                   <ReportProblemIcon />
                </Avatar>
             }

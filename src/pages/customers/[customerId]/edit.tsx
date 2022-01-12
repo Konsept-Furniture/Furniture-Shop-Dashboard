@@ -10,6 +10,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
 import { getInitials } from 'utils'
+import Head from 'next/head'
+import { useSnackbar } from 'notistack'
+import { AxiosError } from 'axios'
 
 export interface EditCustomerPageProps {}
 
@@ -19,6 +22,7 @@ const fetcher = (url: string) => {
    })
 }
 const EditCustomerPage = (props: EditCustomerPageProps) => {
+   const { enqueueSnackbar } = useSnackbar()
    const router = useRouter()
    const { customerId } = router.query
 
@@ -33,27 +37,41 @@ const EditCustomerPage = (props: EditCustomerPageProps) => {
                console.log(res)
                mutate(res.data, true)
                router.push(`/customers/${customerId}`)
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-         } catch (error) {
-            console.log('error to update customer', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
+
    const handleDeleteCustomer = async () => {
       if (typeof customerId === 'string') {
          try {
             await customerApi.delete(customerId).then(res => {
                console.log(res)
                router.push('/customers')
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-         } catch (error) {
-            console.log('error to delete customer', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
 
    return (
       <>
+         <Head>
+            <title>Edit Customer | FurnitureStore Dashboard</title>
+         </Head>
          <Box
             component="main"
             sx={{

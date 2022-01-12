@@ -4,6 +4,7 @@ import { CustomTextField } from 'components/form-controls'
 import { LoginLayout } from 'components/layouts'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { useAuth } from '../hooks'
@@ -15,6 +16,7 @@ const schema = yup.object({
 })
 
 const Login = () => {
+   const { enqueueSnackbar } = useSnackbar()
    const router = useRouter()
    const { login } = useAuth({
       revalidateOnMount: false
@@ -35,8 +37,10 @@ const Login = () => {
       try {
          await login(_data)
          router.push('/')
-      } catch (error) {
-         console.log('error to login:', error)
+      } catch (error: any) {
+         enqueueSnackbar(error.message, {
+            variant: 'error'
+         })
       }
    }
 

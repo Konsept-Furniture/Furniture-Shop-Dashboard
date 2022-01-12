@@ -24,6 +24,7 @@ import { ConfirmDialog } from 'components/product/confirm-dialog'
 import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import axios, { AxiosResponse } from 'axios'
 import useSWR from 'swr'
+import { LoadingBackdrop } from 'components/loading'
 
 export interface OrderBasicInfoCardEditProps {
    order?: Order
@@ -64,6 +65,8 @@ const schema = yup.object().shape({
 
 export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicInfoCardEditProps) {
    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+   const [loading, setLoading] = useState(false)
+
    const {
       control,
       formState: { isSubmitting },
@@ -151,11 +154,16 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
    }
 
    const handleDeleteClick = async (event: MouseEvent) => {
-      if (onDelete) onDelete()
+      setOpenConfirmDialog(false)
+      setLoading(true)
+      if (onDelete) await onDelete()
+      setLoading(false)
    }
 
    return (
       <Card>
+         <LoadingBackdrop open={loading} />
+
          <CardHeader title="Edit order" />
          <Divider />
          <CardContent>
@@ -163,7 +171,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                <Grid container spacing={3}>
                   <Grid item md={12} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.name"
                         label="Recipient's Name"
@@ -171,7 +179,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.phone"
                         label="Recipient's Phone Number"
@@ -179,7 +187,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.email"
                         label="Recipient's Email"
@@ -190,7 +198,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                <Grid container columnSpacing={3}>
                   <Grid item md={12} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.address.street"
                         label="Street"
@@ -198,7 +206,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={4} xs={12}>
                      <CustomSelectField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.address.province"
                         label="Province"
@@ -214,7 +222,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={4} xs={12}>
                      <CustomSelectField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.address.district"
                         label="District"
@@ -230,7 +238,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={4} xs={12}>
                      <CustomSelectField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="deliveryInfo.address.ward"
                         label="Ward"
@@ -246,7 +254,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={12} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="notes"
                         label="Notes"
@@ -254,7 +262,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                   </Grid>
                   <Grid item md={6} xs={12}>
                      <CustomTextField
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         control={control}
                         name="amount"
                         label="Amount"
@@ -268,7 +276,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                         control={control}
                         name="status"
                         label="Status"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !order}
                         options={OrderStatus.map(item => ({
                            label: item,
                            value: item
@@ -278,19 +286,25 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
                </Grid>
             </form>
          </CardContent>
-         <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-               <Link href={`/orders/${order?._id}`} passHref>
-                  <Button variant="outlined">Cancel</Button>
-               </Link>
-               <Button variant="contained" onClick={handleSubmit(handleSave)}>
-                  Update
+         {order && (
+            <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
+               <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Link href={`/orders/${order?._id}`} passHref>
+                     <Button variant="outlined">Cancel</Button>
+                  </Link>
+                  <Button
+                     variant="contained"
+                     onClick={handleSubmit(handleSave)}
+                     disabled={isSubmitting}
+                  >
+                     Update
+                  </Button>
+               </Box>
+               <Button variant="text" color="error" onClick={() => setOpenConfirmDialog(true)}>
+                  Delete order
                </Button>
-            </Box>
-            <Button variant="text" color="error" onClick={() => setOpenConfirmDialog(true)}>
-               Delete order
-            </Button>
-         </CardActions>
+            </CardActions>
+         )}
 
          <ConfirmDialog
             icon={
@@ -301,7 +315,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
             isOpen={openConfirmDialog}
             title="Are you sure?"
             body="Are you sure to delete this order?"
-            onSubmit={onDelete}
+            onSubmit={handleDeleteClick}
             onClose={() => setOpenConfirmDialog(false)}
          />
       </Card>

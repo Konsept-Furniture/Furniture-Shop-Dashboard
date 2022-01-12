@@ -36,7 +36,7 @@ const headCells: HeadCell[] = [
    {
       id: 'createdAt',
       align: 'center',
-      label: 'Ordered date',
+      label: 'Ordered Date',
       sortable: true
    },
    {
@@ -48,7 +48,7 @@ const headCells: HeadCell[] = [
    {
       id: 'payment',
       align: 'center',
-      label: 'Payment Method',
+      label: 'Payment',
       sortable: false
    },
    {
@@ -131,7 +131,7 @@ export const OrderListResults = ({
                           </Link>
                        </TableCell>
                        <TableCell align="left">
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
                              {order.products.slice(0, 3).map(product => (
                                 <Tooltip
                                    key={product.productId}
@@ -141,6 +141,13 @@ export const OrderListResults = ({
                                    <Avatar variant="rounded" src={product.img} />
                                 </Tooltip>
                              ))}
+                             {order.products.length > 3 && (
+                                <Tooltip title="and more..." placement="top">
+                                   <Box sx={{ height: '100%' }}>
+                                      <Typography>...</Typography>
+                                   </Box>
+                                </Tooltip>
+                             )}
                           </Box>
                        </TableCell>
                        <TableCell align="center" sx={{ pr: 5 }}>
@@ -166,20 +173,22 @@ export const OrderListResults = ({
                           </SeverityPill>
                        </TableCell>
                        <TableCell align="center">
-                          <Link href={`/orders/${order._id}/edit`} passHref>
-                             <Tooltip title="Edit Order" placement="top">
-                                <IconButton size="small">
-                                   <PencilIcon width={20} />
-                                </IconButton>
-                             </Tooltip>
-                          </Link>
-                          <Link href={`/orders/${order._id}`} passHref>
-                             <Tooltip title="View Details" placement="top">
-                                <IconButton size="small">
-                                   <ArrowForwardIcon fontSize="small" />
-                                </IconButton>
-                             </Tooltip>
-                          </Link>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                             <Link href={`/orders/${order._id}/edit`} passHref>
+                                <Tooltip title="Edit Order" placement="top">
+                                   <IconButton size="small">
+                                      <PencilIcon width={20} />
+                                   </IconButton>
+                                </Tooltip>
+                             </Link>
+                             <Link href={`/orders/${order._id}`} passHref>
+                                <Tooltip title="View Details" placement="top">
+                                   <IconButton size="small">
+                                      <ArrowForwardIcon fontSize="small" />
+                                   </IconButton>
+                                </Tooltip>
+                             </Link>
+                          </Box>
                        </TableCell>
                     </TableRow>
                  ))

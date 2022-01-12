@@ -14,8 +14,8 @@ import {
    Skeleton,
    Typography
 } from '@mui/material'
+import { customerApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
-import { ButtonDropdownMenu } from 'components/button-dropdown-menu'
 import { CustomerBasicInfoCard, CustomerOrderListCard } from 'components/customer'
 import { DashboardLayout } from 'components/layouts'
 import PencilIcon from 'icons/pencil'
@@ -25,6 +25,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
 import { getInitials } from 'utils'
+import Head from 'next/head'
+import { useSnackbar } from 'notistack'
 
 export interface CustomerDetailPageProps {}
 
@@ -34,6 +36,7 @@ const fetcher = (url: string) => {
    })
 }
 function CustomerDetailPage(props: CustomerDetailPageProps) {
+   const { enqueueSnackbar } = useSnackbar()
    const router = useRouter()
    const { customerId } = router.query
 
@@ -41,8 +44,28 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
       revalidateOnFocus: false
    })
 
+   const handleDeleteCustomer = async () => {
+      if (typeof customerId === 'string') {
+         try {
+            await customerApi.delete(customerId).then(res => {
+               router.push('/customers')
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
+            })
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
+         }
+      }
+   }
+
    return (
       <>
+         <Head>
+            <title>Customer Details | FurnitureStore Dashboard</title>
+         </Head>
          <Box
             component="main"
             sx={{
@@ -108,12 +131,6 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
                            Edit
                         </Button>
                      </Link>
-
-                     <ButtonDropdownMenu label="Action">
-                        <MenuItem>Approve</MenuItem>
-                        <MenuItem>Reject</MenuItem>
-                        <MenuItem>Export bill</MenuItem>
-                     </ButtonDropdownMenu>
                   </Grid>
                </Grid>
 
@@ -138,12 +155,12 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
                               gap: 1
                            }}
                         >
-                           <Button variant="outlined" color="error">
+                           <Button variant="outlined" color="error" onClick={handleDeleteCustomer}>
                               Delete Account
                            </Button>
                            <Typography variant="body2" color="textSecondary">
-                              Remove this customer’s chart if he/she requested that, if not please
-                              be aware that what has been deleted can never brought back
+                              Remove this customer’s account if he/she requested that, if not please
+                              be aware that what has been deleted can never brought back.
                            </Typography>
                         </Box>
                      </CardContent>

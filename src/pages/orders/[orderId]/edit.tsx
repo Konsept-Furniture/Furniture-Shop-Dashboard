@@ -11,6 +11,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
+import Head from 'next/head'
+import { useSnackbar } from 'notistack'
 
 export interface EditOrderPageProps {}
 
@@ -20,6 +22,7 @@ const fetcher = (url: string) => {
    })
 }
 const EditOrderPage = (props: EditOrderPageProps) => {
+   const { enqueueSnackbar } = useSnackbar()
    const router = useRouter()
    const { orderId } = router.query
    const { data: order, mutate } = useSWR(`orders/${orderId}`, fetcher, {
@@ -33,9 +36,14 @@ const EditOrderPage = (props: EditOrderPageProps) => {
                console.log(res)
                mutate(res.data, true)
                router.push(`/orders/${orderId}`)
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-         } catch (error) {
-            console.log('error to update order', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
@@ -45,15 +53,23 @@ const EditOrderPage = (props: EditOrderPageProps) => {
             await orderApi.delete(orderId).then(res => {
                console.log(res)
                router.push('/orders')
+               enqueueSnackbar(res.message, {
+                  variant: 'success'
+               })
             })
-         } catch (error) {
-            console.log('error to delete order', error)
+         } catch (error: any) {
+            enqueueSnackbar(error.message, {
+               variant: 'error'
+            })
          }
       }
    }
 
    return (
       <>
+         <Head>
+            <title>Login | FurnitureStore Dashboard</title>
+         </Head>
          <Box
             component="main"
             sx={{
