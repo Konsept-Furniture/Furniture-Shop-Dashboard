@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { IncomePeriod, Order, ResponseData } from './../models'
 import axiosClient from './axios-client'
 
@@ -12,6 +13,6 @@ export const orderApi = {
       return axiosClient.get(`orders/stats/income?type=${period}`)
    },
    exportBill(id: string) {
-      return axiosClient.get(`orders/fetch-pdf/${id}`)
+      return axios.get(`/api/orders/fetch-pdf/${id}`)
    }
 }
