@@ -22,11 +22,13 @@ import PencilIcon from 'icons/pencil'
 import { ResponseData, User } from 'models'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr'
 import { getInitials } from 'utils'
 import Head from 'next/head'
 import { useSnackbar } from 'notistack'
+import { ConfirmDialog } from 'components/product/confirm-dialog'
+import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 
 export interface CustomerDetailPageProps {}
 
@@ -37,6 +39,7 @@ const fetcher = (url: string) => {
 }
 function CustomerDetailPage(props: CustomerDetailPageProps) {
    const { enqueueSnackbar } = useSnackbar()
+   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
    const router = useRouter()
    const { customerId } = router.query
 
@@ -155,7 +158,11 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
                               gap: 1
                            }}
                         >
-                           <Button variant="outlined" color="error" onClick={handleDeleteCustomer}>
+                           <Button
+                              variant="outlined"
+                              color="error"
+                              onClick={() => setOpenConfirmDialog(true)}
+                           >
                               Delete Account
                            </Button>
                            <Typography variant="body2" color="textSecondary">
@@ -165,6 +172,21 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
                         </Box>
                      </CardContent>
                   </Card>
+
+                  <ConfirmDialog
+                     icon={
+                        <Avatar
+                           sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}
+                        >
+                           <ReportProblemIcon />
+                        </Avatar>
+                     }
+                     isOpen={openConfirmDialog}
+                     title="Are you sure?"
+                     body="Are you sure to delete this customer?"
+                     onSubmit={handleDeleteCustomer}
+                     onClose={() => setOpenConfirmDialog(false)}
+                  />
                </Box>
             </Container>
          </Box>

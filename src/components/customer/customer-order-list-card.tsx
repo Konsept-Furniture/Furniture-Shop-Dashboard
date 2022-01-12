@@ -60,7 +60,7 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                                    </TableCell>
                                    <TableCell align="left">
                                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                         {order.products.slice(3).map(product => (
+                                         {order.products.slice(0, 3).map(product => (
                                             <Tooltip
                                                key={product.productId}
                                                title={product.title}
@@ -69,6 +69,13 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                                                <Avatar variant="rounded" src={product.img} />
                                             </Tooltip>
                                          ))}
+                                         {order.products.length > 3 && (
+                                            <Tooltip title="and more..." placement="top">
+                                               <Box sx={{ height: '100%' }}>
+                                                  <Typography>...</Typography>
+                                               </Box>
+                                            </Tooltip>
+                                         )}
                                       </Box>
                                    </TableCell>
                                    <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
@@ -108,6 +115,15 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                              ))
                            : Array.from(new Array(3)).map((i, idx) => (
                                 <TableRow key={idx}>
+                                   <TableCell>
+                                      <Skeleton variant="text" />
+                                   </TableCell>
+                                   <TableCell>
+                                      <Skeleton variant="text" />
+                                   </TableCell>
+                                   <TableCell>
+                                      <Skeleton variant="text" />
+                                   </TableCell>
                                    <TableCell>
                                       <Skeleton variant="text" />
                                    </TableCell>

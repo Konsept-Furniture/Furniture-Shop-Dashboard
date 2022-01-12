@@ -46,34 +46,34 @@ function fetcher<T>(url: string) {
    })
 }
 const schema = yup.object().shape({
-   name: yup.string().max(255).required(),
+   name: yup.string().max(255),
    phone: yup
       .string()
       .max(255)
-      .required()
+
       .test('is-vietnamese-phonenumber1', 'Incorrect phone number format.', number => {
          if (!number) return true
 
          return regexVietnamesePhoneNumber.test(number)
       }),
-   email: yup.string().email().max(255).nullable().required(),
+   email: yup.string().email().max(255).nullable(),
    deliveryInfo: yup.object().shape({
-      name: yup.string().max(255).required(),
+      name: yup.string().max(255),
       phone: yup
          .string()
          .max(255)
-         .required()
+
          .test('is-vietnamese-phonenumber2', 'Incorrect phone number format.', number => {
             if (!number) return true
 
             return regexVietnamesePhoneNumber.test(number)
          }),
-      email: yup.string().email().max(255).nullable().required(),
+      email: yup.string().email().max(255).nullable(),
       address: yup.object().shape({
-         street: yup.string().max(255).required(),
-         ward: yup.string().max(255).required(),
-         district: yup.string().max(255).required(),
-         province: yup.string().max(255).required()
+         street: yup.string().max(255),
+         ward: yup.string().max(255),
+         district: yup.string().max(255),
+         province: yup.string().max(255)
       })
    })
 })
@@ -345,7 +345,9 @@ export function CustomerBasicInfoCardEdit({
             <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
                <Box sx={{ display: 'flex', gap: 2 }}>
                   <Link href={`/customers/${customer._id}`} passHref>
-                     <Button variant="outlined">Cancel</Button>
+                     <Button variant="outlined" disabled={isSubmitting}>
+                        Cancel
+                     </Button>
                   </Link>
                   <Button
                      variant="contained"
@@ -355,7 +357,12 @@ export function CustomerBasicInfoCardEdit({
                      Update
                   </Button>
                </Box>
-               <Button variant="text" color="error" onClick={() => setOpenConfirmDialog(true)}>
+               <Button
+                  variant="text"
+                  color="error"
+                  disabled={isSubmitting}
+                  onClick={() => setOpenConfirmDialog(true)}
+               >
                   Delete customer
                </Button>
             </CardActions>

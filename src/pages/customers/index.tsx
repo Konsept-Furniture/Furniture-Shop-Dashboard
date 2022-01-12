@@ -109,11 +109,11 @@ const Customers = () => {
                   <Typography sx={{ m: 1 }} variant="h4">
                      Customers
                   </Typography>
-                  <Box sx={{ m: 1 }}>
+                  {/* <Box sx={{ m: 1 }}>
                      <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
                         Export
                      </Button>
-                  </Box>
+                  </Box> */}
                </Box>
                <Box sx={{ mt: 1 }}>
                   <Card>
