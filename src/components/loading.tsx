@@ -1,6 +1,7 @@
 import { Backdrop, CircularProgress } from '@mui/material'
 import * as React from 'react'
-
+import ReactLoading from 'react-loading'
+import { Animation } from './Animation'
 export interface LoadingBackdropProps {
    open?: boolean
 }
@@ -8,10 +9,11 @@ export interface LoadingBackdropProps {
 export function LoadingBackdrop({ open }: LoadingBackdropProps) {
    return (
       <Backdrop
-         sx={{ color: 'secondary.main', zIndex: theme => theme.zIndex.drawer + 1 }}
+         sx={{ color: '#00000000', zIndex: theme => theme.zIndex.drawer + 1 }}
          open={open ? open : true}
       >
-         <CircularProgress color="inherit" />
+      <Animation type={"bubbles"} color={"#ef5350"}/>
+);
       </Backdrop>
    )
 }
