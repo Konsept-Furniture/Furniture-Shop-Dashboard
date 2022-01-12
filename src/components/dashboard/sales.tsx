@@ -18,6 +18,7 @@ import { useState } from 'react'
 import axiosClient from 'api-client/axios-client'
 import { IncomePeriod, ResponseData } from 'models'
 import useSWR from 'swr'
+import { ChartOptions } from 'chart.js'
 
 interface Dataset {
    backgroundColor: string
@@ -60,51 +61,72 @@ export const Sales = (props: any) => {
       revalidateOnFocus: true
    })
 
-   const options = {
-      cornerRadius: 20,
+   const options: ChartOptions<'line'> = {
+      interaction: {
+         intersect: false,
+         mode: 'index'
+      },
       layout: { padding: 0 },
-      legend: { display: false },
       maintainAspectRatio: false,
       responsive: true,
-      xAxes: [
-         {
+      // xAxes: [
+      //    {
+      //       ticks: {
+      //          fontColor: theme.palette.text.secondary
+      //       },
+      //       gridLines: {
+      //          display: false,
+      //          drawBorder: false
+      //       }
+      //    }
+      // ],
+      // yAxes: [
+      //    {
+      //       ticks: {
+      //          callback: (label: string | number) => `$${label}`,
+      //          fontColor: theme.palette.text.secondary,
+      //          beginAtZero: true,
+      //          min: 0
+      //       },
+      //       gridLines: {
+      //          borderDash: [2],
+      //          borderDashOffset: [2],
+      //          color: theme.palette.divider,
+      //          drawBorder: false,
+      //          zeroLineBorderDash: [2],
+      //          zeroLineBorderDashOffset: [2],
+      //          zeroLineColor: theme.palette.divider
+      //       }
+      //    }
+      // ],
+      // tooltips: {
+      //    backgroundColor: theme.palette.background.paper,
+      //    bodyFontColor: theme.palette.text.secondary,
+      //    borderColor: theme.palette.divider,
+      //    borderWidth: 1,
+      //    enabled: true,
+      //    footerFontColor: theme.palette.text.secondary,
+      //    intersect: false,
+      //    mode: 'index',
+      //    titleFontColor: theme.palette.text.primary
+      // },
+      scales: {
+         y: {
             ticks: {
-               fontColor: theme.palette.text.secondary
-            },
-            gridLines: {
-               display: false,
-               drawBorder: false
+               callback: function (value, index, values) {
+                  return '$' + value
+               }
             }
          }
-      ],
-      yAxes: [
-         {
-            ticks: {
-               fontColor: theme.palette.text.secondary,
-               beginAtZero: true,
-               min: 0
-            },
-            gridLines: {
-               borderDash: [2],
-               borderDashOffset: [2],
-               color: theme.palette.divider,
-               drawBorder: false,
-               zeroLineBorderDash: [2],
-               zeroLineBorderDashOffset: [2],
-               zeroLineColor: theme.palette.divider
+      },
+      plugins: {
+         tooltip: {
+            callbacks: {
+               label: function (context) {
+                  return `${context.dataset.label}: $${context.parsed.y.toFixed(2)}`
+               }
             }
          }
-      ],
-      tooltips: {
-         backgroundColor: theme.palette.background.paper,
-         bodyFontColor: theme.palette.text.secondary,
-         borderColor: theme.palette.divider,
-         borderWidth: 1,
-         enabled: true,
-         footerFontColor: theme.palette.text.secondary,
-         intersect: false,
-         mode: 'index',
-         titleFontColor: theme.palette.text.primary
       }
    }
 
@@ -119,7 +141,7 @@ export const Sales = (props: any) => {
                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Select value={period} onChange={handleChangePeriod} size="small">
                      <MenuItem value="week">Last 7 days</MenuItem>
-                     <MenuItem value="month">Last month</MenuItem>
+                     <MenuItem value="month">Last 30 days</MenuItem>
                      <MenuItem value="year">Last year</MenuItem>
                   </Select>
                   {/* <Button endIcon={<ArrowDropDownIcon fontSize="small" />} size="small">

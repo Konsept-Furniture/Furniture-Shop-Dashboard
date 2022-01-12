@@ -70,9 +70,9 @@ const Products = () => {
       if (productListTitleRef.current) productListTitleRef.current.scrollIntoView()
    }
 
-   const handleChangePagination = async (event: ChangeEvent<unknown>, value: number) => {
+   const handleChangePagination = (event: ChangeEvent<unknown>, value: number) => {
       executeScroll()
-      await setPagination({
+      setPagination({
          ...pagination,
          currentPage: value
       })

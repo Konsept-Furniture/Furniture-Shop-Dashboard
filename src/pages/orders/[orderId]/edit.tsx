@@ -16,7 +16,6 @@ export interface EditOrderPageProps {}
 
 const fetcher = (url: string) => {
    return axiosClient.get<any, ResponseData<Order>>(url).then((res: ResponseData<Order>): Order => {
-      console.log(res.data)
       return res.data
    })
 }

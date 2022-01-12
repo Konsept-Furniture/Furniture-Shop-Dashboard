@@ -70,6 +70,22 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
       handleSubmit,
       reset
    } = useForm<EditOrderFormValues>({
+      defaultValues: {
+         deliveryInfo: {
+            name: '',
+            phone: '',
+            email: '',
+            address: {
+               street: '',
+               ward: '',
+               district: '',
+               province: ''
+            }
+         },
+         amount: 0,
+         status: 'PROCESSING',
+         notes: ''
+      },
       resolver: yupResolver(schema)
    })
 
