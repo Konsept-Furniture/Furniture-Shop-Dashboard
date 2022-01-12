@@ -64,7 +64,8 @@ function OrderDetailPage(props: OrderDetailPageProps) {
       if (typeof orderId === 'string') {
          try {
             await orderApi.exportBill(orderId).then(res => {
-               downloadFile(res, `Invoice-${orderId}.pdf`)
+               console.log(res.data)
+               downloadFile(res.data, `Invoice-${orderId}.pdf`, 'application/pdf')
             })
          } catch (error: any) {
             enqueueSnackbar(error.message, {

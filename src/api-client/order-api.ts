@@ -13,6 +13,8 @@ export const orderApi = {
       return axiosClient.get(`orders/stats/income?type=${period}`)
    },
    exportBill(id: string) {
-      return axios.get(`/api/orders/fetch-pdf/${id}`)
+      return axios.get(`/api/orders/fetch-pdf/${id}`, {
+         responseType: 'blob'
+      })
    }
 }
