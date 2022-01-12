@@ -1,7 +1,7 @@
 import { Backdrop, CircularProgress } from '@mui/material'
 import * as React from 'react'
 import ReactLoading from 'react-loading'
-import Animation from './Animation'
+import { Animation } from './Animation'
 export interface LoadingBackdropProps {
    open?: boolean
 }
