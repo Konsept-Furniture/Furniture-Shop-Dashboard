@@ -1,3 +1,5 @@
+import { PaginationParams } from 'models'
+
 declare global {
    interface Navigator {
       msSaveBlob?: (blob: any, defaultName?: string) => boolean
@@ -37,4 +39,13 @@ export function downloadFile(data: any, filename: string, mime?: string) {
       // For Firefox it is necessary to delay revoking the ObjectURL
       window.URL.revokeObjectURL(blobURL)
    }, 100)
+}
+
+export const renderPaginationText = (pagination: PaginationParams) => {
+   const isLastIndex = pagination.currentPage === pagination.totalPages
+   return `Showing ${
+      pagination.totalItems > 0 ? (pagination.currentPage - 1) * pagination.pageSize + 1 : 0
+   }–${!isLastIndex ? pagination.currentPage * pagination.pageSize : pagination.totalItems} of ${
+      pagination.totalItems
+   } results`
 }

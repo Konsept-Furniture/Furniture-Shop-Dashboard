@@ -228,20 +228,23 @@ const Products = () => {
                   }}
                   onDeleteClick={handleDeleteProduct}
                />
-               <Box
-                  sx={{
-                     display: 'flex',
-                     justifyContent: 'center',
-                     pt: 3
-                  }}
-               >
-                  <Pagination
-                     color="primary"
-                     count={pagination.totalPages}
-                     page={pagination.currentPage}
-                     onChange={handleChangePagination}
-                  />
-               </Box>
+
+               {productList && productList.length > 0 && (
+                  <Box
+                     sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        pt: 3
+                     }}
+                  >
+                     <Pagination
+                        color="primary"
+                        count={pagination.totalPages}
+                        page={pagination.currentPage}
+                        onChange={handleChangePagination}
+                     />
+                  </Box>
+               )}
 
                <ProductAddEditModal
                   isEdit={isEdit}

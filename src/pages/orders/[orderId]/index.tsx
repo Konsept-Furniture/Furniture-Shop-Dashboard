@@ -102,7 +102,7 @@ function OrderDetailPage(props: OrderDetailPageProps) {
                      </Grid>
                   )}
                   <Grid item sx={{ display: 'flex', gap: 2 }}>
-                     <Link href={`${orderId}/edit`} passHref>
+                     <Link href={`/orders/${orderId}/edit`} passHref>
                         <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
                            Edit
                         </Button>

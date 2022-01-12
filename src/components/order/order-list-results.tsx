@@ -115,7 +115,7 @@ export const OrderListResults = ({
                ? orderList.map((order: Order) => (
                     <TableRow hover key={order._id}>
                        <TableCell align="left" sx={{ minWidth: 200 }}>
-                          <Link href={`customers/${order.user._id}`} passHref>
+                          <Link href={`/customers/${order.user._id}`} passHref>
                              <Typography
                                 sx={{
                                    cursor: 'pointer',
@@ -132,7 +132,7 @@ export const OrderListResults = ({
                        </TableCell>
                        <TableCell align="left">
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                             {order.products.map(product => (
+                             {order.products.slice(0, 3).map(product => (
                                 <Tooltip
                                    key={product.productId}
                                    title={product.title}
@@ -166,14 +166,14 @@ export const OrderListResults = ({
                           </SeverityPill>
                        </TableCell>
                        <TableCell align="center">
-                          <Link href={`orders/${order._id}/edit`} passHref>
+                          <Link href={`/orders/${order._id}/edit`} passHref>
                              <Tooltip title="Edit Order" placement="top">
                                 <IconButton size="small">
                                    <PencilIcon width={20} />
                                 </IconButton>
                              </Tooltip>
                           </Link>
-                          <Link href={`orders/${order._id}`} passHref>
+                          <Link href={`/orders/${order._id}`} passHref>
                              <Tooltip title="View Details" placement="top">
                                 <IconButton size="small">
                                    <ArrowForwardIcon fontSize="small" />

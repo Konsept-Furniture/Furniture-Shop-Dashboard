@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import axiosClient from 'api-client/axios-client'
 import { ButtonDropdownMenu } from 'components/button-dropdown-menu'
-import { CustomerBasicInfoCard } from 'components/customer'
+import { CustomerBasicInfoCard, CustomerOrderListCard } from 'components/customer'
 import { DashboardLayout } from 'components/layouts'
 import PencilIcon from 'icons/pencil'
 import { ResponseData, User } from 'models'
@@ -103,7 +103,7 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
                      </Grid>
                   )}
                   <Grid item sx={{ display: 'flex', gap: 2 }}>
-                     <Link href={`${customerId}/edit`} passHref>
+                     <Link href={`/customers/${customerId}/edit`} passHref>
                         <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
                            Edit
                         </Button>
@@ -119,6 +119,10 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
 
                <Box sx={{ ml: 1, mt: 4 }}>
                   <CustomerBasicInfoCard customer={customer} />
+               </Box>
+
+               <Box sx={{ ml: 1, mt: 4 }}>
+                  <CustomerOrderListCard />
                </Box>
 
                <Box sx={{ ml: 1, mt: 4 }}>
