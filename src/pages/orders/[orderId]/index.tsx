@@ -1,6 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded'
 import { Box, Button, Container, Grid, MenuItem, Skeleton, Typography } from '@mui/material'
+import { orderApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
 import { ButtonDropdownMenu } from 'components/button-dropdown-menu'
 import { DashboardLayout } from 'components/layouts'
@@ -13,6 +14,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
+import { downloadFile } from 'utils'
 
 export interface OrderDetailPageProps {}
 
@@ -29,6 +31,18 @@ function OrderDetailPage(props: OrderDetailPageProps) {
    const { data: order } = useSWR(`orders/${orderId}`, fetcher, {
       revalidateOnFocus: false
    })
+
+   const handleExportInvoice = async () => {
+      if (typeof orderId === 'string') {
+         try {
+            await orderApi.exportBill(orderId).then(res => {
+               downloadFile(res, `Invoice-${orderId}.pdf`)
+            })
+         } catch (error) {
+            console.log('error to download invoice', error)
+         }
+      }
+   }
 
    return (
       <>
@@ -97,7 +111,7 @@ function OrderDetailPage(props: OrderDetailPageProps) {
                      <ButtonDropdownMenu label="Action">
                         <MenuItem>Approve</MenuItem>
                         <MenuItem>Reject</MenuItem>
-                        <MenuItem>Export bill</MenuItem>
+                        <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
                      </ButtonDropdownMenu>
                   </Grid>
                </Grid>

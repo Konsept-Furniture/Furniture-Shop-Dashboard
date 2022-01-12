@@ -10,5 +10,8 @@ export const orderApi = {
    },
    getStat(period: 'week' | 'month' | 'year'): Promise<ResponseData<IncomePeriod>> {
       return axiosClient.get(`orders/stats/income?type=${period}`)
+   },
+   exportBill(id: string) {
+      return axiosClient.get(`orders/fetch-pdf/${id}`)
    }
 }
