@@ -6,7 +6,7 @@ import Head from 'next/head'
 const Dashboard = () => (
    <>
       <Head>
-         <title>Dashboard | FlowerShop</title>
+         <title>Dashboard | FurnitureStore</title>
       </Head>
       <Box
          component="main"

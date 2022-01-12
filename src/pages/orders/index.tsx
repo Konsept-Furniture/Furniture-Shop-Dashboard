@@ -117,7 +117,7 @@ const Orders = () => {
    return (
       <>
          <Head>
-            <title>Orders | FlowerShop</title>
+            <title>Orders | FurnitureStore</title>
          </Head>
          <Box
             component="main"
