@@ -2,8 +2,8 @@ import React from 'react';
 import ReactLoading from 'react-loading';
 
 export interface AnimationProps {
-   type:string
-	color:string
+   type?:string
+	color?:string
 }
 
 export function Animation({ type, color }: AnimationProps) {

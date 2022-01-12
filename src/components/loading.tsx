@@ -12,7 +12,7 @@ export function LoadingBackdrop({ open }: LoadingBackdropProps) {
          sx={{ color: '#00000000', zIndex: theme => theme.zIndex.drawer + 1 }}
          open={open ? open : true}
       >
-      <Animation/>
+      <Animation type={"bubbles"} color={"#ef5350"}/>
 );
       </Backdrop>
    )
