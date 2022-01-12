@@ -64,7 +64,7 @@ export const TotalOrders = ({ data, ...restProps }: { data?: CardData }) => (
                      mr: 1
                   }}
                >
-                  {Math.abs(data.compareLastMonth)}%
+                  {Math.abs(data.compareLastMonth).toFixed(2)}%
                </Typography>
                <Typography color="textSecondary" variant="caption">
                   Since last month

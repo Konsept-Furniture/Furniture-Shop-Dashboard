@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { ReactNode, useEffect } from 'react'
 import { useAuth } from '../hooks'
+import { LoadingBackdrop } from './loading'
 
 export interface AuthProps {
    children: ReactNode
@@ -16,7 +17,7 @@ export function Auth({ children }: AuthProps) {
       }
    }, [router, profile, firstLoading])
 
-   if (!profile?.username) return <p>Loading...</p>
+   if (!profile?.username) return <LoadingBackdrop />
 
    return <div>{children}</div>
 }

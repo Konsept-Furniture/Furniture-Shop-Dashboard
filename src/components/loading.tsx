@@ -8,7 +8,7 @@ export interface LoadingBackdropProps {
 export function LoadingBackdrop({ open }: LoadingBackdropProps) {
    return (
       <Backdrop
-         sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+         sx={{ color: 'secondary.main', zIndex: theme => theme.zIndex.drawer + 1 }}
          open={open ? open : true}
       >
          <CircularProgress color="inherit" />
