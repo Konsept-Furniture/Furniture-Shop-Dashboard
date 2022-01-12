@@ -44,7 +44,7 @@ const App = (props: AppPropsWithLayout) => {
    return (
       <CacheProvider value={emotionCache}>
          <Head>
-            <title>FlowerShop Admin</title>
+            <title>FurnitureStore Admin</title>
             <meta name="viewport" content="initial-scale=1, width=device-width" />
          </Head>
 

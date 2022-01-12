@@ -30,7 +30,7 @@ const Account = () => {
    return (
       <>
          <Head>
-            <title>Account | FlowerShop</title>
+            <title>Account | FurnitureStore</title>
          </Head>
          <Box
             component="main"

@@ -8,6 +8,6 @@ export interface AnimationProps {
 
 export function Animation({ type, color }: AnimationProps) {
 	return (
-		<ReactLoading type={"bubbles"} color={"#ef5350"} height={'10%'} width={'10%'} />
+		<ReactLoading type={"bubbles"} color={"#1a2640"} height={'10%'} width={'10%'} />
 	)
 }

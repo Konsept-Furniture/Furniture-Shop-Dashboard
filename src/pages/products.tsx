@@ -163,7 +163,7 @@ const Products = () => {
    return (
       <>
          <Head>
-            <title>Products | FlowerShop</title>
+            <title>Products | FurnitureStore</title>
          </Head>
          <Box
             component="main"

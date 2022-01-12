@@ -43,7 +43,7 @@ const Login = () => {
    return (
       <Box>
          <Head>
-            <title>Login | FlowerShop Dashboard</title>
+            <title>Login | FurnitureStore Dashboard</title>
          </Head>
          <Box
             component="main"
