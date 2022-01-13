@@ -98,6 +98,7 @@ export const CustomerListResults = ({
       let random = Math.floor(Math.random() * backgroundColor.length)
       return backgroundColor[random]
    }
+
    return (
       <PerfectScrollbar>
          <Box sx={{ minWidth: 1050 }}>
