@@ -29,7 +29,8 @@ const DEFAULT_PAGINATION = {
 const Customers = () => {
    const [filters, setFilters] = useState<CustomerQueryParams>({
       search: '',
-      orderBy: 'updatedAt-desc'
+      orderBy: 'updatedAt-desc',
+      isOrder: ''
    })
    const [pagination, setPagination] = useState<PaginationParams>(DEFAULT_PAGINATION)
 
@@ -79,8 +80,8 @@ const Customers = () => {
    const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
       setPagination(DEFAULT_PAGINATION)
       setFilters({
-         ...filters
-         // inStock: newValue
+         ...filters,
+         isOrder: newValue
       })
    }
 
@@ -117,10 +118,10 @@ const Customers = () => {
                </Box>
                <Box sx={{ mt: 1 }}>
                   <Card>
-                     <Tabs value={''} onChange={handleChangeTab}>
+                     <Tabs value={filters.isOrder} onChange={handleChangeTab}>
                         <Tab label="All" value="" />
-                        <Tab label="Prospect" value="prospect" />
-                        <Tab label="Returning" value="returning" />
+                        <Tab label="Prospect" value="true" />
+                        <Tab label="Returning" value="false" />
                      </Tabs>
                      <Divider />
                      <CustomerListToolbar

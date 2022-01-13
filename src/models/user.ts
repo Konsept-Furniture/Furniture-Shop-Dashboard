@@ -42,4 +42,5 @@ export interface EditCustomerFormValues {
 export interface CustomerQueryParams extends Partial<Record<keyof User, string>> {
    orderBy?: string
    search?: string
+   isOrder?: string
 }
