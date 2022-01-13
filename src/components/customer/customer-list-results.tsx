@@ -98,7 +98,18 @@ export const CustomerListResults = ({
       let random = Math.floor(Math.random() * backgroundColor.length)
       return backgroundColor[random]
    }
-
+   let bgColor = [
+      '#ab000d',
+      '#5c007a',
+      '#00227b',
+      '#00701a',
+      '#8c9900',
+      '#c68400',
+      '#40241a',
+      '#29434e',
+      '#ab000d',
+      '#5c007a'
+   ]
    return (
       <PerfectScrollbar>
          <Box sx={{ minWidth: 1050 }}>
@@ -139,7 +150,7 @@ export const CustomerListResults = ({
                                 >
                                    <Avatar
                                       style={{
-                                         backgroundColor: randomColor()
+                                         backgroundColor: bgColor[customerList.indexOf(customer)]
                                       }}
                                       src="/broken-image.jpg"
                                       sx={{ mr: 2 }}
