@@ -54,7 +54,7 @@ export const LatestOrders = (props: any) => {
                         ? orders.map((order: Order) => (
                              <TableRow hover key={order._id}>
                                 <TableCell align="left">
-                                   <Link href={`customers/${order.user._id}`} passHref>
+                                   <Link href={`customers/${order.user._id}`} passHref legacyBehavior>
                                       <Typography
                                          sx={{
                                             cursor: 'pointer',
@@ -112,14 +112,14 @@ export const LatestOrders = (props: any) => {
                                 </TableCell>
                                 <TableCell align="center">
                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                      <Link href={`/orders/${order._id}/edit`} passHref>
+                                      <Link href={`/orders/${order._id}/edit`} passHref legacyBehavior>
                                          <Tooltip title="Edit Order" placement="top">
                                             <IconButton size="small">
                                                <PencilIcon width={20} />
                                             </IconButton>
                                          </Tooltip>
                                       </Link>
-                                      <Link href={`/orders/${order._id}`} passHref>
+                                      <Link href={`/orders/${order._id}`} passHref legacyBehavior>
                                          <Tooltip title="View Details" placement="top">
                                             <IconButton size="small">
                                                <ArrowForwardIcon fontSize="small" />
@@ -160,7 +160,7 @@ export const LatestOrders = (props: any) => {
                p: 2
             }}
          >
-            <NextLink href={'/orders'} passHref>
+            <NextLink href={'/orders'} passHref legacyBehavior>
                <Button
                   color="primary"
                   endIcon={<ArrowRightIcon fontSize="small" />}
@@ -172,5 +172,5 @@ export const LatestOrders = (props: any) => {
             </NextLink>
          </Box>
       </Card>
-   )
+   );
 }

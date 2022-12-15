@@ -65,80 +65,78 @@ const EditOrderPage = (props: EditOrderPageProps) => {
       }
    }
 
-   return (
-      <>
-         <Head>
-            <title>Login | FurnitureStore Dashboard</title>
-         </Head>
-         <Box
-            component="main"
-            sx={{
-               flexGrow: 1,
-               pt: 6,
-               pb: 12,
-               px: 6
-            }}
-         >
-            <Container maxWidth={false}>
-               <Box
-                  sx={{
-                     alignItems: 'center',
-                     display: 'flex',
-                     justifyContent: 'space-between',
-                     flexWrap: 'wrap'
-                  }}
-               >
-                  <Link href="/orders" passHref>
-                     <Button variant="text" startIcon={<ArrowBackIcon />}>
-                        Orders
-                     </Button>
-                  </Link>
-               </Box>
-               <Grid
-                  container
-                  sx={{
-                     mt: 1,
-                     alignItems: 'center',
-                     justifyContent: 'space-between'
-                  }}
-               >
-                  {order ? (
-                     <Grid item sx={{ m: 1 }}>
-                        <Typography variant="h4">#{order._id}</Typography>
-                        <Typography
-                           variant="body2"
-                           color="textSecondary"
-                           sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}
-                        >
-                           Placed on
-                           <EventAvailableRoundedIcon />
-                           {format(parseISO(order.createdAt), 'dd/MM/yyyy HH:mm')}
-                        </Typography>
-                     </Grid>
-                  ) : (
-                     <Grid item>
-                        <Typography sx={{ m: 1 }} variant="h4">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                        <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                     </Grid>
-                  )}
-                  <Grid item sx={{ display: 'flex', gap: 2 }}></Grid>
-               </Grid>
+   return <>
+      <Head>
+         <title>Login | FurnitureStore Dashboard</title>
+      </Head>
+      <Box
+         component="main"
+         sx={{
+            flexGrow: 1,
+            pt: 6,
+            pb: 12,
+            px: 6
+         }}
+      >
+         <Container maxWidth={false}>
+            <Box
+               sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap'
+               }}
+            >
+               <Link href="/orders" passHref legacyBehavior>
+                  <Button variant="text" startIcon={<ArrowBackIcon />}>
+                     Orders
+                  </Button>
+               </Link>
+            </Box>
+            <Grid
+               container
+               sx={{
+                  mt: 1,
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+               }}
+            >
+               {order ? (
+                  <Grid item sx={{ m: 1 }}>
+                     <Typography variant="h4">#{order._id}</Typography>
+                     <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}
+                     >
+                        Placed on
+                        <EventAvailableRoundedIcon />
+                        {format(parseISO(order.createdAt), 'dd/MM/yyyy HH:mm')}
+                     </Typography>
+                  </Grid>
+               ) : (
+                  <Grid item>
+                     <Typography sx={{ m: 1 }} variant="h4">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                     <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                  </Grid>
+               )}
+               <Grid item sx={{ display: 'flex', gap: 2 }}></Grid>
+            </Grid>
 
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <OrderBasicInfoCardEdit
-                     order={order}
-                     onSave={handleUpdateBasicInfo}
-                     onDelete={handleDeleteOrder}
-                  />
-               </Box>
-            </Container>
-         </Box>
-      </>
-   )
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <OrderBasicInfoCardEdit
+                  order={order}
+                  onSave={handleUpdateBasicInfo}
+                  onDelete={handleDeleteOrder}
+               />
+            </Box>
+         </Container>
+      </Box>
+   </>;
 }
 
 EditOrderPage.Layout = DashboardLayout

@@ -18,7 +18,7 @@ export const NavItem = props => {
          }}
          {...others}
       >
-         <NextLink href={href} passHref>
+         <NextLink href={href} passHref legacyBehavior>
             <Button
                component="a"
                startIcon={icon}
@@ -45,7 +45,7 @@ export const NavItem = props => {
             </Button>
          </NextLink>
       </ListItem>
-   )
+   );
 }
 
 NavItem.propTypes = {

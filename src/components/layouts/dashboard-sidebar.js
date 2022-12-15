@@ -80,13 +80,13 @@ export const DashboardSidebar = props => {
          >
             <div>
                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
-                  <NextLink href="/" passHref>
-                     <a style={{ mt: 2, textDecoration: 'none' }}>
-                        {}
-                        <Typography variant="h3" sx={{ color: '#ffffff' }}>
-                           Konsept
-                        </Typography>
-                     </a>
+                  <NextLink href="/" passHref style={{ mt: 2, textDecoration: 'none' }}>
+
+                     {}
+                     <Typography variant="h3" sx={{ color: '#ffffff' }}>
+                        Konsept
+                     </Typography>
+
                   </NextLink>
                </Box>
             </div>

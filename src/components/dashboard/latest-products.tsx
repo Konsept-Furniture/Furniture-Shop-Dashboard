@@ -85,12 +85,12 @@ export const LatestProducts = (props: any) => {
                p: 2
             }}
          >
-            <NextLink href={'/products'} passHref>
+            <NextLink href={'/products'} passHref legacyBehavior>
                <Button color="primary" endIcon={<ArrowRightIcon />} size="small" variant="text">
                   View all
                </Button>
             </NextLink>
          </Box>
       </Card>
-   )
+   );
 }

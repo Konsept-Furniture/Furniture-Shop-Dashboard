@@ -96,14 +96,14 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                                       </SeverityPill>
                                    </TableCell>
                                    <TableCell align="center">
-                                      <Link href={`/orders/${order._id}/edit`} passHref>
+                                      <Link href={`/orders/${order._id}/edit`} passHref legacyBehavior>
                                          <Tooltip title="Edit Order" placement="top">
                                             <IconButton size="small">
                                                <PencilIcon width={20} />
                                             </IconButton>
                                          </Tooltip>
                                       </Link>
-                                      <Link href={`/orders/${order._id}`} passHref>
+                                      <Link href={`/orders/${order._id}`} passHref legacyBehavior>
                                          <Tooltip title="View Details" placement="top">
                                             <IconButton size="small">
                                                <ArrowForwardIcon fontSize="small" />
@@ -141,5 +141,5 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
             </PerfectScrollbar>
          </CardContent>
       </Card>
-   )
+   );
 }

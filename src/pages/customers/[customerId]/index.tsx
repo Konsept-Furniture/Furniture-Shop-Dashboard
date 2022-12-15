@@ -64,134 +64,132 @@ function CustomerDetailPage(props: CustomerDetailPageProps) {
       }
    }
 
-   return (
-      <>
-         <Head>
-            <title>Customer Details | FurnitureStore Dashboard</title>
-         </Head>
-         <Box
-            component="main"
-            sx={{
-               flexGrow: 1,
-               pt: 6,
-               pb: 12,
-               px: 6
-            }}
-         >
-            <Container maxWidth={false}>
-               <Box
-                  sx={{
-                     alignItems: 'center',
-                     display: 'flex',
-                     justifyContent: 'space-between',
-                     flexWrap: 'wrap'
-                  }}
-               >
-                  <Link href="/customers" passHref>
-                     <Button variant="text" startIcon={<ArrowBackIcon />}>
-                        Customers
-                     </Button>
-                  </Link>
-               </Box>
-               <Grid
-                  container
-                  sx={{
-                     mt: 1,
-                     alignItems: 'center',
-                     justifyContent: 'space-between'
-                  }}
-               >
-                  {customer ? (
-                     <Grid item sx={{ m: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                           <Avatar sx={{ width: 56, height: 56 }} src="">
-                              {getInitials(customer.name)}
-                           </Avatar>
-                           <Box sx={{ flex: 1 }}>
-                              <Typography variant="h4">{customer.email}</Typography>
-                              <Typography
-                                 variant="subtitle2"
-                                 sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                              >
-                                 user_id: <Chip size="small" label={customer._id} />
-                              </Typography>
-                           </Box>
-                        </Box>
-                     </Grid>
-                  ) : (
-                     <Grid item>
-                        <Typography sx={{ m: 1 }} variant="h4">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                        <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                     </Grid>
-                  )}
-                  <Grid item sx={{ display: 'flex', gap: 2 }}>
-                     <Link href={`/customers/${customerId}/edit`} passHref>
-                        <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
-                           Edit
-                        </Button>
-                     </Link>
-                  </Grid>
-               </Grid>
-
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <CustomerBasicInfoCard customer={customer} />
-               </Box>
-
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <CustomerOrderListCard />
-               </Box>
-
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <Card>
-                     <CardHeader title="Data management" />
-                     <Divider />
-                     <CardContent>
-                        <Box
-                           sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'start',
-                              gap: 1
-                           }}
-                        >
-                           <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => setOpenConfirmDialog(true)}
+   return <>
+      <Head>
+         <title>Customer Details | FurnitureStore Dashboard</title>
+      </Head>
+      <Box
+         component="main"
+         sx={{
+            flexGrow: 1,
+            pt: 6,
+            pb: 12,
+            px: 6
+         }}
+      >
+         <Container maxWidth={false}>
+            <Box
+               sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap'
+               }}
+            >
+               <Link href="/customers" passHref legacyBehavior>
+                  <Button variant="text" startIcon={<ArrowBackIcon />}>
+                     Customers
+                  </Button>
+               </Link>
+            </Box>
+            <Grid
+               container
+               sx={{
+                  mt: 1,
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+               }}
+            >
+               {customer ? (
+                  <Grid item sx={{ m: 1 }}>
+                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar sx={{ width: 56, height: 56 }} src="">
+                           {getInitials(customer.name)}
+                        </Avatar>
+                        <Box sx={{ flex: 1 }}>
+                           <Typography variant="h4">{customer.email}</Typography>
+                           <Typography
+                              variant="subtitle2"
+                              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                            >
-                              Delete Account
-                           </Button>
-                           <Typography variant="body2" color="textSecondary">
-                              Remove this customer’s account if he/she requested that, if not please
-                              be aware that what has been deleted can never brought back.
+                              user_id: <Chip size="small" label={customer._id} />
                            </Typography>
                         </Box>
-                     </CardContent>
-                  </Card>
+                     </Box>
+                  </Grid>
+               ) : (
+                  <Grid item>
+                     <Typography sx={{ m: 1 }} variant="h4">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                     <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                  </Grid>
+               )}
+               <Grid item sx={{ display: 'flex', gap: 2 }}>
+                  <Link href={`/customers/${customerId}/edit`} passHref legacyBehavior>
+                     <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
+                        Edit
+                     </Button>
+                  </Link>
+               </Grid>
+            </Grid>
 
-                  <ConfirmDialog
-                     icon={
-                        <Avatar
-                           sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <CustomerBasicInfoCard customer={customer} />
+            </Box>
+
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <CustomerOrderListCard />
+            </Box>
+
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <Card>
+                  <CardHeader title="Data management" />
+                  <Divider />
+                  <CardContent>
+                     <Box
+                        sx={{
+                           display: 'flex',
+                           flexDirection: 'column',
+                           alignItems: 'start',
+                           gap: 1
+                        }}
+                     >
+                        <Button
+                           variant="outlined"
+                           color="error"
+                           onClick={() => setOpenConfirmDialog(true)}
                         >
-                           <ReportProblemIcon />
-                        </Avatar>
-                     }
-                     isOpen={openConfirmDialog}
-                     title="Are you sure?"
-                     body="Are you sure to delete this customer?"
-                     onSubmit={handleDeleteCustomer}
-                     onClose={() => setOpenConfirmDialog(false)}
-                  />
-               </Box>
-            </Container>
-         </Box>
-      </>
-   )
+                           Delete Account
+                        </Button>
+                        <Typography variant="body2" color="textSecondary">
+                           Remove this customer’s account if he/she requested that, if not please
+                           be aware that what has been deleted can never brought back.
+                        </Typography>
+                     </Box>
+                  </CardContent>
+               </Card>
+
+               <ConfirmDialog
+                  icon={
+                     <Avatar
+                        sx={{ bgcolor: 'rgba(209, 67, 67, 0.08)', color: 'rgb(209, 67, 67)' }}
+                     >
+                        <ReportProblemIcon />
+                     </Avatar>
+                  }
+                  isOpen={openConfirmDialog}
+                  title="Are you sure?"
+                  body="Are you sure to delete this customer?"
+                  onSubmit={handleDeleteCustomer}
+                  onClose={() => setOpenConfirmDialog(false)}
+               />
+            </Box>
+         </Container>
+      </Box>
+   </>;
 }
 
 CustomerDetailPage.Layout = DashboardLayout

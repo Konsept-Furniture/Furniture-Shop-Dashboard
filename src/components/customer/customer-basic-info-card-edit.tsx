@@ -344,7 +344,7 @@ export function CustomerBasicInfoCardEdit({
          {customer && (
             <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Link href={`/customers/${customer._id}`} passHref>
+                  <Link href={`/customers/${customer._id}`} passHref legacyBehavior>
                      <Button variant="outlined" disabled={isSubmitting}>
                         Cancel
                      </Button>
@@ -381,5 +381,5 @@ export function CustomerBasicInfoCardEdit({
             onClose={() => setOpenConfirmDialog(false)}
          />
       </Card>
-   )
+   );
 }

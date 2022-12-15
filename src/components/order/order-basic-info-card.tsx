@@ -74,7 +74,7 @@ export function OrderBasicInfoCard({ order }: OrderBasicInfoCardProps) {
                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="primary">
                            {order.user && (
-                              <Link href={`/customers/${order.user._id}`} passHref>
+                              <Link href={`/customers/${order.user._id}`} passHref legacyBehavior>
                                  {order.user?.name}
                               </Link>
                            )}
@@ -199,5 +199,5 @@ export function OrderBasicInfoCard({ order }: OrderBasicInfoCardProps) {
             )}
          </CardContent>
       </Card>
-   )
+   );
 }

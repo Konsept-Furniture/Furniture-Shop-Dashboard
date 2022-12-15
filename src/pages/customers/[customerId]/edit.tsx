@@ -67,83 +67,81 @@ const EditCustomerPage = (props: EditCustomerPageProps) => {
       }
    }
 
-   return (
-      <>
-         <Head>
-            <title>Edit Customer | FurnitureStore Dashboard</title>
-         </Head>
-         <Box
-            component="main"
-            sx={{
-               flexGrow: 1,
-               pt: 6,
-               pb: 12,
-               px: 6
-            }}
-         >
-            <Container maxWidth={false}>
-               <Box
-                  sx={{
-                     alignItems: 'center',
-                     display: 'flex',
-                     justifyContent: 'space-between',
-                     flexWrap: 'wrap'
-                  }}
-               >
-                  <Link href="/customers" passHref>
-                     <Button variant="text" startIcon={<ArrowBackIcon />}>
-                        Customers
-                     </Button>
-                  </Link>
-               </Box>
-               <Grid
-                  container
-                  sx={{
-                     mt: 1,
-                     alignItems: 'center',
-                     justifyContent: 'space-between'
-                  }}
-               >
-                  {customer ? (
-                     <Grid item sx={{ m: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                           <Avatar sx={{ width: 56, height: 56 }} src="">
-                              {getInitials(customer.name)}
-                           </Avatar>
-                           <Box sx={{ flex: 1 }}>
-                              <Typography variant="h4">{customer.email}</Typography>
-                              <Typography
-                                 variant="subtitle2"
-                                 sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                              >
-                                 user_id: <Chip size="small" label={customer._id} />
-                              </Typography>
-                           </Box>
+   return <>
+      <Head>
+         <title>Edit Customer | FurnitureStore Dashboard</title>
+      </Head>
+      <Box
+         component="main"
+         sx={{
+            flexGrow: 1,
+            pt: 6,
+            pb: 12,
+            px: 6
+         }}
+      >
+         <Container maxWidth={false}>
+            <Box
+               sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap'
+               }}
+            >
+               <Link href="/customers" passHref legacyBehavior>
+                  <Button variant="text" startIcon={<ArrowBackIcon />}>
+                     Customers
+                  </Button>
+               </Link>
+            </Box>
+            <Grid
+               container
+               sx={{
+                  mt: 1,
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+               }}
+            >
+               {customer ? (
+                  <Grid item sx={{ m: 1 }}>
+                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar sx={{ width: 56, height: 56 }} src="">
+                           {getInitials(customer.name)}
+                        </Avatar>
+                        <Box sx={{ flex: 1 }}>
+                           <Typography variant="h4">{customer.email}</Typography>
+                           <Typography
+                              variant="subtitle2"
+                              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                           >
+                              user_id: <Chip size="small" label={customer._id} />
+                           </Typography>
                         </Box>
-                     </Grid>
-                  ) : (
-                     <Grid item>
-                        <Typography sx={{ m: 1 }} variant="h4">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                        <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                     </Grid>
-                  )}
-               </Grid>
+                     </Box>
+                  </Grid>
+               ) : (
+                  <Grid item>
+                     <Typography sx={{ m: 1 }} variant="h4">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                     <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                  </Grid>
+               )}
+            </Grid>
 
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <CustomerBasicInfoCardEdit
-                     customer={customer}
-                     onSave={handleUpdateBasicInfo}
-                     onDelete={handleDeleteCustomer}
-                  />
-               </Box>
-            </Container>
-         </Box>
-      </>
-   )
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <CustomerBasicInfoCardEdit
+                  customer={customer}
+                  onSave={handleUpdateBasicInfo}
+                  onDelete={handleDeleteCustomer}
+               />
+            </Box>
+         </Container>
+      </Box>
+   </>;
 }
 
 EditCustomerPage.Layout = DashboardLayout

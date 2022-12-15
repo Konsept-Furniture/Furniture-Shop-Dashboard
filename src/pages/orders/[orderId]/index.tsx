@@ -75,106 +75,104 @@ function OrderDetailPage(props: OrderDetailPageProps) {
       }
    }
 
-   return (
-      <>
-         <Head>
-            <title>Order Details | FurnitureStore Dashboard</title>
-         </Head>
-         <Box
-            component="main"
-            sx={{
-               flexGrow: 1,
-               pt: 6,
-               pb: 12,
-               px: 6
-            }}
-         >
-            <Container maxWidth={false}>
-               <Box
-                  sx={{
-                     alignItems: 'center',
-                     display: 'flex',
-                     justifyContent: 'space-between',
-                     flexWrap: 'wrap'
-                  }}
-               >
-                  <Link href="/orders" passHref>
-                     <Button variant="text" startIcon={<ArrowBackIcon />}>
-                        Orders
-                     </Button>
-                  </Link>
-               </Box>
-               <Grid
-                  container
-                  sx={{
-                     mt: 1,
-                     alignItems: 'center',
-                     justifyContent: 'space-between'
-                  }}
-               >
-                  {order ? (
-                     <Grid item sx={{ m: 1 }}>
-                        <Typography variant="h4">#{order._id}</Typography>
-                        <Typography
-                           variant="body2"
-                           color="textSecondary"
-                           sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}
-                        >
-                           Placed on
-                           <EventAvailableRoundedIcon />
-                           {format(parseISO(order.createdAt), 'dd/MM/yyyy HH:mm')}
-                        </Typography>
-                     </Grid>
-                  ) : (
-                     <Grid item>
-                        <Typography sx={{ m: 1 }} variant="h4">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                        <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
-                           <Skeleton variant="text" width="300px" />
-                        </Typography>
-                     </Grid>
-                  )}
-                  {order && (
-                     <Grid item sx={{ display: 'flex', gap: 2 }}>
-                        <Link href={`/orders/${orderId}/edit`} passHref>
-                           <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
-                              Edit
-                           </Button>
-                        </Link>
+   return <>
+      <Head>
+         <title>Order Details | FurnitureStore Dashboard</title>
+      </Head>
+      <Box
+         component="main"
+         sx={{
+            flexGrow: 1,
+            pt: 6,
+            pb: 12,
+            px: 6
+         }}
+      >
+         <Container maxWidth={false}>
+            <Box
+               sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap'
+               }}
+            >
+               <Link href="/orders" passHref legacyBehavior>
+                  <Button variant="text" startIcon={<ArrowBackIcon />}>
+                     Orders
+                  </Button>
+               </Link>
+            </Box>
+            <Grid
+               container
+               sx={{
+                  mt: 1,
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+               }}
+            >
+               {order ? (
+                  <Grid item sx={{ m: 1 }}>
+                     <Typography variant="h4">#{order._id}</Typography>
+                     <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}
+                     >
+                        Placed on
+                        <EventAvailableRoundedIcon />
+                        {format(parseISO(order.createdAt), 'dd/MM/yyyy HH:mm')}
+                     </Typography>
+                  </Grid>
+               ) : (
+                  <Grid item>
+                     <Typography sx={{ m: 1 }} variant="h4">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                     <Typography sx={{ m: 1 }} variant="body2" color="textSecondary">
+                        <Skeleton variant="text" width="300px" />
+                     </Typography>
+                  </Grid>
+               )}
+               {order && (
+                  <Grid item sx={{ display: 'flex', gap: 2 }}>
+                     <Link href={`/orders/${orderId}/edit`} passHref legacyBehavior>
+                        <Button variant="outlined" endIcon={<PencilIcon width={20} />}>
+                           Edit
+                        </Button>
+                     </Link>
 
-                        {order.status === 'PROCESSING' && (
-                           <ButtonDropdownMenu label="Actions">
-                              <MenuItem
-                                 onClick={handleApproveOrder}
-                                 sx={{
-                                    color: 'primary'
-                                 }}
-                              >
-                                 Approve
-                              </MenuItem>
-                              <MenuItem onClick={handleRejectOrder}>Reject</MenuItem>
-                              <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
-                           </ButtonDropdownMenu>
-                        )}
-                        {order.status === 'DELIVERIED' && (
-                           <ButtonDropdownMenu label="Actions">
-                              <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
-                           </ButtonDropdownMenu>
-                        )}
-                     </Grid>
-                  )}
-               </Grid>
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <OrderBasicInfoCard order={order} />
-               </Box>
-               <Box sx={{ ml: 1, mt: 4 }}>
-                  <OrderLineItemsCard order={order} />
-               </Box>
-            </Container>
-         </Box>
-      </>
-   )
+                     {order.status === 'PROCESSING' && (
+                        <ButtonDropdownMenu label="Actions">
+                           <MenuItem
+                              onClick={handleApproveOrder}
+                              sx={{
+                                 color: 'primary'
+                              }}
+                           >
+                              Approve
+                           </MenuItem>
+                           <MenuItem onClick={handleRejectOrder}>Reject</MenuItem>
+                           <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
+                        </ButtonDropdownMenu>
+                     )}
+                     {order.status === 'DELIVERIED' && (
+                        <ButtonDropdownMenu label="Actions">
+                           <MenuItem onClick={handleExportInvoice}>Export Invoice</MenuItem>
+                        </ButtonDropdownMenu>
+                     )}
+                  </Grid>
+               )}
+            </Grid>
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <OrderBasicInfoCard order={order} />
+            </Box>
+            <Box sx={{ ml: 1, mt: 4 }}>
+               <OrderLineItemsCard order={order} />
+            </Box>
+         </Container>
+      </Box>
+   </>;
 }
 
 OrderDetailPage.Layout = DashboardLayout

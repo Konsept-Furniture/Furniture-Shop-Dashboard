@@ -289,7 +289,7 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
          {order && (
             <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Link href={`/orders/${order._id}`} passHref>
+                  <Link href={`/orders/${order._id}`} passHref legacyBehavior>
                      <Button variant="outlined" disabled={isSubmitting}>
                         Cancel
                      </Button>
@@ -326,5 +326,5 @@ export function OrderBasicInfoCardEdit({ order, onSave, onDelete }: OrderBasicIn
             onClose={() => setOpenConfirmDialog(false)}
          />
       </Card>
-   )
+   );
 }
