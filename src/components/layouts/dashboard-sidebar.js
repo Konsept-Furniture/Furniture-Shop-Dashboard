@@ -47,7 +47,7 @@ const items = [
    }
 ]
 
-export const DashboardSidebar = props => {
+export const DashboardSidebar = ({ token, ...props }) => {
    const { open, onClose } = props
    const router = useRouter()
    const lgUp = useMediaQuery(theme => theme.breakpoints.up('lg'), {
@@ -81,12 +81,10 @@ export const DashboardSidebar = props => {
             <div>
                <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
                   <NextLink href="/" passHref style={{ mt: 2, textDecoration: 'none' }}>
-
                      {}
                      <Typography variant="h3" sx={{ color: '#ffffff' }}>
                         Konsept
                      </Typography>
-
                   </NextLink>
                </Box>
             </div>

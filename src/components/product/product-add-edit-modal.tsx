@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import React, { ReactNode, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Category, Product, ProductPayload } from 'models'
 import { CustomSelectField, CustomTextField } from 'components/form-controls'

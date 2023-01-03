@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { DashboardNavbar } from './dashboard-navbar'
@@ -17,9 +17,16 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
    }
 }))
 
-export const DashboardLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = ({ children }) => {
    const router = useRouter()
    const [isSidebarOpen, setSidebarOpen] = useState(true)
+
+   useEffect(() => {
+      const token = localStorage.getItem('token')
+      if (!token) {
+         router.push('/login')
+      }
+   }, [])
 
    return (
       <Auth>
@@ -41,3 +48,5 @@ export const DashboardLayout = ({ children }: { children: ReactNode }) => {
       </Auth>
    )
 }
+
+export default DashboardLayout

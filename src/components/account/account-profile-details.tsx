@@ -5,7 +5,7 @@ import { regexVietnamesePhoneNumber } from 'constants/regexes'
 import * as yup from 'yup'
 import { EditProfileFormValues } from 'models'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useAuth } from 'hooks'
 
 export interface AccountProfileDetailsProps {

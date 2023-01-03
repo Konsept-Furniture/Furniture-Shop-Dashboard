@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import {
    Avatar,
    Button,
@@ -381,5 +381,5 @@ export function CustomerBasicInfoCardEdit({
             onClose={() => setOpenConfirmDialog(false)}
          />
       </Card>
-   );
+   )
 }

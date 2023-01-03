@@ -12,34 +12,24 @@ import {
    Select,
    MenuItem
 } from '@mui/material'
-import { CustomerQueryParams } from 'models'
 import { useRef } from 'react'
 import { Search as SearchIcon } from '../../icons/search'
 
-export interface ProductListToolbarProps {
-   onSearch: Function
-   onChangeSorting: Function
-   filters: Partial<CustomerQueryParams>
-}
-export const CustomerListToolbar = ({
-   onSearch,
-   onChangeSorting,
-   filters,
-   ...restProps
-}: ProductListToolbarProps) => {
-   const ref = useRef<NodeJS.Timeout | null>(null)
+// export interface ProductListToolbarProps {
+//    onSearch: Function
+//    onChangeSorting: Function
+//    filters: Partial<CustomerQueryParams>
+// }
+const CustomerListToolbar = ({ onSearch, ...restProps }) => {
+   const ref = useRef(null)
 
-   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const handleChangeSearch = e => {
       if (ref.current) {
          clearTimeout(ref.current)
       }
       ref.current = setTimeout(() => {
          onSearch(e.target.value.trim())
       }, 500)
-   }
-
-   const handleChangeSort = (event: SelectChangeEvent) => {
-      onChangeSorting(event.target.value as string)
    }
 
    return (
@@ -64,3 +54,5 @@ export const CustomerListToolbar = ({
       </Box>
    )
 }
+
+export default CustomerListToolbar

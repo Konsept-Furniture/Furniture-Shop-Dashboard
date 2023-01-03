@@ -5,6 +5,10 @@ declare global {
       msSaveBlob?: (blob: any, defaultName?: string) => boolean
    }
 }
+
+// function capitalizeFirstLetter(string: any) {
+//    return string.charAt(0).toUpperCase() + string.slice(1)
+// }
 export function downloadFile(data: any, filename: string, mime?: string) {
    // It is necessary to create a new blob object with mime-type explicitly set
    // otherwise only Chrome works like it should

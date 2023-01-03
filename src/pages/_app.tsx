@@ -54,37 +54,35 @@ const App = (props: AppPropsWithLayout) => {
             <meta name="viewport" content="initial-scale=1, width=device-width" />
          </Head>
 
-         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ThemeProvider theme={theme}>
-               <SnackbarProvider
-                  maxSnack={1}
-                  preventDuplicate
-                  // action={(key: SnackbarKey) => (
-                  //    <Button varient="text" onClick={onClickDismiss(key)} color="inherit">
-                  //       Dismiss
-                  //    </Button>
-                  // )}
-                  classes={{
-                     variantSuccess: '#4caf50',
-                     variantError: '#f44336',
-                     variantWarning: '#fdd835'
-                     // variantInfo: classes.info,
+         <ThemeProvider theme={theme}>
+            <SnackbarProvider
+               maxSnack={1}
+               preventDuplicate
+               // action={(key: SnackbarKey) => (
+               //    <Button varient="text" onClick={onClickDismiss(key)} color="inherit">
+               //       Dismiss
+               //    </Button>
+               // )}
+               classes={{
+                  variantSuccess: '#4caf50',
+                  variantError: '#f44336',
+                  variantWarning: '#fdd835'
+                  // variantInfo: classes.info,
+               }}
+            >
+               <SWRConfig
+                  value={{
+                     fetcher: (url: string) => axiosClient.get(url).then(res => res.data),
+                     shouldRetryOnError: false
                   }}
                >
-                  <SWRConfig
-                     value={{
-                        fetcher: (url: string) => axiosClient.get(url).then(res => res.data),
-                        shouldRetryOnError: false
-                     }}
-                  >
-                     <CssBaseline />
-                     <Layout>
-                        <Component {...pageProps} />
-                     </Layout>
-                  </SWRConfig>
-               </SnackbarProvider>
-            </ThemeProvider>
-         </LocalizationProvider>
+                  <CssBaseline />
+                  <Layout>
+                     <Component {...pageProps} />
+                  </Layout>
+               </SWRConfig>
+            </SnackbarProvider>
+         </ThemeProvider>
       </CacheProvider>
    )
 }

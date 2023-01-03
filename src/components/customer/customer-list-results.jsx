@@ -21,7 +21,8 @@ import { useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { getInitials } from '../../utils/get-initials'
 
-const headCells: HeadCell[] = [
+// const headCells: HeadCell[] = [
+const headCells = [
    {
       id: 'name',
       align: 'left',
@@ -46,18 +47,18 @@ const headCells: HeadCell[] = [
       label: 'Registration Date',
       sortable: true
    },
-   {
-      id: 'orderCount',
-      align: 'center',
-      label: 'Orders',
-      sortable: false
-   },
-   {
-      id: 'amountTotal',
-      align: 'center',
-      label: 'Spent',
-      sortable: false
-   },
+   // {
+   //    id: 'orderCount',
+   //    align: 'center',
+   //    label: 'Orders',
+   //    sortable: false
+   // },
+   // {
+   //    id: 'amountTotal',
+   //    align: 'center',
+   //    label: 'Spent',
+   //    sortable: false
+   // },
    {
       id: 'actions',
       align: 'center',
@@ -65,39 +66,36 @@ const headCells: HeadCell[] = [
       sortable: false
    }
 ]
-export const CustomerListResults = ({
-   customerList,
-   pagination,
-   onSortByColumn,
-   ...rest
-}: {
-   customerList?: User[]
-   pagination: PaginationParams
-   onSortByColumn: Function
-}) => {
-   const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+
+// {
+// customerList?: User[]
+// pagination: PaginationParams
+// onSortByColumn: Function
+// }
+const CustomerListResults = ({ customerList, pagination, onSortByColumn, ...rest }) => {
+   const [order, setOrder] = useState('asc')
    const [orderBy, setOrderBy] = useState('')
 
-   const handleSort = (property: string) => async (event: React.MouseEvent) => {
-      const isAsc = orderBy === property && order === 'asc'
-      setOrder(isAsc ? 'desc' : 'asc')
-      setOrderBy(property)
-      onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
-   }
-   function randomColor() {
-      let backgroundColor = [
-         '#ab000d',
-         '#5c007a',
-         '#00227b',
-         '#00701a',
-         '#8c9900',
-         '#c68400',
-         '#40241a',
-         '#29434e'
-      ]
-      let random = Math.floor(Math.random() * backgroundColor.length)
-      return backgroundColor[random]
-   }
+   // const handleSort = (property) => async (event) => {
+   //    const isAsc = orderBy === property && order === 'asc'
+   //    setOrder(isAsc ? 'desc' : 'asc')
+   //    setOrderBy(property)
+   //    onSortByColumn(`${property}-${isAsc ? 'desc' : 'asc'}`)
+   // }
+   // function randomColor() {
+   //    let backgroundColor = [
+   //       '#ab000d',
+   //       '#5c007a',
+   //       '#00227b',
+   //       '#00701a',
+   //       '#8c9900',
+   //       '#c68400',
+   //       '#40241a',
+   //       '#29434e'
+   //    ]
+   //    let random = Math.floor(Math.random() * backgroundColor.length)
+   //    return backgroundColor[random]
+   // }
    let bgColor = [
       '#ab000d',
       '#5c007a',
@@ -110,6 +108,8 @@ export const CustomerListResults = ({
       '#ab000d',
       '#5c007a'
    ]
+
+   // console.log('cusList', customerList)
    return (
       <PerfectScrollbar>
          <Box sx={{ minWidth: 1050 }}>
@@ -120,9 +120,9 @@ export const CustomerListResults = ({
                         <TableCell
                            key={cell.id}
                            align={cell.align}
-                           sortDirection={orderBy === cell.id ? order : false}
+                           // sortDirection={orderBy === cell.id ? order : false}
                         >
-                           {cell.sortable ? (
+                           {/* {cell.sortable ? (
                               <TableSortLabel
                                  active={orderBy === cell.id}
                                  direction={orderBy === cell.id ? order : 'asc'}
@@ -132,7 +132,8 @@ export const CustomerListResults = ({
                               </TableSortLabel>
                            ) : (
                               cell.label
-                           )}
+                           )} */}
+                           {cell.label}
                         </TableCell>
                      ))}
                   </TableRow>
@@ -140,7 +141,7 @@ export const CustomerListResults = ({
                <TableBody>
                   {customerList
                      ? customerList.map(customer => (
-                          <TableRow hover key={customer._id}>
+                          <TableRow hover key={customer.id}>
                              <TableCell align="left">
                                 <Box
                                    sx={{
@@ -150,42 +151,48 @@ export const CustomerListResults = ({
                                 >
                                    <Avatar
                                       style={{
-                                         backgroundColor: bgColor[customerList.indexOf(customer)]
+                                         backgroundColor: customer.avatar?.url
+                                            ? 'transparent'
+                                            : bgColor[customerList.indexOf(customer)]
                                       }}
-                                      src="/broken-image.jpg"
+                                      src={customer.avatar?.url}
                                       sx={{ mr: 2 }}
                                    >
-                                      {getInitials(customer.name)}
+                                      {getInitials(customer.first_name + customer.last_name)}
                                    </Avatar>
                                    <Typography
                                       sx={{ fontWeight: 500 }}
                                       color="textPrimary"
                                       variant="body2"
                                    >
-                                      {customer.name || 'N/A'}
+                                      {customer.first_name + ' ' + customer.last_name || 'N/A'}
                                    </Typography>
                                 </Box>
                              </TableCell>
-                             <TableCell align="left">{customer.email}</TableCell>
-                             <TableCell align="center">{customer.phone}</TableCell>
+                             <TableCell align="left">{customer.email || 'N/A'}</TableCell>
+                             <TableCell align="center">{customer.phone || 'N/A'}</TableCell>
                              <TableCell align="center" sx={{ pr: 5 }}>
-                                {format(parseISO(customer.createdAt), 'dd/MM/yyyy')}
+                                {format(parseISO(customer.created_at), 'dd/MM/yyyy')}
                              </TableCell>
-                             <TableCell align="center">{customer.orderCount}</TableCell>
-                             <TableCell align="center">
+                             {/* <TableCell align="center">{customer.orderCount}</TableCell> */}
+                             {/* <TableCell align="center">
                                 <Typography color="success.main" variant="body2">
                                    {customer.amountTotal && `$${customer.amountTotal.toFixed(2)}`}
                                 </Typography>
-                             </TableCell>
+                             </TableCell> */}
                              <TableCell align="center">
-                                <Link href={`/customers/${customer._id}/edit`} passHref legacyBehavior>
+                                <Link
+                                   href={`/customers/${customer.id}/edit`}
+                                   passHref
+                                   legacyBehavior
+                                >
                                    <Tooltip title="Edit Customer" placement="top">
                                       <IconButton size="small">
                                          <PencilIcon width={20} />
                                       </IconButton>
                                    </Tooltip>
                                 </Link>
-                                <Link href={`/customers/${customer._id}`} passHref legacyBehavior>
+                                <Link href={`/customers/${customer.id}`} passHref legacyBehavior>
                                    <Tooltip title="View Details" placement="top">
                                       <IconButton size="small">
                                          <ArrowForwardIcon fontSize="small" />
@@ -195,7 +202,7 @@ export const CustomerListResults = ({
                              </TableCell>
                           </TableRow>
                        ))
-                     : Array.from(new Array(pagination.pageSize)).map((item, idx) => (
+                     : Array.from(new Array(pagination.limit)).map((item, idx) => (
                           <TableRow hover key={idx}>
                              <TableCell align="center">
                                 <Skeleton variant="text" />
@@ -224,5 +231,7 @@ export const CustomerListResults = ({
             </Table>
          </Box>
       </PerfectScrollbar>
-   );
+   )
 }
+
+export default CustomerListResults

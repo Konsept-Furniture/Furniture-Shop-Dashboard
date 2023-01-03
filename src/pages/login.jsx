@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, Button, Card, CardContent, Container, Typography } from '@mui/material'
 import { CustomTextField } from 'components/form-controls'
 import { LoginLayout } from 'components/layouts'
@@ -6,12 +5,13 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useAuth } from '../hooks'
-import { LoginPayload } from '../models'
+import userApi from 'api/userApi'
 
 const schema = yup.object({
-   username: yup.string().max(255).required('Username is required'),
+   username: yup.string().email().max(255).required('Username is required'),
    password: yup.string().max(255).required('Password is required')
 })
 
@@ -21,27 +21,37 @@ const Login = () => {
    const { login } = useAuth({
       revalidateOnMount: false
    })
-   const form = useForm<LoginPayload>({
+
+   const form = useForm({
       defaultValues: {
-         username: '',
-         password: ''
+         username: 'admin.binh@gmail.com',
+         password: '123456'
       },
       resolver: yupResolver(schema)
    })
+
    const {
       formState: { isSubmitting },
       control
    } = form
 
-   const handleClickLogin = async (_data: LoginPayload) => {
-      try {
-         await login(_data)
-         router.push('/')
-      } catch (error: any) {
-         enqueueSnackbar(error.message, {
+   const handleClickLogin = async _data => {
+      const { response, err } = await userApi.login({
+         email: _data.username,
+         password: _data.password
+      })
+      if (err) {
+         enqueueSnackbar(err.message, {
             variant: 'error'
          })
+         return
       }
+      // getProfile()
+      localStorage.setItem('token', response.data.token)
+      enqueueSnackbar('Login successfully!', {
+         variant: 'success'
+      })
+      router.push('/')
    }
 
    return (

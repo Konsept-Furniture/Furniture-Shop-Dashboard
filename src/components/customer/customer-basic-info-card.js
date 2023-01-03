@@ -9,54 +9,20 @@ import {
    Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
-import axios, { AxiosResponse } from 'axios'
 import { format, parseISO } from 'date-fns'
-import { District, Province, User, Ward } from 'models'
 import React from 'react'
-import useSWR from 'swr'
 
-export interface CustomerBasicInfoCardProps {
-   customer?: User
-}
+// export interface CustomerBasicInfoCardProps {
+//    customer?: User
+// }
 
-function fetcher<T>(url: string) {
-   return axios.get<any, AxiosResponse<T>>(url).then((res: AxiosResponse<T>): T => {
-      return res.data
-   })
-}
+// function fetcher<T>(url: string) {
+//    return axios.get<any, AxiosResponse<T>>(url).then((res: AxiosResponse<T>): T => {
+//       return res.data
+//    })
+// }
 
-export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) {
-   const { data: customerProvince } = useSWR<Province>(
-      () =>
-         customer && customer?.deliveryInfo.address.province
-            ? `https://provinces.open-api.vn/api/p/${customer?.deliveryInfo.address.province}`
-            : null,
-      fetcher,
-      {
-         revalidateOnFocus: false
-      }
-   )
-   const { data: customerDistrict } = useSWR<District>(
-      () =>
-         customer && customer?.deliveryInfo.address.province
-            ? `https://provinces.open-api.vn/api/d/${customer?.deliveryInfo.address.district}`
-            : null,
-      fetcher,
-      {
-         revalidateOnFocus: false
-      }
-   )
-   const { data: customerWard } = useSWR<Ward>(
-      () =>
-         customer && customer?.deliveryInfo.address.province
-            ? `https://provinces.open-api.vn/api/w/${customer?.deliveryInfo.address.ward}`
-            : null,
-      fetcher,
-      {
-         revalidateOnFocus: false
-      }
-   )
-
+const CustomerBasicInfoCard = ({ customer }) => {
    return (
       <Card>
          <CardHeader title="Basic details" />
@@ -73,8 +39,12 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                         Full Name
                      </Typography>
                      <Box sx={{ flex: 1 }}>
-                        <Typography sx={{ fontWeight: 'bold' }} variant="body2" color="text.secondary">
-                           {customer.name}
+                        <Typography
+                           sx={{ fontWeight: 'bold' }}
+                           variant="body2"
+                           color="text.secondary"
+                        >
+                           {customer.first_name + ' ' + customer.last_name}
                         </Typography>
                      </Box>
                   </ListItem>
@@ -90,7 +60,7 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                      </Typography>
                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">
-                           {customer.username}
+                           {customer.last_name}
                         </Typography>
                      </Box>
                   </ListItem>
@@ -106,7 +76,7 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                      </Typography>
                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">
-                           {customer.phone}
+                           {customer.phone || 'N/A'}
                         </Typography>
                      </Box>
                   </ListItem>
@@ -122,13 +92,13 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                      </Typography>
                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">
-                           {customer.email}
+                           {customer.email || 'N/A'}
                         </Typography>
                      </Box>
                   </ListItem>
                   <Divider />
 
-                  <ListItem
+                  {/* <ListItem
                      sx={{ px: 3, py: 1.5, display: 'flex', flexDirection: 'row', my: 0 }}
                      alignItems="center"
                      disablePadding
@@ -151,7 +121,7 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                         </Typography>
                      </Box>
                   </ListItem>
-                  <Divider />
+                  <Divider /> */}
 
                   <ListItem
                      sx={{ px: 3, py: 1.5, display: 'flex', flexDirection: 'row', my: 0 }}
@@ -163,8 +133,8 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
                      </Typography>
                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">
-                           {customer.createdAt &&
-                              format(parseISO(customer.createdAt), 'dd/MM/yyyy HH:mm')}
+                           {customer.created_at &&
+                              format(parseISO(customer.created_at), 'dd/MM/yyyy HH:mm')}
                         </Typography>
                      </Box>
                   </ListItem>
@@ -183,3 +153,5 @@ export function CustomerBasicInfoCard({ customer }: CustomerBasicInfoCardProps) 
       </Card>
    )
 }
+
+export default CustomerBasicInfoCard

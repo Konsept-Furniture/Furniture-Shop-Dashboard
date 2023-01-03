@@ -5,7 +5,7 @@ import { authApi } from 'api-client'
 import { CustomTextField } from 'components/form-controls'
 import { useForm } from 'react-hook-form'
 import { ChangePasswordFormValues } from 'models'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const schema = yup.object().shape({
    oldPassword: yup

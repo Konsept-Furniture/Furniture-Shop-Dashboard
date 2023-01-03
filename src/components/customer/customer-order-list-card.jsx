@@ -22,17 +22,33 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { Order } from 'models'
 import { format, parseISO } from 'date-fns'
 import PencilIcon from 'icons/pencil'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { useEffect, useState } from 'react'
+import userApi from 'api/userApi'
+// export interface CustomerOrderListCardProps {}
 
-export interface CustomerOrderListCardProps {}
-
-export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
+const CustomerOrderListCard = props => {
    const router = useRouter()
    const { customerId } = router.query
-   const { data: orders } = useSWR(`orders/order-userid/${customerId}`)
+   const [orders, setOrders] = useState([])
+
+   useEffect(() => {
+      const listUserOrder = async () => {
+         const { response, err } = await userApi.listOrderByUserId(7)
+
+         if (err) {
+            enqueueSnackbar(err.message, {
+               variant: 'error'
+            })
+            return
+         }
+         setOrders(response.data)
+      }
+      listUserOrder()
+   }, [customerId])
+
    return (
       <Card>
          <CardHeader title="Recent orders" />
@@ -53,23 +69,26 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                      </TableHead>
                      <TableBody>
                         {orders
-                           ? orders.map((order: Order) => (
-                                <TableRow hover key={order._id}>
+                           ? orders.map(order => (
+                                <TableRow hover key={order.id}>
                                    <TableCell align="center">
-                                      {format(parseISO(order.createdAt), 'dd/MM/yyyy')}
+                                      {format(parseISO(order.created_at), 'dd/MM/yyyy')}
                                    </TableCell>
                                    <TableCell align="left">
                                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                         {order.products.slice(0, 3).map(product => (
+                                         {order.items.slice(0, 3).map(product => (
                                             <Tooltip
-                                               key={product.productId}
-                                               title={product.title}
+                                               key={product.id}
+                                               title={product.food_origin?.name}
                                                placement="top"
                                             >
-                                               <Avatar variant="rounded" src={product.img} />
+                                               <Avatar
+                                                  variant="rounded"
+                                                  src={product.food_origin?.images.url}
+                                               />
                                             </Tooltip>
                                          ))}
-                                         {order.products.length > 3 && (
+                                         {order.items.length > 3 && (
                                             <Tooltip title="and more..." placement="top">
                                                <Box sx={{ height: '100%' }}>
                                                   <Typography>...</Typography>
@@ -78,8 +97,10 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                                          )}
                                       </Box>
                                    </TableCell>
-                                   <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
-                                   <TableCell align="center">{order.payment}</TableCell>
+                                   <TableCell align="center">
+                                      ${order.total_price.toFixed(2)}
+                                   </TableCell>
+                                   <TableCell align="center">{order.payment || 'COD'}</TableCell>
                                    <TableCell align="center" sx={{ minWidth: 200 }}>
                                       <SeverityPill
                                          color={
@@ -89,14 +110,18 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
                                                REFUNDED: 'error',
                                                PROCESSING: 'primary',
                                                CANCELED: 'warning'
-                                            }[order.status || 'PENDING']
+                                            }[order.tracking_state || 'PENDING']
                                          }
                                       >
-                                         {order.status}
+                                         {order.tracking_state}
                                       </SeverityPill>
                                    </TableCell>
                                    <TableCell align="center">
-                                      <Link href={`/orders/${order._id}/edit`} passHref legacyBehavior>
+                                      <Link
+                                         href={`/orders/${order._id}/edit`}
+                                         passHref
+                                         legacyBehavior
+                                      >
                                          <Tooltip title="Edit Order" placement="top">
                                             <IconButton size="small">
                                                <PencilIcon width={20} />
@@ -141,5 +166,7 @@ export function CustomerOrderListCard(props: CustomerOrderListCardProps) {
             </PerfectScrollbar>
          </CardContent>
       </Card>
-   );
+   )
 }
+
+export default CustomerOrderListCard

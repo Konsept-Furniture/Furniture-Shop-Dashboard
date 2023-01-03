@@ -16,10 +16,12 @@ import {
    Tooltip,
    Typography
 } from '@mui/material'
+import userApi from 'api/userApi'
 import { useAuth } from 'hooks'
 import { useRouter } from 'next/router'
+import { useSnackbar } from 'notistack'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
@@ -28,16 +30,33 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }))
 
 export const DashboardNavbar = props => {
+  
+
    const router = useRouter()
+   const { enqueueSnackbar } = useSnackbar()
 
    const { onSidebarOpen, ...other } = props
-   const { profile, logout } = useAuth()
+   const [profile, setProfile] = useState(null)
    const [anchorEl, setAnchorEl] = useState(null)
    const openPopover = Boolean(anchorEl)
 
+   const getProfile = async () => {
+      const { response, err } = await userApi.profile()
+      if (err) {
+         enqueueSnackbar(err.message, {
+            variant: 'error'
+         })
+         return
+      }
+      setProfile(response.data)
+   }
+   useEffect(() => {
+      getProfile()
+   }, [])
+
    const handleLogoutClick = async () => {
-      await logout()
-      setAnchorEl(null)
+      localStorage.removeItem('token')
+      router.push('/login')
    }
    return (
       <DashboardNavbarRoot
@@ -134,9 +153,11 @@ export const DashboardNavbar = props => {
                      flexDirection: 'column'
                   }}
                >
-                  <Typography variant="subtitle1">{profile.name || ''}</Typography>
+                  <Typography variant="subtitle1">
+                     {profile?.first_name + ' ' + profile?.last_name || ''}
+                  </Typography>
                   <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 400 }}>
-                     {profile.email}
+                     {profile?.email || ''}
                   </Typography>
                </Box>
             </Box>
