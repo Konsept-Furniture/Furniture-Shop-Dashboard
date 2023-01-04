@@ -44,6 +44,8 @@ const CustomerOrderListCard = props => {
             })
             return
          }
+
+         console.log(response.data)
          setOrders(response.data)
       }
       listUserOrder()
@@ -105,15 +107,25 @@ const CustomerOrderListCard = props => {
                                       <SeverityPill
                                          color={
                                             {
-                                               PENDING: 'info',
-                                               DELIVERIED: 'secondary',
-                                               REFUNDED: 'error',
-                                               PROCESSING: 'primary',
-                                               CANCELED: 'warning'
-                                            }[order.tracking_state || 'PENDING']
+                                               pending: 'info',
+                                               delivered: 'secondary',
+                                               cancel: 'error',
+                                               preparing: 'primary',
+                                               on_the_way: 'warning'
+                                               //   }[order.tracking_state]
+                                            }[order.tracking_state]
                                          }
                                       >
-                                         {order.tracking_state}
+                                         {
+                                            {
+                                               pending: 'PENDING',
+                                               delivered: 'DELIVERED',
+                                               cancel: 'CANCEL',
+                                               preparing: 'PREPARING',
+                                               on_the_way: 'SHIPPING'
+                                               //   }[order.tracking_state]
+                                            }['on_the_way']
+                                         }
                                       </SeverityPill>
                                    </TableCell>
                                    <TableCell align="center">

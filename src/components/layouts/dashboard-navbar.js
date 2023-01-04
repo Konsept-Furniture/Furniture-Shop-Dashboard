@@ -30,8 +30,6 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }))
 
 export const DashboardNavbar = props => {
-  
-
    const router = useRouter()
    const { enqueueSnackbar } = useSnackbar()
 
@@ -48,6 +46,7 @@ export const DashboardNavbar = props => {
          })
          return
       }
+      console.log(response.data)
       setProfile(response.data)
    }
    useEffect(() => {
@@ -139,7 +138,7 @@ export const DashboardNavbar = props => {
                         width: 40,
                         ml: 1
                      }}
-                     src="https://konsept-client.vercel.app/dist/src/assets/images/sang.jpg"
+                     src={profile?.avatar?.url}
                   >
                      <UserCircleIcon fontSize="small" />
                   </Avatar>

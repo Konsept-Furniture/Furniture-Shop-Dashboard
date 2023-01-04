@@ -83,7 +83,7 @@ export const DashboardSidebar = ({ token, ...props }) => {
                   <NextLink href="/" passHref style={{ mt: 2, textDecoration: 'none' }}>
                      {}
                      <Typography variant="h3" sx={{ color: '#ffffff' }}>
-                        Konsept
+                        Buy Me
                      </Typography>
                   </NextLink>
                </Box>

@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import { customerApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
-import { DashboardLayout } from 'components/layouts'
+
 import PencilIcon from 'icons/pencil'
 import { ResponseData, User } from 'models'
 import Link from 'next/link'
@@ -31,7 +31,7 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 import CustomerBasicInfoCard from 'components/customer/customer-basic-info-card'
 import CustomerOrderListCard from 'components/customer/customer-order-list-card'
 import userApi from 'api/userApi'
-
+import DashboardLayout from 'components/layouts/dashboard-layout'
 // export interface CustomerDetailPageProps {}
 
 // const fetcher = (url: string) => {
