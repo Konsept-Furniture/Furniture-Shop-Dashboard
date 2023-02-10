@@ -54,7 +54,7 @@ export const LatestOrders = (props: any) => {
                         ? orders.map((order: Order) => (
                            <TableRow hover key={order._id}>
                               <TableCell align="left">
-                                 <Link href={`customers/${order.user._id}`} passHref legacyBehavior>
+                                 <Link href={`customers/${order.user._id}`} passHref>
                                     <Typography
                                        sx={{
                                           cursor: 'pointer',
@@ -82,7 +82,7 @@ export const LatestOrders = (props: any) => {
                                           title={product.title}
                                           placement="top"
                                        >
-                                          <Avatar variant="rounded" src={product.photo?.url ?? product.img} />
+                                          <Avatar variant="rounded" src={product.img} />
                                        </Tooltip>
                                     ))}
                                     {order.products.length > 3 && (

@@ -45,7 +45,7 @@ export const NavItem = props => {
             </Button>
          </NextLink>
       </ListItem>
-   );
+   )
 }
 
 NavItem.propTypes = {
