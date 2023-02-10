@@ -187,8 +187,10 @@ export const PreviewContainer = styled.section`
    &:hover {
       opacity: 0.55;
 
-      ${FileMetaData} {
+      ${
+         '' /* ${FileMetaData} {
          display: flex;
+      } */
       }
    }
 
@@ -215,4 +217,5 @@ export const ImagePreview = styled.img`
    border-radius: 6px;
    width: 100%;
    height: 100%;
+   object-fit: cover;
 `

@@ -52,103 +52,103 @@ export const LatestOrders = (props: any) => {
                   <TableBody>
                      {orders
                         ? orders.map((order: Order) => (
-                             <TableRow hover key={order._id}>
-                                <TableCell align="left">
-                                   <Link href={`customers/${order.user._id}`} passHref legacyBehavior>
-                                      <Typography
-                                         sx={{
-                                            cursor: 'pointer',
-                                            ':hover': {
-                                               textDecoration: 'underline'
-                                            }
-                                         }}
-                                         variant="body2"
-                                      >
-                                         {order.user.name}
-                                      </Typography>
-                                   </Link>
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Box
-                                      sx={{
-                                         display: 'flex',
-                                         alignItems: 'end',
-                                         gap: 1
-                                      }}
-                                   >
-                                      {order.products.slice(0, 3).map(product => (
-                                         <Tooltip
-                                            key={product.productId}
-                                            title={product.title}
-                                            placement="top"
-                                         >
-                                            <Avatar variant="rounded" src={product.img} />
-                                         </Tooltip>
-                                      ))}
-                                      {order.products.length > 3 && (
-                                         <Tooltip title="and more..." placement="top">
-                                            <Box sx={{ height: '100%' }}>
-                                               <Typography>...</Typography>
-                                            </Box>
-                                         </Tooltip>
-                                      )}
-                                   </Box>
-                                </TableCell>
-                                <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
-                                <TableCell align="center">
-                                   <SeverityPill
-                                      color={
-                                         {
-                                            PENDING: 'info',
-                                            DELIVERIED: 'secondary',
-                                            REFUNDED: 'error',
-                                            PROCESSING: 'primary',
-                                            CANCELED: 'warning'
-                                         }[order.status || 'PENDING']
-                                      }
-                                   >
-                                      {order.status}
-                                   </SeverityPill>
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                      <Link href={`/orders/${order._id}/edit`} passHref legacyBehavior>
-                                         <Tooltip title="Edit Order" placement="top">
-                                            <IconButton size="small">
-                                               <PencilIcon width={20} />
-                                            </IconButton>
-                                         </Tooltip>
-                                      </Link>
-                                      <Link href={`/orders/${order._id}`} passHref legacyBehavior>
-                                         <Tooltip title="View Details" placement="top">
-                                            <IconButton size="small">
-                                               <ArrowForwardIcon fontSize="small" />
-                                            </IconButton>
-                                         </Tooltip>
-                                      </Link>
-                                   </Box>
-                                </TableCell>
-                             </TableRow>
-                          ))
+                           <TableRow hover key={order._id}>
+                              <TableCell align="left">
+                                 <Link href={`customers/${order.user._id}`} passHref legacyBehavior>
+                                    <Typography
+                                       sx={{
+                                          cursor: 'pointer',
+                                          ':hover': {
+                                             textDecoration: 'underline'
+                                          }
+                                       }}
+                                       variant="body2"
+                                    >
+                                       {order.user.name}
+                                    </Typography>
+                                 </Link>
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Box
+                                    sx={{
+                                       display: 'flex',
+                                       alignItems: 'end',
+                                       gap: 1
+                                    }}
+                                 >
+                                    {order.products.slice(0, 3).map(product => (
+                                       <Tooltip
+                                          key={product.productId}
+                                          title={product.title}
+                                          placement="top"
+                                       >
+                                          <Avatar variant="rounded" src={product.photo?.url ?? product.img} />
+                                       </Tooltip>
+                                    ))}
+                                    {order.products.length > 3 && (
+                                       <Tooltip title="and more..." placement="top">
+                                          <Box sx={{ height: '100%' }}>
+                                             <Typography>...</Typography>
+                                          </Box>
+                                       </Tooltip>
+                                    )}
+                                 </Box>
+                              </TableCell>
+                              <TableCell align="center">${order.amount.toFixed(2)}</TableCell>
+                              <TableCell align="center">
+                                 <SeverityPill
+                                    color={
+                                       {
+                                          PENDING: 'info',
+                                          DELIVERIED: 'secondary',
+                                          REFUNDED: 'error',
+                                          PROCESSING: 'primary',
+                                          CANCELED: 'warning'
+                                       }[order.status || 'PENDING']
+                                    }
+                                 >
+                                    {order.status}
+                                 </SeverityPill>
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Link href={`/orders/${order._id}/edit`} passHref legacyBehavior>
+                                       <Tooltip title="Edit Order" placement="top">
+                                          <IconButton size="small">
+                                             <PencilIcon width={20} />
+                                          </IconButton>
+                                       </Tooltip>
+                                    </Link>
+                                    <Link href={`/orders/${order._id}`} passHref legacyBehavior>
+                                       <Tooltip title="View Details" placement="top">
+                                          <IconButton size="small">
+                                             <ArrowForwardIcon fontSize="small" />
+                                          </IconButton>
+                                       </Tooltip>
+                                    </Link>
+                                 </Box>
+                              </TableCell>
+                           </TableRow>
+                        ))
                         : Array.from(new Array(NUMBER_ORDERS)).map((item, idx) => (
-                             <TableRow hover key={idx}>
-                                <TableCell align="left">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                                <TableCell align="center">
-                                   <Skeleton variant="text" />
-                                </TableCell>
-                             </TableRow>
-                          ))}
+                           <TableRow hover key={idx}>
+                              <TableCell align="left">
+                                 <Skeleton variant="text" />
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Skeleton variant="text" />
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Skeleton variant="text" />
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Skeleton variant="text" />
+                              </TableCell>
+                              <TableCell align="center">
+                                 <Skeleton variant="text" />
+                              </TableCell>
+                           </TableRow>
+                        ))}
                   </TableBody>
                </Table>
             </Box>

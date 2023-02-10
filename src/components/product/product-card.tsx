@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import { Product } from 'models'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ConfirmDialog } from './confirm-dialog'
 import ReportProblemIcon from '@mui/icons-material/ReportProblem'
 
@@ -27,6 +27,8 @@ interface ProductCardProps {
 }
 export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: ProductCardProps) => {
    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+   const totalQuantity = useMemo(() => product ? product.variants.reduce((prev, acc) => prev + acc.qty, 0) : 0, [product])
+
    return product ? (
       <Card
          sx={{
@@ -37,7 +39,7 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
          {...rest}
          elevation={6}
       >
-         <CardMedia component="img" height="220" image={product.img} alt={product.title} />
+         <CardMedia component="img" height="220" image={product.photo?.url ?? product.img} alt={product.title} />
          <CardContent>
             <Typography align="center" color="textPrimary" gutterBottom variant="h5">
                {product.title}
@@ -62,7 +64,7 @@ export const ProductCard = ({ product, onEditClick, onDeleteClick, ...rest }: Pr
                >
                   <Inventory2Icon color="action" />
                   <Typography color="textSecondary" display="inline" sx={{ pl: 1 }} variant="body2">
-                     {product.quantity} In Stocks
+                     {totalQuantity > 0 ? `${totalQuantity} in stocks` : 'Out of stock'}
                   </Typography>
                </Grid>
                <Grid

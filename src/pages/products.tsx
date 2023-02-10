@@ -9,11 +9,12 @@ import {
    Tabs,
    Typography
 } from '@mui/material'
-import { productApi } from 'api-client'
+import { mediaApi, productApi } from 'api-client'
 import axiosClient from 'api-client/axios-client'
 import { ProductList, ProductListToolbar } from 'components/product'
 import { ProductAddEditModal } from 'components/product/product-add-edit-modal'
 import {
+   Media,
    PaginationParams,
    Product,
    ProductPayload,
@@ -25,8 +26,6 @@ import { useSnackbar } from 'notistack'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import queryString from 'query-string'
-import { Download as DownloadIcon } from '../icons/download'
-import { Upload as UploadIcon } from '../icons/upload'
 import { DashboardLayout } from 'components/layouts'
 
 const DEFAULT_PAGINATION = {
@@ -54,8 +53,7 @@ const Products = () => {
    }
 
    const { data: productList, mutate } = useSWR(
-      `products?page=${pagination.currentPage}&pageSize=${
-         pagination.pageSize
+      `products?page=${pagination.currentPage}&pageSize=${pagination.pageSize
       }&${queryString.stringify(filters, { skipEmptyString: true })}`,
       fetcher,
       {
@@ -80,6 +78,14 @@ const Products = () => {
    }
 
    const handleAddEditProduct = async (product: ProductPayload) => {
+      if (product.photo instanceof File) {
+         const uploadedImg = (await mediaApi.uploadFiles([product.photo])).data[0]
+         product.photo = {
+            public_id: uploadedImg.public_id,
+            name: uploadedImg.original_filename,
+            url: uploadedImg.secure_url
+         }
+      }
       if (editProduct?._id) {
          try {
             await productApi.update(editProduct._id, product).then(res => {
@@ -124,9 +130,10 @@ const Products = () => {
                })
             })
          } catch (error: any) {
-            enqueueSnackbar(error.message, {
-               variant: 'error'
-            })
+            console.log("🚀 ~ file: products.tsx:127 ~ handleAddEditProduct ~ error", error)
+            // enqueueSnackbar(error.message, {
+            //    variant: 'error'
+            // })
          }
       }
    }

@@ -22,6 +22,7 @@ export interface ProductOrder {
    price: number
    quantity: number
    amount: number
+   size: number
 }
 export interface DeliveryInfo {
    address: Address
