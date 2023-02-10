@@ -244,6 +244,7 @@ export function OrderDetailModal({
                   <TableHead>
                      <TableRow>
                         <TableCell>Product</TableCell>
+                        <TableCell align="center">Size</TableCell>
                         <TableCell align="center">QTY</TableCell>
                         <TableCell align="right">Amount</TableCell>
                      </TableRow>
@@ -257,6 +258,7 @@ export function OrderDetailModal({
                                  {product.title}
                               </Box>
                            </TableCell>
+                           <TableCell align="center">{product?.size}</TableCell>
                            <TableCell align="center">{product?.quantity}</TableCell>
                            <TableCell align="right">${product?.amount.toFixed(2)}</TableCell>
                         </TableRow>

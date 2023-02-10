@@ -296,9 +296,9 @@ export function CustomerBasicInfoCardEdit({
                            options={
                               provinceList
                                  ? provinceList.map(province => ({
-                                      label: province.name,
-                                      value: province.code.toString()
-                                   }))
+                                    label: province.name,
+                                    value: province.code.toString()
+                                 }))
                                  : []
                            }
                         />
@@ -312,9 +312,9 @@ export function CustomerBasicInfoCardEdit({
                            options={
                               selectedProvince
                                  ? selectedProvince.districts.map(district => ({
-                                      label: district.name,
-                                      value: district.code
-                                   }))
+                                    label: district.name,
+                                    value: district.code
+                                 }))
                                  : []
                            }
                         />
@@ -328,9 +328,9 @@ export function CustomerBasicInfoCardEdit({
                            options={
                               selectedDistrict
                                  ? selectedDistrict.wards.map(ward => ({
-                                      label: ward.name,
-                                      value: ward.code
-                                   }))
+                                    label: ward.name,
+                                    value: ward.code
+                                 }))
                                  : []
                            }
                         />
@@ -344,7 +344,7 @@ export function CustomerBasicInfoCardEdit({
          {customer && (
             <CardActions sx={{ m: 2, justifyContent: 'space-between' }}>
                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Link href={`/customers/${customer._id}`} passHref legacyBehavior>
+                  <Link href={`/customers/${customer._id}`} passHref>
                      <Button variant="outlined" disabled={isSubmitting}>
                         Cancel
                      </Button>

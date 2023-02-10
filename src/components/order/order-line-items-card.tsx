@@ -30,6 +30,7 @@ export function OrderLineItemsCard({ order }: OrderLineItemsCardProps) {
                <TableHead>
                   <TableRow>
                      <TableCell>PRODUCT</TableCell>
+                     <TableCell align="center">SIZE</TableCell>
                      <TableCell align="center">QUANTITY</TableCell>
                      <TableCell align="center">AMOUNT</TableCell>
                   </TableRow>
@@ -37,30 +38,34 @@ export function OrderLineItemsCard({ order }: OrderLineItemsCardProps) {
                <TableBody>
                   {order
                      ? order.products.map(item => (
-                          <TableRow hover key={item.productId}>
-                             <TableCell>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                   <Avatar variant="rounded" src={item.img}></Avatar>
-                                   <Typography variant="body2">{item.title}</Typography>
-                                </Box>
-                             </TableCell>
-                             <TableCell align="center">{item.quantity}</TableCell>
-                             <TableCell align="center">${item.amount.toFixed(2)}</TableCell>
-                          </TableRow>
-                       ))
+                        <TableRow hover key={item.productId}>
+                           <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                 <Avatar variant="rounded" src={item.img}></Avatar>
+                                 <Typography variant="body2">{item.title}</Typography>
+                              </Box>
+                           </TableCell>
+                           <TableCell align="center">{item.size}</TableCell>
+                           <TableCell align="center">{item.quantity}</TableCell>
+                           <TableCell align="center">${item.amount.toFixed(2)}</TableCell>
+                        </TableRow>
+                     ))
                      : Array.from(new Array(3)).map((i, idx) => (
-                          <TableRow key={idx}>
-                             <TableCell>
-                                <Skeleton variant="text" />
-                             </TableCell>
-                             <TableCell>
-                                <Skeleton variant="text" />
-                             </TableCell>
-                             <TableCell>
-                                <Skeleton variant="text" />
-                             </TableCell>
-                          </TableRow>
-                       ))}
+                        <TableRow key={idx}>
+                           <TableCell>
+                              <Skeleton variant="text" />
+                           </TableCell>
+                           <TableCell>
+                              <Skeleton variant="text" />
+                           </TableCell>
+                           <TableCell>
+                              <Skeleton variant="text" />
+                           </TableCell>
+                           <TableCell>
+                              <Skeleton variant="text" />
+                           </TableCell>
+                        </TableRow>
+                     ))}
                </TableBody>
             </Table>
          </CardContent>
